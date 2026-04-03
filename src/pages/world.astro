@@ -1,0 +1,296 @@
+---
+// Страница «Устройство мира»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Card from '@components/Card.astro';
+import WorldTree from '@components/WorldTree.astro';
+import DragonCard from '@components/DragonCard.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { WORLDS } from '@data/worlds';
+import { DRAGONS } from '@data/dragons';
+---
+
+<BaseLayout title="Устройство мира">
+  <div class="page-header">
+    <h1>🌳 Устройство мира</h1>
+    <p class="page-description">
+      Три мира, соединённых Мировым Дубом, и пять великих драконов, хранящих равновесие стихий
+    </p>
+  </div>
+
+  <!-- Мировое Древо -->
+  <section class="section">
+    <h2>🌲 Мировое Древо</h2>
+    <p>
+      В сердце Царства Пяти Начал возвышается <strong>Мировой Дуб</strong> — ось, соединяющая три мира.
+      Его корни уходят в Навь, ствол проходит через Явь, а крона достигает Прави.
+    </p>
+    <WorldTree />
+  </section>
+
+  <!-- Три мира -->
+  <section class="section">
+    <h2>🌍 Три мира</h2>
+    <div class="worlds-grid">
+      {WORLDS.map(world => (
+        <div class={`world-card world-${world.id}`}>
+          <div class="world-header">
+            <span class="world-icon">{world.icon}</span>
+            <h3>{world.name}</h3>
+          </div>
+          <p class="world-description">{world.description}</p>
+          {world.quote && (
+            <div class="world-quote">«{world.quote}»</div>
+          )}
+          <div class="world-details">
+            <div class="world-inhabitants">
+              <strong>👥 Обитатели:</strong>
+              <ul>
+                {world.inhabitants.map(inhabitant => <li>{inhabitant}</li>)}
+              </ul>
+            </div>
+            <div class="world-features">
+              <strong>🏛️ Ключевые места:</strong>
+              <ul>
+                {world.keyFeatures.map(feature => <li>{feature}</li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Пять драконов -->
+  <section class="section">
+    <h2>🐉 Пять Драконов-Хранителей</h2>
+    <p>
+      Из ветвей Мирового Дуба вышли пять великих драконов, каждый из которых хранит одно из Начал.
+      Они следят за равновесием и вмешиваются, когда порядку угрожает опасность.
+    </p>
+    <div class="dragons-grid">
+      {DRAGONS.map(dragon => (
+        <DragonCard
+          name={dragon.name}
+          element={dragon.element}
+          title={dragon.title}
+          description={dragon.description}
+          abilities={dragon.abilities}
+          location={dragon.location}
+          icon={dragon.icon}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Река Смородина -->
+  <section class="section">
+    <h2>🌊 Река Смородина</h2>
+    <div class="smorodina-card">
+      <div class="smorodina-content">
+        <div class="smorodina-icon">🌊</div>
+        <div class="smorodina-text">
+          <p>
+            <strong>Река Смородина</strong> — мистическая граница между миром живых (Явью) 
+            и миром мёртвых (Навью). Её воды помнят всё, что было, и могут показать то, 
+            что будет. Через реку перекинут <strong>Калинов мост</strong> — место испытания 
+            для душ, желающих перейти в Навь.
+          </p>
+          <p class="smorodina-note">
+            ✨ Говорят, в тихие ночи на берегу Смородины можно услышать голоса предков.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Искажённые Земли -->
+  <section class="section">
+    <h2>⚠️ Искажённые Земли</h2>
+    <div class="distorted-card">
+      <div class="distorted-content">
+        <div class="distorted-icon">🌀</div>
+        <div class="distorted-text">
+          <p>
+            <strong>Искажённые Земли</strong> — место, где был заключён Теневой Дракон. 
+            Здесь законы мира искажены: деревья растут корнями вверх, реки текут в гору, 
+            а призрачные тени блуждают среди скал. Это напоминание о выборе между порядком и хаосом.
+          </p>
+          <p class="distorted-warning">
+            ⚠️ Путникам не рекомендуется заходить в Искажённые Земли без защиты волхвов.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  /* Три мира */
+  .worlds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .world-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    transition: transform var(--transition-fast);
+  }
+  
+  .world-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .world-prav { border-top: 3px solid #c4a747; }
+  .world-yav { border-top: 3px solid #4a8a42; }
+  .world-nav { border-top: 3px solid #5a5a8a; }
+  
+  .world-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .world-icon {
+    font-size: 2rem;
+  }
+  
+  .world-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+  
+  .world-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .world-quote {
+    background: var(--bg-secondary);
+    padding: 0.75rem;
+    border-radius: var(--border-radius-md);
+    font-style: italic;
+    color: var(--text-accent);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .world-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .world-details ul {
+    margin: 0.25rem 0 0 1.25rem;
+    color: var(--text-muted);
+  }
+  
+  .world-details li {
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Драконы */
+  .dragons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Река Смородина */
+  .smorodina-card {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(45, 45, 74, 0.2) 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    border: 1px solid var(--element-water);
+  }
+  
+  .smorodina-content {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .smorodina-icon {
+    font-size: 3rem;
+  }
+  
+  .smorodina-text {
+    flex: 1;
+  }
+  
+  .smorodina-note {
+    color: var(--text-accent);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  
+  /* Искажённые Земли */
+  .distorted-card {
+    background: linear-gradient(135deg, rgba(60, 30, 60, 0.3) 0%, rgba(20, 20, 30, 0.5) 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    border: 1px solid #8a2a6a;
+  }
+  
+  .distorted-content {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .distorted-icon {
+    font-size: 3rem;
+  }
+  
+  .distorted-text {
+    flex: 1;
+  }
+  
+  .distorted-warning {
+    color: #c44a8a;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  
+  @media (max-width: 768px) {
+    .worlds-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .dragons-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .smorodina-content, .distorted-content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+</style>

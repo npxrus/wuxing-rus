@@ -1,0 +1,198 @@
+---
+// Динамическая страница для отдельного артефакта
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { ARTIFACTS, RARITY_COLORS, RARITY_NAMES } from '@data/artifacts';
+
+export async function getStaticPaths() {
+  return ARTIFACTS.map(artifact => ({
+    params: { id: artifact.id },
+    props: { artifact },
+  }));
+}
+
+const { artifact } = Astro.props;
+const { 
+  name, 
+  properties, 
+  location, 
+  description, 
+  history, 
+  element, 
+  rarity, 
+  icon 
+} = artifact;
+
+const rarityColor = RARITY_COLORS[rarity];
+const rarityName = RARITY_NAMES[rarity];
+---
+
+<BaseLayout title={name}>
+  <div class="page-header">
+    <div class="header-icon" style={`background: ${rarityColor}20; border-color: ${rarityColor}`}>
+      <span>{icon}</span>
+    </div>
+    <div class="header-text">
+      <h1>{name}</h1>
+      <div class="header-meta">
+        <span class="rarity-badge" style={`background: ${rarityColor}; color: white`}>
+          {rarityName}
+        </span>
+        {element && <ElementBadge element={element} size="medium" />}
+      </div>
+    </div>
+  </div>
+
+  <!-- Свойства -->
+  <section class="section">
+    <h2>✨ Свойства</h2>
+    <div class="properties-card">
+      <p>{properties}</p>
+    </div>
+  </section>
+
+  <!-- Описание -->
+  <section class="section">
+    <h2>📜 Описание</h2>
+    <p class="description-text">{description}</p>
+  </section>
+
+  <!-- История -->
+  <section class="section">
+    <h2>📖 История</h2>
+    <div class="history-card">
+      <p>{history}</p>
+    </div>
+  </section>
+
+  <!-- Местонахождение -->
+  <section class="section">
+    <h2>📍 Местонахождение</h2>
+    <div class="location-card">
+      <span class="location-icon">🏛️</span>
+      <span>{location}</span>
+    </div>
+  </section>
+
+  <!-- Навигация назад -->
+  <div class="back-link">
+    <a href="/artifacts">← Вернуться к списку артефактов</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+  }
+  
+  .header-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border: 2px solid;
+  }
+  
+  .header-text h1 {
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .rarity-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .properties-card, .history-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1.25rem;
+    border-left: 4px solid var(--text-accent);
+  }
+  
+  .properties-card p {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+  
+  .description-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  
+  .history-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .location-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .location-icon {
+    font-size: 1.3rem;
+  }
+  
+  .back-link {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+  }
+  
+  .back-link a {
+    color: var(--text-accent);
+    text-decoration: none;
+  }
+  
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .page-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .header-meta {
+      justify-content: center;
+    }
+    
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 2rem;
+    }
+  }
+</style>

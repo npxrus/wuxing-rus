@@ -1,0 +1,105 @@
+---
+// Компонент для отображения бейджа стихии
+// Использование: <ElementBadge element="wood" size="small" />
+
+export interface Props {
+  element: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  size?: 'small' | 'medium' | 'large';
+  showLabel?: boolean;
+  label?: string;
+}
+
+const { element, size = 'medium', showLabel = true, label } = Astro.props;
+
+// Иконки и названия для каждой стихии
+const elementsMap: Record<string, { icon: string; name: string; color: string }> = {
+  wood: { icon: '🌿', name: 'Дерево', color: 'var(--element-wood)' },
+  fire: { icon: '🔥', name: 'Огонь', color: 'var(--element-fire)' },
+  earth: { icon: '⛰️', name: 'Земля', color: 'var(--element-earth)' },
+  metal: { icon: '⚔️', name: 'Металл', color: 'var(--element-metal)' },
+  water: { icon: '💧', name: 'Вода', color: 'var(--element-water)' },
+};
+
+// Защита от неверного элемента
+const elementData = elementsMap[element] || elementsMap.wood;
+const displayLabel = label || elementData.name;
+const sizeClass = `badge-${size}`;
+---
+
+<span class={`element-badge ${element} ${sizeClass}`}>
+  <span class="badge-icon">{elementData.icon}</span>
+  {showLabel && <span class="badge-label">{displayLabel}</span>}
+</span>
+
+<style>
+  .element-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+  
+  .badge-small {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+    gap: 0.25rem;
+  }
+  
+  .badge-medium {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
+  }
+  
+  .badge-large {
+    padding: 0.4rem 1rem;
+    font-size: 1rem;
+    gap: 0.5rem;
+  }
+  
+  .badge-icon {
+    font-size: 1em;
+  }
+  
+  .badge-label {
+    line-height: 1;
+  }
+  
+  /* Цвета для разных стихий */
+  .element-badge.wood {
+    background: rgba(45, 90, 39, 0.2);
+    color: var(--element-wood-light);
+    border: 1px solid var(--element-wood);
+  }
+  
+  .element-badge.fire {
+    background: rgba(194, 65, 12, 0.2);
+    color: var(--element-fire-light);
+    border: 1px solid var(--element-fire);
+  }
+  
+  .element-badge.earth {
+    background: rgba(180, 83, 9, 0.2);
+    color: var(--element-earth-light);
+    border: 1px solid var(--element-earth);
+  }
+  
+  .element-badge.metal {
+    background: rgba(120, 113, 108, 0.2);
+    color: var(--element-metal-light);
+    border: 1px solid var(--element-metal);
+  }
+  
+  .element-badge.water {
+    background: rgba(30, 64, 175, 0.2);
+    color: var(--element-water-light);
+    border: 1px solid var(--element-water);
+  }
+  
+  .element-badge:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+</style>

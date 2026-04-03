@@ -1,0 +1,332 @@
+---
+// Интерактивная схема расположения княжеств
+import { PRINCIPALITIES } from '@data/principalities';
+---
+
+<div class="map-container">
+  <div class="map-title">🗺️ Карта Царства Пяти Начал</div>
+  
+  <div class="map-grid">
+    <!-- Центр — Мировое Древо -->
+    <div class="map-center">
+      <div class="world-tree-node">
+        <span class="tree-icon">🌳</span>
+        <span class="tree-label">Мировой<br/>Дуб</span>
+      </div>
+    </div>
+    
+    <!-- Княжества по направлениям -->
+    <div class="map-north">
+      <div class="principality-node wood-node">
+        <div class="node-content">
+          <span class="node-icon">🌿</span>
+          <span class="node-name">Зелёные<br/>Рощи</span>
+        </div>
+        <div class="direction-label">Север</div>
+      </div>
+    </div>
+    
+    <div class="map-south">
+      <div class="principality-node fire-node">
+        <div class="node-content">
+          <span class="node-icon">🔥</span>
+          <span class="node-name">Пылающие<br/>Степи</span>
+        </div>
+        <div class="direction-label">Юг</div>
+      </div>
+    </div>
+    
+    <div class="map-east">
+      <div class="principality-node metal-node">
+        <div class="node-content">
+          <span class="node-icon">⚔️</span>
+          <span class="node-name">Железные<br/>Горы</span>
+        </div>
+        <div class="direction-label">Восток</div>
+      </div>
+    </div>
+    
+    <div class="map-west">
+      <div class="principality-node water-node">
+        <div class="node-content">
+          <span class="node-icon">💧</span>
+          <span class="node-name">Туманные<br/>Озёра</span>
+        </div>
+        <div class="direction-label">Запад</div>
+      </div>
+    </div>
+    
+    <div class="map-center-northwest">
+      <div class="principality-node earth-node">
+        <div class="node-content">
+          <span class="node-icon">⛰️</span>
+          <span class="node-name">Великие<br/>Холмы</span>
+        </div>
+        <div class="direction-label">Северо-Запад</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="map-legend">
+    <div class="legend-title">Условные обозначения</div>
+    <div class="legend-items">
+      <div class="legend-item"><span class="legend-color wood-color"></span> Дерево (Север)</div>
+      <div class="legend-item"><span class="legend-color fire-color"></span> Огонь (Юг)</div>
+      <div class="legend-item"><span class="legend-color earth-color"></span> Земля (Северо-Запад)</div>
+      <div class="legend-item"><span class="legend-color metal-color"></span> Металл (Восток)</div>
+      <div class="legend-item"><span class="legend-color water-color"></span> Вода (Запад)</div>
+      <div class="legend-item"><span class="legend-color center-color"></span> Мировое Древо (Центр)</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .map-container {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, #0a0a1a 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border: 1px solid var(--border-color);
+  }
+  
+  .map-title {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-accent);
+  }
+  
+  .map-grid {
+    position: relative;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Позиционирование элементов */
+  .map-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  
+  .map-north {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .map-south {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .map-east {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .map-west {
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .map-center-northwest {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Узлы княжеств */
+  .principality-node {
+    text-align: center;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+  }
+  
+  .principality-node:hover {
+    transform: scale(1.1);
+  }
+  
+  .node-content {
+    background: var(--bg-card);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    border: 2px solid;
+    transition: all var(--transition-fast);
+  }
+  
+  .wood-node .node-content { border-color: var(--element-wood); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(45, 90, 39, 0.2) 100%); }
+  .fire-node .node-content { border-color: var(--element-fire); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(194, 65, 12, 0.2) 100%); }
+  .earth-node .node-content { border-color: var(--element-earth); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(180, 83, 9, 0.2) 100%); }
+  .metal-node .node-content { border-color: var(--element-metal); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(120, 113, 108, 0.2) 100%); }
+  .water-node .node-content { border-color: var(--element-water); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(30, 64, 175, 0.2) 100%); }
+  
+  .node-icon {
+    font-size: 1.8rem;
+  }
+  
+  .node-name {
+    font-size: 0.7rem;
+    text-align: center;
+    line-height: 1.2;
+  }
+  
+  .direction-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+  
+  .world-tree-node {
+    background: linear-gradient(135deg, #2a1a0a 0%, #3d2a1a 100%);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #c4a747;
+    box-shadow: 0 0 20px rgba(196, 167, 71, 0.3);
+  }
+  
+  .tree-icon {
+    font-size: 2.5rem;
+  }
+  
+  .tree-label {
+    font-size: 0.7rem;
+    text-align: center;
+    color: #c4a747;
+  }
+  
+  /* Легенда */
+  .map-legend {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .legend-title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+  
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+  
+  .wood-color { background: var(--element-wood); }
+  .fire-color { background: var(--element-fire); }
+  .earth-color { background: var(--element-earth); }
+  .metal-color { background: var(--element-metal); }
+  .water-color { background: var(--element-water); }
+  .center-color { background: #c4a747; }
+  
+  /* Адаптив для карты */
+  @media (max-width: 768px) {
+    .map-grid {
+      min-height: 500px;
+    }
+    
+    .node-content {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .node-icon {
+      font-size: 1.3rem;
+    }
+    
+    .node-name {
+      font-size: 0.55rem;
+    }
+    
+    .world-tree-node {
+      width: 70px;
+      height: 70px;
+    }
+    
+    .tree-icon {
+      font-size: 1.8rem;
+    }
+    
+    .map-center-northwest {
+      left: 20%;
+      top: 20%;
+    }
+    
+    .map-north { top: 2%; }
+    .map-south { bottom: 2%; }
+    .map-east { right: 2%; }
+    .map-west { left: 2%; }
+  }
+  
+  @media (max-width: 640px) {
+    .map-grid {
+      min-height: 450px;
+    }
+    
+    .node-content {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .node-icon {
+      font-size: 1.1rem;
+    }
+    
+    .node-name {
+      display: none;
+    }
+    
+    .world-tree-node {
+      width: 55px;
+      height: 55px;
+    }
+    
+    .tree-label {
+      font-size: 0.55rem;
+    }
+    
+    .direction-label {
+      font-size: 0.6rem;
+    }
+  }
+</style>

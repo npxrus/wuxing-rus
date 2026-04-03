@@ -1,0 +1,321 @@
+---
+// BaseLayout — обёртка для всех страниц сайта
+import { SITE_CONFIG, NAVIGATION } from '@data/siteConfig';
+import SearchBar from '@components/SearchBar.astro';
+import SeasonalBanner from '@components/SeasonalBanner.astro';
+import RandomFact from '@components/RandomFact.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+
+import '@styles/global.scss'
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} | ${SITE_CONFIG.title}` : SITE_CONFIG.title;
+const pageDescription = description || SITE_CONFIG.description;
+---
+
+<!DOCTYPE html>
+<html lang={SITE_CONFIG.language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={pageDescription} />
+    <meta name="author" content={SITE_CONFIG.author} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <!-- Шапка сайта -->
+    <header class="site-header">
+      <div class="container header-container">
+        <div class="logo">
+          <a href="/">
+            <span class="logo-icon">🌳</span>
+            <span class="logo-text">{SITE_CONFIG.title}</span>
+            <span class="logo-subtitle">{SITE_CONFIG.shortTitle}</span>
+          </a>
+        </div>
+        
+        <SearchBar />
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        
+        <nav class="main-nav" id="mainNav">
+          <ul>
+            {
+              NAVIGATION.map((item) => (
+                <li>
+                  <a href={item.href}>
+                    <span class="nav-icon">{item.icon}</span>
+                    <span>{item.title}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+      <div class="container">
+        <SeasonalBanner />
+        <slot />
+      </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>🌳 {SITE_CONFIG.title}</h4>
+            <p>{SITE_CONFIG.description}</p>
+          </div>
+          <div class="footer-section">
+            <h4>Навигация</h4>
+            <ul>
+              {NAVIGATION.map((item) => (
+                <li><a href={item.href}>{item.icon} {item.title}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Случайный факт</h4>
+            <RandomFact />
+          </div>
+          <div class="footer-section">
+            <h4>Пять Начал</h4>
+            <div class="elements-list">
+              <ElementBadge element="wood" size="small" />
+              <ElementBadge element="fire" size="small" />
+              <ElementBadge element="earth" size="small" />
+              <ElementBadge element="metal" size="small" />
+              <ElementBadge element="water" size="small" />
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© {SITE_CONFIG.year} {SITE_CONFIG.title}. Все права защищены.</p>
+          <p>Правь · Явь · Навь — Мировой Дуб соединяет миры</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Мобильное меню
+      const menuBtn = document.getElementById('mobileMenuBtn');
+      const mainNav = document.getElementById('mainNav');
+      
+      if (menuBtn && mainNav) {
+        menuBtn.addEventListener('click', () => {
+          menuBtn.classList.toggle('active');
+          mainNav.classList.toggle('open');
+        });
+      }
+      
+      // Анимация появления
+      document.querySelectorAll('.card, .grid > *').forEach((el, index) => {
+        el.classList.add('fade-in');
+        el.style.animationDelay = `${index * 0.05}s`;
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Стили для шапки */
+  .site-header {
+    position: sticky;
+    top: 0;
+    background: var(--bg-header);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+    height: var(--header-height);
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    gap: 1rem;
+  }
+  
+  .logo a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  
+  .logo-icon {
+    font-size: 1.8rem;
+  }
+  
+  .logo-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .logo-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-accent);
+    font-weight: 400;
+  }
+  
+  /* Навигация */
+  .main-nav ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+  
+  .main-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+  
+  .main-nav a:hover {
+    color: var(--text-accent);
+  }
+  
+  .nav-icon {
+    font-size: 1.1rem;
+  }
+  
+  /* Мобильное меню */
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  
+  .mobile-menu-btn span {
+    width: 25px;
+    height: 2px;
+    background: var(--text-primary);
+    transition: all var(--transition-fast);
+  }
+  
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: flex;
+    }
+    
+    .main-nav {
+      position: fixed;
+      top: var(--header-height);
+      left: -100%;
+      width: 100%;
+      height: calc(100vh - var(--header-height));
+      background: var(--bg-primary);
+      transition: left var(--transition-normal);
+      overflow-y: auto;
+    }
+    
+    .main-nav.open {
+      left: 0;
+    }
+    
+    .main-nav ul {
+      flex-direction: column;
+      padding: 2rem;
+      gap: 1rem;
+    }
+    
+    .main-nav a {
+      font-size: 1.2rem;
+      padding: 0.5rem 0;
+    }
+    
+    .logo-subtitle {
+      display: none;
+    }
+  }
+  
+  /* Подвал */
+  .site-footer {
+    background: var(--bg-footer);
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+    padding: 3rem 0 1.5rem;
+  }
+  
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+  }
+  
+  .footer-section li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .elements-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  /* Основной контент */
+  .main-content {
+    min-height: calc(100vh - var(--header-height) - 400px);
+    padding: 2rem 0;
+  }
+  
+  /* Адаптивные заголовки */
+  @media (max-width: 768px) {
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+  }
+</style>

@@ -1,0 +1,147 @@
+---
+// Универсальный компонент карточки
+// Использование: <Card title="Название" element="wood" image="/path/to/image.jpg">Контент</Card>
+
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  image?: string;
+  imageAlt?: string;
+  href?: string;
+  isInteractive?: boolean;
+}
+
+const { 
+  title, 
+  subtitle, 
+  element, 
+  image, 
+  imageAlt = title || 'Изображение',
+  href,
+  isInteractive = true 
+} = Astro.props;
+
+// Базовые классы
+let cardClasses = 'card';
+if (element) cardClasses += ` card-${element}`;
+if (href) cardClasses += ' card-clickable';
+
+// Определяем обёртку: ссылку или div
+const CardWrapper = href ? 'a' : 'div';
+const wrapperProps = href ? { href, class: cardClasses } : { class: cardClasses };
+---
+
+<CardWrapper {...wrapperProps}>
+  {image && (
+    <div class="card-image">
+      <img src={image} alt={imageAlt} loading="lazy" />
+    </div>
+  )}
+  
+  <div class="card-content">
+    {element && (
+      <div class="card-element-badge">
+        <ElementBadge element={element} size="small" />
+      </div>
+    )}
+    
+    {title && <h3 class="card-title">{title}</h3>}
+    {subtitle && <p class="card-subtitle">{subtitle}</p>}
+    
+    <div class="card-body">
+      <slot />
+    </div>
+  </div>
+</CardWrapper>
+
+<style>
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-clickable {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  .card-clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border-color: var(--text-accent);
+  }
+  
+  /* Карточки с акцентом на стихию */
+  .card-wood { border-top: 3px solid var(--element-wood); }
+  .card-fire { border-top: 3px solid var(--element-fire); }
+  .card-earth { border-top: 3px solid var(--element-earth); }
+  .card-metal { border-top: 3px solid var(--element-metal); }
+  .card-water { border-top: 3px solid var(--element-water); }
+  
+  .card-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+  }
+  
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+  }
+  
+  .card-clickable:hover .card-image img {
+    transform: scale(1.05);
+  }
+  
+  .card-content {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-element-badge {
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  
+  .card-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-accent);
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-body {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+  }
+  
+  .card-body :global(p) {
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,180 @@
+---
+// Карточка княжества
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  id: string;
+  name: string;
+  element: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  landscape: string;
+  architecture: string;
+  keyLocations: string[];
+  description: string;
+  icon: string;
+  color: string;
+}
+
+const { id, name, element, landscape, architecture, keyLocations, description, icon, color } = Astro.props;
+---
+
+<div class={`principality-card principality-${element}`}>
+  <div class="card-header">
+    <div class="card-icon" style={`background: ${color}20; border-color: ${color}`}>
+      <span>{icon}</span>
+    </div>
+    <div class="card-title">
+      <h3>{name}</h3>
+      <ElementBadge element={element} size="small" />
+    </div>
+  </div>
+  
+  <p class="card-description">{description}</p>
+  
+  <div class="card-details">
+    <div class="detail-item">
+      <span class="detail-icon">🏞️</span>
+      <div>
+        <strong>Ландшафт</strong>
+        <p>{landscape}</p>
+      </div>
+    </div>
+    
+    <div class="detail-item">
+      <span class="detail-icon">🏛️</span>
+      <div>
+        <strong>Архитектура</strong>
+        <p>{architecture}</p>
+      </div>
+    </div>
+    
+    <div class="detail-item">
+      <span class="detail-icon">📍</span>
+      <div>
+        <strong>Ключевые места</strong>
+        <ul>
+          {keyLocations.slice(0, 3).map(location => <li>{location}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <a href={`/principalities/${id}`} class="card-link">
+    Узнать больше о княжестве →
+  </a>
+</div>
+
+<style>
+  .principality-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-left: 4px solid;
+  }
+  
+  .principality-wood { border-left-color: var(--element-wood); }
+  .principality-fire { border-left-color: var(--element-fire); }
+  .principality-earth { border-left-color: var(--element-earth); }
+  .principality-metal { border-left-color: var(--element-metal); }
+  .principality-water { border-left-color: var(--element-water); }
+  
+  .principality-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  }
+  
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    border: 2px solid;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-title {
+    flex: 1;
+  }
+  
+  .card-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+  }
+  
+  .card-description {
+    padding: 0 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  
+  .card-details {
+    padding: 0 1.25rem;
+    flex: 1;
+  }
+  
+  .detail-item {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .detail-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  
+  .detail-item strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text-primary);
+  }
+  
+  .detail-item p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  
+  .detail-item ul {
+    margin: 0;
+    padding-left: 1rem;
+    color: var(--text-muted);
+  }
+  
+  .detail-item li {
+    margin-bottom: 0.15rem;
+  }
+  
+  .card-link {
+    display: block;
+    margin: 1rem 1.25rem 1.25rem 1.25rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  
+  .card-link:hover {
+    background: var(--text-accent);
+    color: var(--bg-primary);
+  }
+</style>

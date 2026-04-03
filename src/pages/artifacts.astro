@@ -1,0 +1,361 @@
+---
+// Страница «Артефакты»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ArtifactCard from '@components/ArtifactCard.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { ARTIFACTS, SYMBOLS, RARITY_COLORS, RARITY_NAMES } from '@data/artifacts';
+
+// Группировка артефактов по редкости
+const mythicArtifacts = ARTIFACTS.filter(a => a.rarity === 'mythic');
+const legendaryArtifacts = ARTIFACTS.filter(a => a.rarity === 'legendary');
+const rareArtifacts = ARTIFACTS.filter(a => a.rarity === 'rare');
+---
+
+<BaseLayout title="Артефакты">
+  <div class="page-header">
+    <h1>⚔️ Артефакты и реликвии</h1>
+    <p class="page-description">
+      Древние предметы, хранящие силу стихий и память веков. От мифических жемчужин до легендарных клинков
+    </p>
+  </div>
+
+  <!-- Таблица артефактов (быстрый обзор) -->
+  <section class="section">
+    <h2>📋 Свод артефактов</h2>
+    <div class="table-container">
+      <table class="artifacts-table">
+        <thead>
+          <tr>
+            <th>Артефакт</th>
+            <th>Свойства</th>
+            <th>Местонахождение</th>
+            <th>Редкость</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ARTIFACTS.map(artifact => (
+            <tr>
+              <td class="artifact-name-cell">
+                <span class="artifact-icon-small">{artifact.icon}</span>
+                <a href={`/artifacts/${artifact.id}`}>{artifact.name}</a>
+              </td>
+              <td class="artifact-properties-cell">{artifact.properties}</td>
+              <td class="artifact-location-cell">{artifact.location}</td>
+              <td>
+                <span 
+                  class="rarity-dot" 
+                  style={`background: ${RARITY_COLORS[artifact.rarity]}`}
+                ></span>
+                {RARITY_NAMES[artifact.rarity]}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Мифические артефакты -->
+  {mythicArtifacts.length > 0 && (
+    <section class="section">
+      <h2>✨ Мифические артефакты</h2>
+      <p>
+        Предметы невероятной силы, созданные самими драконами или древними божествами. 
+        Каждый из них способен изменить ход истории.
+      </p>
+      <div class="artifacts-grid">
+        {mythicArtifacts.map(artifact => (
+          <ArtifactCard
+            id={artifact.id}
+            name={artifact.name}
+            properties={artifact.properties}
+            location={artifact.location}
+            description={artifact.description}
+            element={artifact.element}
+            rarity={artifact.rarity}
+            icon={artifact.icon}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Легендарные артефакты -->
+  {legendaryArtifacts.length > 0 && (
+    <section class="section">
+      <h2>🌟 Легендарные артефакты</h2>
+      <p>
+        Предметы, прославленные в сказаниях. Их сила велика, но они доступны 
+        лишь избранным героям.
+      </p>
+      <div class="artifacts-grid">
+        {legendaryArtifacts.map(artifact => (
+          <ArtifactCard
+            id={artifact.id}
+            name={artifact.name}
+            properties={artifact.properties}
+            location={artifact.location}
+            description={artifact.description}
+            element={artifact.element}
+            rarity={artifact.rarity}
+            icon={artifact.icon}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Редкие артефакты -->
+  {rareArtifacts.length > 0 && (
+    <section class="section">
+      <h2>🔮 Редкие артефакты</h2>
+      <p>
+        Предметы, которые можно встретить в княжествах. Их сила скромнее, 
+        но они незаменимы в повседневной магии.
+      </p>
+      <div class="artifacts-grid">
+        {rareArtifacts.map(artifact => (
+          <ArtifactCard
+            id={artifact.id}
+            name={artifact.name}
+            properties={artifact.properties}
+            location={artifact.location}
+            description={artifact.description}
+            element={artifact.element}
+            rarity={artifact.rarity}
+            icon={artifact.icon}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Символы сотворения -->
+  <section class="section symbols-section">
+    <h2>🪷 Символы сотворения</h2>
+    <p>
+      Символы, почитаемые в Царстве Пяти Начал. Их наносят на одежду, оружие и амулеты 
+      для привлечения удачи и защиты.
+    </p>
+    <div class="symbols-grid">
+      {SYMBOLS.map(symbol => (
+        <div class="symbol-card">
+          <div class="symbol-icon">{symbol.icon}</div>
+          <div class="symbol-info">
+            <div class="symbol-name">{symbol.name}</div>
+            <div class="symbol-meaning">{symbol.meaning}</div>
+            <div class="symbol-usage">{symbol.usage}</div>
+            {symbol.element && (
+              <div class="symbol-element">
+                <ElementBadge element={symbol.element} size="small" />
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Не артефакт делает героя, а герой — артефакт. Сила внутри тебя, предмет лишь её проводник»</p>
+    <p class="quote-author">— Кузнец-Дракон</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  /* Таблица */
+  .table-container {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .artifacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  
+  .artifacts-table th,
+  .artifacts-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .artifacts-table th {
+    background: var(--bg-secondary);
+    color: var(--text-accent);
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  
+  .artifacts-table tr:hover {
+    background: var(--bg-secondary);
+  }
+  
+  .artifact-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .artifact-icon-small {
+    font-size: 1.2rem;
+  }
+  
+  .artifact-name-cell a {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  
+  .artifact-name-cell a:hover {
+    color: var(--text-accent);
+  }
+  
+  .artifact-properties-cell {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .artifact-location-cell {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .rarity-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+  }
+  
+  /* Сетка артефактов */
+  .artifacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Символы */
+  .symbols-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .symbols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .symbol-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .symbol-card:hover {
+    transform: translateX(5px);
+    border-color: var(--text-accent);
+  }
+  
+  .symbol-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  
+  .symbol-info {
+    flex: 1;
+  }
+  
+  .symbol-name {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .symbol-meaning {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .symbol-usage {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .symbol-element {
+    margin-top: 0.5rem;
+  }
+  
+  /* Цитата */
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .artifacts-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .symbols-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+    
+    .artifacts-table th,
+    .artifacts-table td {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+</style>

@@ -1,0 +1,169 @@
+---
+// Страница «Пять княжеств»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PrincipalityCard from '@components/PrincipalityCard.astro';
+import PrincipalitiesMap from '@components/PrincipalitiesMap.astro';
+import ElementBadge from '@/components/ElementBadge.astro';
+import { PRINCIPALITIES } from '@data/principalities';
+---
+
+<BaseLayout title="Пять княжеств">
+  <div class="page-header">
+    <h1>🏰 Пять княжеств</h1>
+    <p class="page-description">
+      Пять земель, пять стихий, пять путей. Каждое княжество хранит свою частицу великого равновесия.
+    </p>
+  </div>
+
+  <!-- Карта княжеств -->
+  <section class="section">
+    <h2>🗺️ Карта Царства</h2>
+    <p>
+      Княжества расположены вокруг Мирового Дуба, каждое в своём направлении света.
+      Север хранит Дерево, юг — Огонь, восток — Металл, запад — Воду, а сердце Земли — на северо-западе.
+    </p>
+    <PrincipalitiesMap />
+  </section>
+
+  <!-- Княжества сеткой -->
+  <section class="section">
+    <h2>✨ Княжества</h2>
+    <p>
+      Каждое княжество уникально: от зелёных лесов до огненных степей, от подземных городов до туманных озёр.
+      Выберите княжество, чтобы узнать о нём больше.
+    </p>
+    
+    <div class="principalities-grid">
+      {PRINCIPALITIES.map(principality => (
+        <PrincipalityCard
+          id={principality.id}
+          name={principality.name}
+          element={principality.element}
+          landscape={principality.landscape}
+          architecture={principality.architecture}
+          keyLocations={principality.keyLocations}
+          description={principality.description}
+          icon={principality.icon}
+          color={principality.color}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Сравнение княжеств -->
+  <section class="section">
+    <h2>📊 Сравнение княжеств</h2>
+    <div class="comparison-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Княжество</th>
+            <th>Стихия</th>
+            <th>Главное ремесло</th>
+            <th>Ключевое место</th>
+          </tr>
+        </thead>
+        <tbody>
+          {PRINCIPALITIES.map(p => (
+            <tr key={p.id}>
+              <td class={`principality-name principality-${p.element}`}>
+                <span class="table-icon">{p.icon}</span> {p.name}
+              </td>
+              <td><ElementBadge element={p.element} size="small" /></td>
+              <td>{
+                p.element === 'wood' ? 'Травничество' :
+                p.element === 'fire' ? 'Кузнечество' :
+                p.element === 'earth' ? 'Земледелие' :
+                p.element === 'metal' ? 'Рудокопство' : 'Рыболовство'
+              }</td>
+              <td>{p.keyLocations[0]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .principalities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Таблица сравнения */
+  .comparison-table {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  th {
+    background: var(--bg-secondary);
+    color: var(--text-accent);
+    font-weight: 600;
+  }
+  
+  tr:hover {
+    background: var(--bg-secondary);
+  }
+  
+  .principality-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .table-icon {
+    font-size: 1.2rem;
+  }
+  
+  .principality-wood { color: var(--element-wood-light); }
+  .principality-fire { color: var(--element-fire-light); }
+  .principality-earth { color: var(--element-earth-light); }
+  .principality-metal { color: var(--element-metal-light); }
+  .principality-water { color: var(--element-water-light); }
+  
+  @media (max-width: 768px) {
+    .principalities-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    th, td {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>

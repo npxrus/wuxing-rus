@@ -1,0 +1,282 @@
+---
+// Динамическая страница для отдельного княжества
+// Доступна по адресу /principalities/green-groves и т.д.
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { PRINCIPALITIES } from '@data/principalities';
+
+// Получаем параметр id из URL
+export async function getStaticPaths() {
+  return PRINCIPALITIES.map(principality => ({
+    params: { id: principality.id },
+    props: { principality },
+  }));
+}
+
+const { principality } = Astro.props;
+const { 
+  name, 
+  element, 
+  landscape, 
+  architecture, 
+  keyLocations, 
+  description, 
+  history, 
+  culture, 
+  notableInhabitants, 
+  festivals, 
+  icon, 
+  color 
+} = principality;
+---
+
+<BaseLayout title={name}>
+  <div class="page-header" style={`border-bottom-color: ${color}`}>
+    <div class="header-icon" style={`background: ${color}20; border-color: ${color}`}>
+      <span>{icon}</span>
+    </div>
+    <div class="header-text">
+      <h1>{name}</h1>
+      <div class="header-badge">
+        <ElementBadge element={element} size="medium" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Описание -->
+  <section class="section">
+    <h2>📜 Описание</h2>
+    <p class="description-text">{description}</p>
+  </section>
+
+  <!-- История -->
+  <section class="section">
+    <h2>📖 История</h2>
+    <div class="history-card">
+      <p>{history}</p>
+    </div>
+  </section>
+
+  <!-- Две колонки: ландшафт и архитектура -->
+  <section class="section two-columns">
+    <div class="column">
+      <h3>🏞️ Ландшафт</h3>
+      <div class="info-card">
+        <p>{landscape}</p>
+      </div>
+    </div>
+    <div class="column">
+      <h3>🏛️ Архитектура</h3>
+      <div class="info-card">
+        <p>{architecture}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ключевые места -->
+  <section class="section">
+    <h2>📍 Ключевые места</h2>
+    <div class="locations-grid">
+      {keyLocations.map(location => (
+        <div class="location-card">
+          <span class="location-icon">🏛️</span>
+          <span class="location-name">{location}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Культура -->
+  <section class="section">
+    <h2>🎭 Культура и традиции</h2>
+    <div class="culture-card">
+      <p>{culture}</p>
+    </div>
+  </section>
+
+  <!-- Известные обитатели -->
+  <section class="section">
+    <h2>👥 Известные обитатели</h2>
+    <div class="inhabitants-list">
+      {notableInhabitants.map(inhabitant => (
+        <span class="inhabitant-tag">{inhabitant}</span>
+      ))}
+    </div>
+  </section>
+
+  <!-- Праздники -->
+  <section class="section">
+    <h2>🎉 Праздники</h2>
+    <div class="festivals-list">
+      {festivals.map(festival => (
+        <div class="festival-card">
+          <span class="festival-icon">✨</span>
+          <span>{festival}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Навигация назад -->
+  <div class="back-link">
+    <a href="/principalities">← Вернуться к списку княжеств</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid;
+    flex-wrap: wrap;
+  }
+  
+  .header-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border: 2px solid;
+  }
+  
+  .header-text h1 {
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .section {
+    margin-bottom: 3rem;
+  }
+  
+  .description-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  
+  .history-card, .culture-card, .info-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    border-left: 3px solid var(--text-accent);
+  }
+  
+  .two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .location-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform var(--transition-fast);
+  }
+  
+  .location-card:hover {
+    transform: translateX(5px);
+    background: var(--bg-card-hover);
+  }
+  
+  .location-icon {
+    font-size: 1.3rem;
+  }
+  
+  .location-name {
+    font-weight: 500;
+  }
+  
+  .inhabitants-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .inhabitant-tag {
+    background: var(--bg-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+  }
+  
+  .inhabitant-tag:hover {
+    border-color: var(--text-accent);
+    transform: translateY(-2px);
+  }
+  
+  .festivals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .festival-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    transition: transform var(--transition-fast);
+  }
+  
+  .festival-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .festival-icon {
+    font-size: 1.2rem;
+  }
+  
+  .back-link {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+  }
+  
+  .back-link a {
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .page-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .two-columns {
+      grid-template-columns: 1fr;
+    }
+    
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 2rem;
+    }
+  }
+</style>

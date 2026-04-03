@@ -1,0 +1,204 @@
+---
+// Карточка существа
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  id: string;
+  name: string;
+  category: 'higher' | 'common';
+  element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  description: string;
+  appearance: string;
+  habitat: string;
+  abilities: string[];
+  icon: string;
+}
+
+const { id, name, category, element, description, appearance, habitat, abilities, icon } = Astro.props;
+
+const categoryLabel = category === 'higher' ? 'Высшее существо' : 'Обычное существо';
+const categoryClass = category === 'higher' ? 'category-higher' : 'category-common';
+---
+
+<div class={`creature-card ${element ? `creature-${element}` : ''} ${categoryClass}`}>
+  <div class="card-header">
+    <div class="creature-icon">{icon}</div>
+    <div class="creature-title">
+      <h3>{name}</h3>
+      <div class="creature-meta">
+        <span class="category-badge">{categoryLabel}</span>
+        {element && <ElementBadge element={element} size="small" />}
+      </div>
+    </div>
+  </div>
+  
+  <p class="creature-description">{description}</p>
+  
+  <div class="creature-details">
+    <div class="detail-item">
+      <span class="detail-icon">👁️</span>
+      <div>
+        <strong>Облик</strong>
+        <p>{appearance}</p>
+      </div>
+    </div>
+    
+    <div class="detail-item">
+      <span class="detail-icon">🏞️</span>
+      <div>
+        <strong>Обитание</strong>
+        <p>{habitat}</p>
+      </div>
+    </div>
+    
+    <div class="detail-item">
+      <span class="detail-icon">✨</span>
+      <div>
+        <strong>Способности</strong>
+        <ul>
+          {abilities.slice(0, 3).map(ability => <li>{ability}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <a href={`/creatures/${id}`} class="card-link">
+    Узнать больше о существе →
+  </a>
+</div>
+
+<style>
+  .creature-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-left: 4px solid;
+  }
+  
+  .creature-wood { border-left-color: var(--element-wood); }
+  .creature-fire { border-left-color: var(--element-fire); }
+  .creature-earth { border-left-color: var(--element-earth); }
+  .creature-metal { border-left-color: var(--element-metal); }
+  .creature-water { border-left-color: var(--element-water); }
+  
+  .category-higher {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+  }
+  
+  .category-common {
+    background: var(--bg-card);
+  }
+  
+  .creature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  }
+  
+  .creature-icon {
+    font-size: 2.5rem;
+  }
+  
+  .creature-title {
+    flex: 1;
+  }
+  
+  .creature-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+  }
+  
+  .creature-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .category-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+  }
+  
+  .category-higher .category-badge {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--text-accent);
+  }
+  
+  .creature-description {
+    padding: 0 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  
+  .creature-details {
+    padding: 0 1.25rem;
+    flex: 1;
+  }
+  
+  .detail-item {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .detail-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .detail-item strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--text-primary);
+  }
+  
+  .detail-item p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  
+  .detail-item ul {
+    margin: 0;
+    padding-left: 1rem;
+    color: var(--text-muted);
+  }
+  
+  .detail-item li {
+    margin-bottom: 0.15rem;
+  }
+  
+  .card-link {
+    display: block;
+    margin: 1rem 1.25rem 1.25rem 1.25rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  
+  .card-link:hover {
+    background: var(--text-accent);
+    color: var(--bg-primary);
+  }
+</style>

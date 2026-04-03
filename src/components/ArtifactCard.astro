@@ -1,0 +1,181 @@
+---
+// Карточка артефакта
+import ElementBadge from './ElementBadge.astro';
+import { RARITY_COLORS, RARITY_NAMES } from '@data/artifacts';
+
+export interface Props {
+  id: string;
+  name: string;
+  properties: string;
+  location: string;
+  description: string;
+  element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  rarity: 'common' | 'rare' | 'legendary' | 'mythic';
+  icon: string;
+}
+
+const { id, name, properties, location, description, element, rarity, icon } = Astro.props;
+const rarityColor = RARITY_COLORS[rarity];
+const rarityName = RARITY_NAMES[rarity];
+---
+
+<div class={`artifact-card ${element ? `artifact-${element}` : ''}`}>
+  <div class="artifact-header">
+    <div class="artifact-icon" style={`background: ${rarityColor}20; border-color: ${rarityColor}`}>
+      <span>{icon}</span>
+    </div>
+    <div class="artifact-title">
+      <h3>{name}</h3>
+      <div class="artifact-meta">
+        <span class="rarity-badge" style={`background: ${rarityColor}; color: white`}>
+          {rarityName}
+        </span>
+        {element && <ElementBadge element={element} size="small" />}
+      </div>
+    </div>
+  </div>
+  
+  <div class="artifact-property">
+    <span class="property-label">✨ Свойство:</span>
+    <span class="property-text">{properties}</span>
+  </div>
+  
+  <p class="artifact-description">{description}</p>
+  
+  <div class="artifact-location">
+    <span class="location-icon">📍</span>
+    <span class="location-text">{location}</span>
+  </div>
+  
+  <a href={`/artifacts/${id}`} class="card-link">
+    Узнать больше об артефакте →
+  </a>
+</div>
+
+<style>
+  .artifact-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+  }
+  
+  .artifact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .artifact-wood { border-left: 4px solid var(--element-wood); }
+  .artifact-fire { border-left: 4px solid var(--element-fire); }
+  .artifact-earth { border-left: 4px solid var(--element-earth); }
+  .artifact-metal { border-left: 4px solid var(--element-metal); }
+  .artifact-water { border-left: 4px solid var(--element-water); }
+  
+  .artifact-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  }
+  
+  .artifact-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 2px solid;
+  }
+  
+  .artifact-title {
+    flex: 1;
+  }
+  
+  .artifact-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .artifact-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .rarity-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  
+  .artifact-property {
+    margin: 0.5rem 1.25rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .property-label {
+    font-weight: 600;
+    color: var(--text-accent);
+    font-size: 0.8rem;
+  }
+  
+  .property-text {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+  }
+  
+  .artifact-description {
+    padding: 0 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+  
+  .artifact-location {
+    margin: 0 1.25rem 1rem 1.25rem;
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .location-icon {
+    font-size: 1rem;
+  }
+  
+  .card-link {
+    display: block;
+    margin: 0 1.25rem 1.25rem 1.25rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  
+  .card-link:hover {
+    background: var(--text-accent);
+    color: var(--bg-primary);
+  }
+</style>

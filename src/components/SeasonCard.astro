@@ -1,0 +1,171 @@
+---
+// Карточка сезона
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  name: string;
+  element: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  icon: string;
+  color: string;
+  description: string;
+  daysCount: number;
+  traits: string[];
+  activities: string[];
+  isCurrent?: boolean;
+}
+
+const { name, element, icon, color, description, daysCount, traits, activities, isCurrent = false } = Astro.props;
+---
+
+<div class={`season-card ${isCurrent ? 'current-season' : ''}`} style={`border-top-color: ${color}`}>
+  {isCurrent && <div class="current-badge">🌟 Текущий сезон</div>}
+  
+  <div class="season-header">
+    <div class="season-icon" style={`background: ${color}20; color: ${color}`}>
+      <span>{icon}</span>
+    </div>
+    <div class="season-title">
+      <h3>{name}</h3>
+      <div class="season-meta">
+        <ElementBadge element={element} size="small" />
+        <span class="days-badge">{daysCount} дней</span>
+      </div>
+    </div>
+  </div>
+  
+  <p class="season-description">{description}</p>
+  
+  <div class="season-traits">
+    <div class="traits-title">🌿 Характерные черты</div>
+    <div class="traits-list">
+      {traits.map(trait => (
+        <span class="trait-tag">{trait}</span>
+      ))}
+    </div>
+  </div>
+  
+  <div class="season-activities">
+    <div class="activities-title">🎯 Основные занятия</div>
+    <ul>
+      {activities.map(activity => (
+        <li>{activity}</li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .season-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+    border-top-width: 4px;
+    border-top-style: solid;
+    position: relative;
+  }
+  
+  .season-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .current-season {
+    border: 2px solid var(--text-accent);
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .current-badge {
+    position: absolute;
+    top: -10px;
+    right: 1rem;
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  
+  .season-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .season-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+  
+  .season-title {
+    flex: 1;
+  }
+  
+  .season-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .season-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .days-badge {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .season-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .season-traits, .season-activities {
+    margin-top: 1rem;
+  }
+  
+  .traits-title, .activities-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .traits-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .trait-tag {
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+  
+  .season-activities ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  
+  .season-activities li {
+    margin-bottom: 0.2rem;
+  }
+</style>

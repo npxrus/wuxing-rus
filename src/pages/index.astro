@@ -1,17 +1,148 @@
 ---
-
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Card from '@components/Card.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { SITE_CONFIG } from '@data/siteConfig';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Добро пожаловать">
+  <div class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title floating">
+        <span class="hero-icon">🌳</span>
+        {SITE_CONFIG.title}
+      </h1>
+      <p class="hero-subtitle">Мир У-Син-Руси — где пять стихий обрели форму</p>
+      <div class="hero-elements">
+        <ElementBadge element="wood" size="medium" />
+        <ElementBadge element="fire" size="medium" />
+        <ElementBadge element="earth" size="medium" />
+        <ElementBadge element="metal" size="medium" />
+        <ElementBadge element="water" size="medium" />
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-grid">
+    <Card title="🌍 Три мира" element="wood">
+      <p><strong>Правь</strong> — небесный мир звёздных духов<br/>
+      <strong>Явь</strong> — срединный мир, где стихии обрели форму<br/>
+      <strong>Навь</strong> — подземный мир теней и забытых сущностей</p>
+    </Card>
+    
+    <Card title="🐉 Пять Драконов-Хранителей" element="fire">
+      <p>Зелёный (Мудрец) · Красный (Воин)<br/>
+      Жёлтый (Хранитель) · Белый (Судья)<br/>
+      Чёрный (Странник)</p>
+    </Card>
+    
+    <Card title="📅 Пять сезонов" element="earth">
+      <p>Зелёный · Алый · Золотой · Белый · Чёрный<br/>
+      Каждый сезон — 72 дня + 5 «дней без начала»</p>
+    </Card>
+  </div>
+
+  <div class="quote-block">
+    <p class="quote">«Из Великого Единства родилось Противоборство Начал — столкновение Инь и Ян, породившее вихрь первозданной энергии»</p>
+    <p class="quote-author">— Свиток Великого Единства</p>
+  </div>
+
+  <div class="cta-section">
+    <h2>Погрузитесь в мир Царства Пяти Начал</h2>
+    <div class="cta-buttons">
+      <a href="/world" class="button">🏛️ Устройство мира</a>
+      <a href="/principalities" class="button">🏰 Пять княжеств</a>
+      <a href="/creatures" class="button">🐉 Существа и духи</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 3rem 1rem 4rem;
+    background: linear-gradient(135deg, rgba(45, 90, 39, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 2rem;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--text-accent);
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-elements {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .intro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+  
+  .quote-block {
+    background: var(--bg-card);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  .cta-section {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    margin: 2rem 0;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    
+    .quote {
+      font-size: 1rem;
+    }
+  }
+</style>

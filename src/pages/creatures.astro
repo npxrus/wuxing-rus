@@ -1,0 +1,325 @@
+---
+// Страница «Существа и духи»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import CreatureCard from '@components/CreatureCard.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { ALL_CREATURES, HIGHER_CREATURES, COMMON_CREATURES } from '@data/creatures';
+
+// Получаем уникальные стихии для фильтрации
+const elements = ['wood', 'fire', 'earth', 'metal', 'water'] as const;
+const elementNames = {
+  wood: 'Дерево',
+  fire: 'Огонь',
+  earth: 'Земля',
+  metal: 'Металл',
+  water: 'Вода',
+};
+---
+
+<BaseLayout title="Существа и духи">
+  <div class="page-header">
+    <h1>🐉 Существа и духи</h1>
+    <p class="page-description">
+      От высших сущностей Прави до обычных духов лесов и вод — мир Царства Пяти Начал населён удивительными созданиями
+    </p>
+  </div>
+
+  <!-- Фильтры -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <span class="filter-label">Категория:</span>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Все</button>
+        <button class="filter-btn" data-filter="higher">Высшие существа</button>
+        <button class="filter-btn" data-filter="common">Обычные существа</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Стихия:</span>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-element="all">Все</button>
+        {elements.map(element => (
+          <button class="filter-btn" data-element={element}>
+            <ElementBadge element={element} size="small" showLabel={false} />
+            {elementNames[element]}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Высшие существа -->
+  <section class="section" id="higher-section">
+    <h2>⭐ Высшие сущности</h2>
+    <p>
+      Бессмертные создания Прави, стоящие у истоков мироздания. Драконы-Хранители, Звёздные Духи и сам Теневой Дракон.
+    </p>
+    <div class="creatures-grid higher-grid">
+      {HIGHER_CREATURES.map(creature => (
+        <CreatureCard
+          id={creature.id}
+          name={creature.name}
+          category={creature.category}
+          element={creature.element}
+          description={creature.description}
+          appearance={creature.appearance}
+          habitat={creature.habitat}
+          abilities={creature.abilities}
+          icon={creature.icon}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Обычные существа -->
+  <section class="section" id="common-section">
+    <h2>🌿 Обычные существа</h2>
+    <p>
+      Духи лесов, вод и гор, которые населяют Явь. Они могут быть добрыми или опасными — всё зависит от того, как с ними обращаться.
+    </p>
+    <div class="creatures-grid common-grid">
+      {COMMON_CREATURES.map(creature => (
+        <CreatureCard
+          id={creature.id}
+          name={creature.name}
+          category={creature.category}
+          element={creature.element}
+          description={creature.description}
+          appearance={creature.appearance}
+          habitat={creature.habitat}
+          abilities={creature.abilities}
+          icon={creature.icon}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Статистика -->
+  <section class="section stats-section">
+    <h2>📊 Бестиарий</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">{ALL_CREATURES.length}</div>
+        <div class="stat-label">Всего существ</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{HIGHER_CREATURES.length}</div>
+        <div class="stat-label">Высших сущностей</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{COMMON_CREATURES.length}</div>
+        <div class="stat-label">Обычных существ</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Стихий</div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .filters-section {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .filter-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .filter-btn {
+    padding: 0.4rem 0.8rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .filter-btn:hover {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+  }
+  
+  .filter-btn.active {
+    background: var(--text-accent);
+    border-color: var(--text-accent);
+    color: var(--bg-primary);
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .creatures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Статистика */
+  .stats-section {
+    text-align: center;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .stat-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--text-accent);
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-accent);
+  }
+  
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .creatures-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .filters-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .filter-group {
+      justify-content: space-between;
+    }
+    
+    .filter-buttons {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Фильтрация существ
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const higherGrid = document.querySelector('.higher-grid');
+  const commonGrid = document.querySelector('.common-grid');
+  
+  let currentCategory = 'all';
+  let currentElement = 'all';
+  
+  function filterCards() {
+    // Фильтрация высших существ
+    if (higherGrid) {
+      const higherCards = higherGrid.querySelectorAll('.creature-card');
+      higherCards.forEach(card => {
+        const cardElement = card.classList.contains('creature-wood') ? 'wood' :
+                           card.classList.contains('creature-fire') ? 'fire' :
+                           card.classList.contains('creature-earth') ? 'earth' :
+                           card.classList.contains('creature-metal') ? 'metal' :
+                           card.classList.contains('creature-water') ? 'water' : null;
+        
+        const categoryMatch = currentCategory === 'all' || currentCategory === 'higher';
+        const elementMatch = currentElement === 'all' || cardElement === currentElement;
+        
+        card.style.display = (categoryMatch && elementMatch) ? '' : 'none';
+      });
+    }
+    
+    // Фильтрация обычных существ
+    if (commonGrid) {
+      const commonCards = commonGrid.querySelectorAll('.creature-card');
+      commonCards.forEach(card => {
+        const cardElement = card.classList.contains('creature-wood') ? 'wood' :
+                           card.classList.contains('creature-fire') ? 'fire' :
+                           card.classList.contains('creature-earth') ? 'earth' :
+                           card.classList.contains('creature-metal') ? 'metal' :
+                           card.classList.contains('creature-water') ? 'water' : null;
+        
+        const categoryMatch = currentCategory === 'all' || currentCategory === 'common';
+        const elementMatch = currentElement === 'all' || cardElement === currentElement;
+        
+        card.style.display = (categoryMatch && elementMatch) ? '' : 'none';
+      });
+    }
+  }
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterValue = btn.dataset.filter;
+      const elementValue = btn.dataset.element;
+      
+      if (filterValue) {
+        currentCategory = filterValue;
+        // Обновляем активное состояние для категорий
+        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll(`[data-filter="${filterValue}"]`).forEach(b => b.classList.add('active'));
+      }
+      
+      if (elementValue) {
+        currentElement = elementValue;
+        // Обновляем активное состояние для стихий
+        document.querySelectorAll('[data-element]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll(`[data-element="${elementValue}"]`).forEach(b => b.classList.add('active'));
+      }
+      
+      filterCards();
+    });
+  });
+</script>

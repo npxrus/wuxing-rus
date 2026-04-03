@@ -1,0 +1,131 @@
+---
+// Карточка для отображения дракона
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  name: string;
+  element: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  title: string;
+  description: string;
+  abilities: string[];
+  location: string;
+  icon: string;
+}
+
+const { name, element, title, description, abilities, location, icon } = Astro.props;
+---
+
+<div class={`dragon-card dragon-${element}`}>
+  <div class="dragon-header">
+    <div class="dragon-icon">{icon}</div>
+    <div class="dragon-title">
+      <h3>{name}</h3>
+      <span class="dragon-subtitle">{title}</span>
+    </div>
+    <ElementBadge element={element} size="medium" />
+  </div>
+  
+  <p class="dragon-description">{description}</p>
+  
+  <div class="dragon-abilities">
+    <div class="abilities-title">✨ Способности</div>
+    <ul>
+      {abilities.map(ability => <li>{ability}</li>)}
+    </ul>
+  </div>
+  
+  <div class="dragon-location">
+    <span>📍</span>
+    <span>{location}</span>
+  </div>
+</div>
+
+<style>
+  .dragon-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    height: 100%;
+    border-left: 4px solid;
+  }
+  
+  .dragon-wood { border-left-color: var(--element-wood); }
+  .dragon-fire { border-left-color: var(--element-fire); }
+  .dragon-earth { border-left-color: var(--element-earth); }
+  .dragon-metal { border-left-color: var(--element-metal); }
+  .dragon-water { border-left-color: var(--element-water); }
+  
+  .dragon-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .dragon-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  
+  .dragon-icon {
+    font-size: 2.5rem;
+  }
+  
+  .dragon-title {
+    flex: 1;
+  }
+  
+  .dragon-title h3 {
+    margin: 0;
+    font-size: 1.3rem;
+  }
+  
+  .dragon-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-accent);
+  }
+  
+  .dragon-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .dragon-abilities {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+  }
+  
+  .abilities-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .dragon-abilities ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  
+  .dragon-abilities li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .dragon-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+  }
+</style>

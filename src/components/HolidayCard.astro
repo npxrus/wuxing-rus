@@ -1,0 +1,149 @@
+---
+// Карточка праздника
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  name: string;
+  season: string;
+  element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+  description: string;
+  rituals: string[];
+  traditions: string[];
+  date: string;
+  icon: string;
+}
+
+const { name, season, element, description, rituals, traditions, date, icon } = Astro.props;
+---
+
+<div class="holiday-card">
+  <div class="holiday-header">
+    <div class="holiday-icon">{icon}</div>
+    <div class="holiday-info">
+      <h3>{name}</h3>
+      <div class="holiday-meta">
+        <span class="season-badge">📅 {season}</span>
+        <span class="date-badge">📆 {date}</span>
+        {element && <ElementBadge element={element} size="small" />}
+      </div>
+    </div>
+  </div>
+  
+  <p class="holiday-description">{description}</p>
+  
+  <div class="holiday-details">
+    <div class="rituals-section">
+      <div class="section-title">🕯️ Ритуалы</div>
+      <ul>
+        {rituals.map(ritual => <li>{ritual}</li>)}
+      </ul>
+    </div>
+    <div class="traditions-section">
+      <div class="section-title">🎉 Традиции</div>
+      <ul>
+        {traditions.map(tradition => <li>{tradition}</li>)}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .holiday-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+  }
+  
+  .holiday-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--text-accent);
+  }
+  
+  .holiday-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .holiday-icon {
+    font-size: 2.5rem;
+  }
+  
+  .holiday-info {
+    flex: 1;
+  }
+  
+  .holiday-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .holiday-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .season-badge, .date-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+  }
+  
+  .holiday-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .holiday-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .section-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .rituals-section ul, .traditions-section ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  
+  .rituals-section li, .traditions-section li {
+    margin-bottom: 0.25rem;
+  }
+  
+  @media (max-width: 640px) {
+    .holiday-details {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    
+    .holiday-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .holiday-meta {
+      justify-content: center;
+    }
+  }
+</style>

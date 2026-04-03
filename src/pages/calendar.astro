@@ -1,0 +1,412 @@
+---
+// Страница «Календарь и праздники»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SeasonCard from '@components/SeasonCard.astro';
+import HolidayCard from '@components/HolidayCard.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { SEASONS, HOLIDAYS, DAYS_WITHOUT_BEGINNING, getCurrentSeason, getHolidaysBySeason } from '@data/calendar';
+
+const currentSeason = getCurrentSeason();
+const currentSeasonHolidays = getHolidaysBySeason(currentSeason.name);
+---
+
+<BaseLayout title="Календарь и праздники">
+  <div class="page-header">
+    <h1>📅 Календарь Пяти Сезонов</h1>
+    <p class="page-description">
+      Год в Царстве Пяти Начал разделён на пять сезонов по 72 дня, плюс 5 «дней без начала» — времени размышлений и подготовки к новому циклу
+    </p>
+  </div>
+
+  <!-- Текущий сезон (выделенный) -->
+  <section class="section current-season-section">
+    <h2>🌟 Текущий сезон</h2>
+    <p class="season-note">
+      Сейчас в Царстве — <strong class="current-highlight">{currentSeason.name}</strong>. 
+      Это время {currentSeason.description.toLowerCase()}
+    </p>
+    <SeasonCard
+      name={currentSeason.name}
+      element={currentSeason.element}
+      icon={currentSeason.icon}
+      color={currentSeason.color}
+      description={currentSeason.description}
+      daysCount={currentSeason.daysCount}
+      traits={currentSeason.traits}
+      activities={currentSeason.activities}
+      isCurrent={true}
+    />
+  </section>
+
+  <!-- Ближайшие праздники -->
+  {currentSeasonHolidays.length > 0 && (
+    <section class="section">
+      <h2>🎊 Ближайшие праздники</h2>
+      <p>
+        В текущем сезоне отмечаются следующие праздники. Не пропустите возможность 
+        присоединиться к древним традициям!
+      </p>
+      <div class="holidays-grid">
+        {currentSeasonHolidays.map(holiday => (
+          <HolidayCard
+            name={holiday.name}
+            season={holiday.season}
+            element={holiday.element}
+            description={holiday.description}
+            rituals={holiday.rituals}
+            traditions={holiday.traditions}
+            date={holiday.date}
+            icon={holiday.icon}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Все сезоны -->
+  <section class="section">
+    <h2>🍂 Пять сезонов</h2>
+    <p>
+      Каждый сезон длится 72 дня и связан с одной из стихий. Цикл завершается 
+      5 «днями без начала» — временем вне времени.
+    </p>
+    <div class="seasons-grid">
+      {SEASONS.map(season => (
+        <SeasonCard
+          name={season.name}
+          element={season.element}
+          icon={season.icon}
+          color={season.color}
+          description={season.description}
+          daysCount={season.daysCount}
+          traits={season.traits}
+          activities={season.activities}
+          isCurrent={season.id === currentSeason.id}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Дни без начала -->
+  <section class="section days-section">
+    <h2>⏳ Дни без начала</h2>
+    <div class="days-card">
+      <div class="days-icon">⏰</div>
+      <div class="days-content">
+        <div class="days-count">{DAYS_WITHOUT_BEGINNING.count} дней</div>
+        <p class="days-description">{DAYS_WITHOUT_BEGINNING.description}</p>
+        <div class="days-activities">
+          <strong>Чем заняться в эти дни:</strong>
+          <ul>
+            {DAYS_WITHOUT_BEGINNING.activities.map(activity => (
+              <li>{activity}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Все праздники -->
+  <section class="section">
+    <h2>🎉 Все праздники года</h2>
+    <p>
+      Полный список праздников Царства Пяти Начал, распределённых по сезонам.
+    </p>
+    
+    {SEASONS.map(season => {
+      const seasonHolidays = HOLIDAYS.filter(h => h.season === season.name);
+      if (seasonHolidays.length === 0) return null;
+      
+      return (
+        <div class="season-holidays">
+          <h3 class={`season-title season-${season.element}`}>
+            <span class="season-icon-small">{season.icon}</span>
+            {season.name}
+          </h3>
+          <div class="holidays-grid">
+            {seasonHolidays.map(holiday => (
+              <HolidayCard
+                name={holiday.name}
+                season={holiday.season}
+                element={holiday.element}
+                description={holiday.description}
+                rituals={holiday.rituals}
+                traditions={holiday.traditions}
+                date={holiday.date}
+                icon={holiday.icon}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </section>
+
+  <!-- Календарная таблица -->
+  <section class="section">
+    <h2>📊 Структура года</h2>
+    <div class="calendar-table-container">
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th>Сезон</th>
+            <th>Стихия</th>
+            <th>Длительность</th>
+            <th>Праздники</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SEASONS.map(season => (
+            <tr class={`season-row season-${season.element}`}>
+              <td class="season-name-cell">
+                <span class="season-icon-tiny">{season.icon}</span>
+                {season.name}
+              </td>
+              <td><ElementBadge element={season.element} size="small" /></td>
+              <td>{season.daysCount} дней</td>
+              <td class="holidays-cell">
+                {HOLIDAYS.filter(h => h.season === season.name).map(h => h.name).join(' · ')}
+              </td>
+            </tr>
+          ))}
+          <tr class="days-row">
+            <td colspan="4" class="days-cell">
+              <strong>+ {DAYS_WITHOUT_BEGINNING.count} дней без начала</strong> — {DAYS_WITHOUT_BEGINNING.description}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Время течёт как вода, но каждый сезон приносит свой дар. Пойми ритм природы — и она станет твоим союзником»</p>
+    <p class="quote-author">— Лунная Дева</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .current-season-section {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .season-note {
+    margin-bottom: 1.5rem;
+  }
+  
+  .current-highlight {
+    color: var(--text-accent);
+  }
+  
+  .seasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .holidays-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1rem 0 2rem 0;
+  }
+  
+  /* Дни без начала */
+  .days-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .days-card {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .days-icon {
+    font-size: 3rem;
+  }
+  
+  .days-content {
+    flex: 1;
+  }
+  
+  .days-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .days-description {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+  
+  .days-activities ul {
+    margin: 0.5rem 0 0 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  
+  /* Сезонные заголовки */
+  .season-holidays {
+    margin-bottom: 2rem;
+  }
+  
+  .season-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.3rem;
+  }
+  
+  .season-icon-small {
+    font-size: 1.5rem;
+  }
+  
+  .season-wood { color: var(--element-wood-light); }
+  .season-fire { color: var(--element-fire-light); }
+  .season-earth { color: var(--element-earth-light); }
+  .season-metal { color: var(--element-metal-light); }
+  .season-water { color: var(--element-water-light); }
+  
+  /* Календарная таблица */
+  .calendar-table-container {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  
+  .calendar-table th,
+  .calendar-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .calendar-table th {
+    background: var(--bg-secondary);
+    color: var(--text-accent);
+    font-weight: 600;
+  }
+  
+  .season-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .season-icon-tiny {
+    font-size: 1.1rem;
+  }
+  
+  .season-row:hover {
+    background: var(--bg-secondary);
+  }
+  
+  .season-wood { border-left: 3px solid var(--element-wood); }
+  .season-fire { border-left: 3px solid var(--element-fire); }
+  .season-earth { border-left: 3px solid var(--element-earth); }
+  .season-metal { border-left: 3px solid var(--element-metal); }
+  .season-water { border-left: 3px solid var(--element-water); }
+  
+  .holidays-cell {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .days-row td {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+  }
+  
+  .days-cell {
+    text-align: center;
+  }
+  
+  /* Цитата */
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .seasons-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .holidays-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .days-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .days-activities ul {
+      text-align: left;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+    
+    .calendar-table th,
+    .calendar-table td {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+</style>

@@ -1,0 +1,127 @@
+---
+// Сезонный баннер — отображает текущий сезон в календаре Царства
+// Сезоны: wood (Зелёный/Дерево), fire (Алый/Огонь), earth (Золотой/Земля), metal (Белый/Металл), water (Чёрный/Вода)
+
+// Определение текущего сезона на основе реальной даты (для демонстрации)
+// В реальном проекте можно настроить вручную или синхронизировать с календарём мира
+
+const seasons: { name: string; element: 'wood' | 'fire' | 'earth' | 'metal' | 'water'; month: number }[] = [
+  { name: 'Зелёный сезон — Пробуждение', element: 'wood', month: 3 },  // Март
+  { name: 'Алый сезон — Жара и грозы', element: 'fire', month: 6 },     // Июнь
+  { name: 'Золотой сезон — Сбор урожая', element: 'earth', month: 9 },  // Сентябрь
+  { name: 'Белый сезон — Заморозки', element: 'metal', month: 11 },     // Ноябрь
+  { name: 'Чёрный сезон — Туман и гадания', element: 'water', month: 1 },// Январь
+];
+
+// Получаем текущий месяц и определяем сезон
+const currentMonth = new Date().getMonth() + 1; // getMonth() возвращает 0-11
+let currentSeason = seasons.find(s => Math.abs(s.month - currentMonth) <= 1) || seasons[0];
+let nextSeason = seasons[(seasons.findIndex(s => s === currentSeason) + 1) % seasons.length];
+
+// Иконки и описания сезонов
+const seasonDetails = {
+  wood: { icon: '🌱', greeting: 'Время роста и обновления', holiday: 'День Пробуждения' },
+  fire: { icon: '🔥', greeting: 'Время страсти и силы', holiday: 'Праздник Огненного Танца' },
+  earth: { icon: '🌾', greeting: 'Время благодарения', holiday: 'Пир Урожая' },
+  metal: { icon: '⚒️', greeting: 'Время мастерства', holiday: 'День Кузнеца' },
+  water: { icon: '🌙', greeting: 'Время тайн и гаданий', holiday: 'Ночь Зеркальной Луны' },
+};
+
+const details = seasonDetails[currentSeason.element];
+---
+
+<div class="seasonal-banner">
+  <div class={`banner-content banner-${currentSeason.element}`}>
+    <div class="banner-icon">{details.icon}</div>
+    <div class="banner-text">
+      <div class="banner-season">{currentSeason.name}</div>
+      <div class="banner-greeting">{details.greeting}</div>
+      <div class="banner-holiday">✨ Следующий праздник: {details.holiday}</div>
+    </div>
+    <div class="banner-next">
+      <span class="next-label">Следующий сезон:</span>
+      <span class="next-name">{nextSeason.name}</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .seasonal-banner {
+    margin: 1rem 0;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  
+  .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-left: 4px solid;
+  }
+  
+  .banner-wood { border-left-color: var(--element-wood); background: linear-gradient(135deg, rgba(45, 90, 39, 0.2) 0%, transparent 100%); }
+  .banner-fire { border-left-color: var(--element-fire); background: linear-gradient(135deg, rgba(194, 65, 12, 0.2) 0%, transparent 100%); }
+  .banner-earth { border-left-color: var(--element-earth); background: linear-gradient(135deg, rgba(180, 83, 9, 0.2) 0%, transparent 100%); }
+  .banner-metal { border-left-color: var(--element-metal); background: linear-gradient(135deg, rgba(120, 113, 108, 0.2) 0%, transparent 100%); }
+  .banner-water { border-left-color: var(--element-water); background: linear-gradient(135deg, rgba(30, 64, 175, 0.2) 0%, transparent 100%); }
+  
+  .banner-icon {
+    font-size: 2.5rem;
+  }
+  
+  .banner-text {
+    flex: 1;
+  }
+  
+  .banner-season {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .banner-greeting {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .banner-holiday {
+    font-size: 0.8rem;
+    color: var(--text-accent);
+    margin-top: 0.25rem;
+  }
+  
+  .banner-next {
+    text-align: right;
+    font-size: 0.8rem;
+  }
+  
+  .next-label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+  }
+  
+  .next-name {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  @media (max-width: 640px) {
+    .banner-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .banner-next {
+      text-align: center;
+    }
+    
+    .banner-icon {
+      font-size: 2rem;
+    }
+  }
+</style>

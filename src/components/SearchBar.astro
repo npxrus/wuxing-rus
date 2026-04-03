@@ -1,0 +1,260 @@
+---
+// Компонент поиска по сайту
+// Показывает поле ввода и отображает результаты
+---
+
+<div class="search-container">
+  <div class="search-wrapper">
+    <span class="search-icon">🔍</span>
+    <input 
+      type="text" 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Поиск по миру Царства Пяти Начал..."
+      autocomplete="off"
+    />
+    <button class="search-clear" id="searchClear" aria-label="Очистить">✕</button>
+  </div>
+  
+  <div class="search-results" id="searchResults" style="display: none;">
+    <div class="search-results-header">
+      <span>Результаты поиска</span>
+      <span class="search-results-count" id="resultsCount">0</span>
+    </div>
+    <div class="search-results-list" id="resultsList">
+      <!-- Результаты будут добавлены через JavaScript -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // База данных для поиска (временная, позже будет расширена)
+  const searchData = [
+    { title: 'Мировое Древо', url: '/world', category: 'Мир', content: 'Мировой Дуб высотой 500 метров, соединяющий Правь, Явь и Навь' },
+    { title: 'Княжество Зелёных Рощ', url: '/principalities#wood', category: 'Княжества', content: 'Стихия Дерева, густые леса, дома-гнёзда в кронах' },
+    { title: 'Княжество Пылающих Степей', url: '/principalities#fire', category: 'Княжества', content: 'Стихия Огня, степи, вулканические плато' },
+    { title: 'Княжество Великих Холмов', url: '/principalities#earth', category: 'Княжества', content: 'Стихия Земли, круглые холмы, подземные города' },
+    { title: 'Княжество Железных Гор', url: '/principalities#metal', category: 'Княжества', content: 'Стихия Металла, острые горы, Небесная Кузня' },
+    { title: 'Княжество Туманных Озёр', url: '/principalities#water', category: 'Княжества', content: 'Стихия Воды, озёра, каналы, Дворец Тумана' },
+    { title: 'Зелёный Дракон', url: '/creatures', category: 'Существа', content: 'Дракон-Хранитель Дерева, символ мудрости' },
+    { title: 'Красный Дракон', url: '/creatures', category: 'Существа', content: 'Дракон-Хранитель Огня, символ воина' },
+    { title: 'Жёлтый Дракон', url: '/creatures', category: 'Существа', content: 'Дракон-Хранитель Земли, символ хранителя' },
+    { title: 'Белый Дракон', url: '/creatures', category: 'Существа', content: 'Дракон-Хранитель Металла, символ судьи' },
+    { title: 'Чёрный Дракон', url: '/creatures', category: 'Существа', content: 'Дракон-Хранитель Воды, символ странника' },
+    { title: 'Леший-Хули-Цзин', url: '/creatures', category: 'Существа', content: 'Дух леса, рост 2-3 метра, тело из коры и мха' },
+    { title: 'Домовой-Цзао-Шэнь', url: '/creatures', category: 'Существа', content: 'Хранитель дома, рост 60 см, борода из соломы' },
+    { title: 'Водяной-Лун-Ван', url: '/creatures', category: 'Существа', content: 'Царь рек, рост 4-5 метров, чешуйчатая кожа' },
+    { title: 'Жар-Птица', url: '/creatures', category: 'Существа', content: 'Мифическая птица с огненными перьями' },
+    { title: 'Волхвы', url: '/magic', category: 'Магия', content: 'Учатся в Храмах Начал, медитируют у символов стихий' },
+    { title: 'Богатыри', url: '/magic', category: 'Магия', content: 'Получают силу через обряды посвящения' },
+    { title: 'Ведуньи', url: '/magic', category: 'Магия', content: 'Осваивают танцы стихий и травяные заговоры' },
+    { title: 'Кузнецы', url: '/magic', category: 'Магия', content: 'Изучают алхимию и драконьи руны' },
+    { title: 'Пять Жемчужин Начал', url: '/artifacts', category: 'Артефакты', content: 'Восстанавливают баланс Начал' },
+    { title: 'Меч Кузнеца-Дракона', url: '/artifacts', category: 'Артефакты', content: 'Режет даже тени Нави' },
+    { title: 'Зеркало Лунной Девы', url: '/artifacts', category: 'Артефакты', content: 'Показывает правду' },
+    { title: 'День Пробуждения', url: '/calendar', category: 'Календарь', content: 'Начало Зелёного Сезона, праздник посадки семян' },
+    { title: 'Праздник Огненного Танца', url: '/calendar', category: 'Календарь', content: 'Начало Алого Сезона, состязания воинов и кузнецов' },
+    { title: 'Пир Урожая', url: '/calendar', category: 'Календарь', content: 'Начало Золотого Сезона, благодарение Матушке Земле' },
+  ];
+
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const searchClear = document.getElementById('searchClear');
+  const resultsList = document.getElementById('resultsList');
+  const resultsCount = document.getElementById('resultsCount');
+
+  let currentResults = [];
+
+  function performSearch(query) {
+    if (!query || query.length < 2) {
+      searchResults.style.display = 'none';
+      return;
+    }
+
+    const lowerQuery = query.toLowerCase();
+    currentResults = searchData.filter(item => 
+      item.title.toLowerCase().includes(lowerQuery) ||
+      item.content.toLowerCase().includes(lowerQuery) ||
+      item.category.toLowerCase().includes(lowerQuery)
+    );
+
+    displayResults(currentResults);
+  }
+
+  function displayResults(results) {
+    if (results.length === 0) {
+      resultsList.innerHTML = '<div class="search-no-results">Ничего не найдено 😔</div>';
+      resultsCount.textContent = '0';
+      searchResults.style.display = 'block';
+      return;
+    }
+
+    resultsCount.textContent = results.length;
+    resultsList.innerHTML = results.map(result => `
+      <a href="${result.url}" class="search-result-item">
+        <div class="search-result-category">${result.category}</div>
+        <div class="search-result-title">${escapeHtml(result.title)}</div>
+        <div class="search-result-snippet">${escapeHtml(result.content.substring(0, 100))}...</div>
+      </a>
+    `).join('');
+
+    searchResults.style.display = 'block';
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function clearSearch() {
+    searchInput.value = '';
+    searchResults.style.display = 'none';
+    searchInput.focus();
+  }
+
+  // Обработчики событий
+  searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+  searchClear.addEventListener('click', clearSearch);
+  
+  // Закрытие результатов при клике вне
+  document.addEventListener('click', (e) => {
+    if (!searchResults.contains(e.target) && e.target !== searchInput) {
+      searchResults.style.display = 'none';
+    }
+  });
+  
+  // Предотвращаем закрытие при клике внутри результатов
+  searchResults.addEventListener('click', (e) => e.stopPropagation());
+</script>
+
+<style>
+  .search-container {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.6rem 2rem 0.6rem 2.2rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--text-accent);
+    box-shadow: 0 0 0 2px var(--border-glow);
+  }
+  
+  .search-clear {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+  }
+  
+  .search-clear:hover {
+    color: var(--text-primary);
+    background: var(--bg-card);
+  }
+  
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .search-results-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .search-results-count {
+    color: var(--text-accent);
+  }
+  
+  .search-results-list {
+    padding: 0.5rem 0;
+  }
+  
+  .search-result-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+    cursor: pointer;
+  }
+  
+  .search-result-item:hover {
+    background: var(--bg-card);
+  }
+  
+  .search-result-category {
+    font-size: 0.7rem;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .search-result-title {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  .search-result-snippet {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  .search-no-results {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  
+  @media (max-width: 768px) {
+    .search-container {
+      max-width: 100%;
+      margin: 0.5rem 0;
+    }
+  }
+</style>

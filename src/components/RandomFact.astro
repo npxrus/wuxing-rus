@@ -1,0 +1,119 @@
+---
+// Компонент со случайным фактом о мире
+// Обновляется при каждом обновлении страницы
+---
+
+<div class="random-fact card">
+  <div class="fact-header">
+    <span class="fact-icon">📜</span>
+    <span class="fact-title">Знаете ли вы?</span>
+  </div>
+  <p class="fact-content" id="randomFactText">
+    Загрузка...
+  </p>
+  <button class="fact-refresh" id="refreshFact" aria-label="Новый факт">
+    🔄 Другой факт
+  </button>
+</div>
+
+<script>
+  // База фактов о мире Царства Пяти Начал
+  const facts = [
+    "Мировой Дуб достигает высоты 500 метров — это выше, чем Останкинская телебашня!",
+    "В Царстве Пяти Начал год длится 365 дней, но разделён на 5 сезонов по 72 дня плюс 5 «дней без начала».",
+    "Лешие-Хули-Цзин могут менять форму и часто обманывают путников, но никогда не причиняют вреда детям.",
+    "Каждый из пяти драконов-хранителей связан с одним из пяти элементов и одним из пяти мировых направлений.",
+    "Жар-Птица не обжигает своим огнём тех, у кого чистое сердце.",
+    "Искажённые Земли — место, где Теневой Дракон был заключён. Там деревья растут корнями вверх, а реки текут в гору.",
+    "Волхвы могут общаться с духами стихий через танец и барабаны.",
+    "Кузнецы Княжества Железных Гор используют драконьи руны, чтобы придать оружию магические свойства.",
+    "Журавли-Наставники считаются самыми мудрыми существами после драконов. Их хрустальные клювы могут видеть правду.",
+    "Домовые-Цзао-Шэни помогают по хозяйству, но если их обидеть — начинают прятать вещи.",
+    "Река Смородина — граница между миром живых (Явью) и миром мёртвых (Навью).",
+    "Пять Жемчужин Начал были спрятаны в каждом княжестве, чтобы никто не мог нарушить равновесие стихий.",
+    "В Ночь Зеркальной Луны (начало Чёрного сезона) можно увидеть своё будущее в отражении воды.",
+    "Змеи-Мудрики живут в горах и могут предсказывать погоду за месяц вперёд.",
+    "Кикиморы-Гуй обитают на болотах и заманивают путников блуждающими огнями.",
+    "Праздник Огненного Танца включает соревнования, где воины танцуют с горящими мечами.",
+    "Амулет Инь-Янь, хранящийся в Каменном Круге, балансирует магию во всём Царстве.",
+    "Мировое Древо имеет крону диаметром 800 метров — под ней могли бы укрыться несколько футбольных полей.",
+    "В День Кузнеца мастера соревнуются, кто выкует самый острый клинок, не используя молот.",
+    "Считается, что каждый человек в Царстве Пяти Начал рождается с преобладанием одной из стихий.",
+  ];
+  
+  function getRandomFact() {
+    return facts[Math.floor(Math.random() * facts.length)];
+  }
+  
+  function updateFact() {
+    const factElement = document.getElementById('randomFactText');
+    if (factElement) {
+      factElement.style.opacity = '0';
+      setTimeout(() => {
+        factElement.textContent = getRandomFact();
+        factElement.style.opacity = '1';
+      }, 200);
+    }
+  }
+  
+  // Инициализация
+  const factText = document.getElementById('randomFactText');
+  if (factText) {
+    factText.textContent = getRandomFact();
+  }
+  
+  const refreshBtn = document.getElementById('refreshFact');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', updateFact);
+  }
+</script>
+
+<style>
+  .random-fact {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(45, 90, 39, 0.1) 100%);
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+  
+  .fact-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .fact-icon {
+    font-size: 1.5rem;
+  }
+  
+  .fact-title {
+    font-weight: 600;
+    color: var(--text-accent);
+    letter-spacing: 1px;
+  }
+  
+  .fact-content {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    transition: opacity 0.2s ease;
+    min-height: 70px;
+  }
+  
+  .fact-refresh {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .fact-refresh:hover {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+    transform: translateY(-2px);
+  }
+</style>

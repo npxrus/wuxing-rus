@@ -1,0 +1,285 @@
+// Глобальные стили Царства Пяти Начал
+// Тёмная тема с акцентами пяти стихий
+
+// CSS-переменные (доступны во всех компонентах)
+:root {
+    // Цвета фона
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #141414;
+    --bg-card: #1e1e1e;
+    --bg-card-hover: #2a2a2a;
+    --bg-header: rgba(10, 10, 10, 0.95);
+    --bg-footer: #0a0a0a;
+
+    // Цвета текста
+    --text-primary: #e8e8e8;
+    --text-secondary: #a0a0a0;
+    --text-muted: #6b6b6b;
+    --text-accent: #d4af37;
+
+    // Цвета стихий
+    --element-wood: #2d5a27;
+    --element-wood-light: #4a8a42;
+    --element-fire: #c2410c;
+    --element-fire-light: #ea580c;
+    --element-earth: #b45309;
+    --element-earth-light: #d97706;
+    --element-metal: #78716c;
+    --element-metal-light: #a8a29e;
+    --element-water: #1e40af;
+    --element-water-light: #3b82f6;
+
+    // Цвета границ и теней
+    --border-color: #2a2a2a;
+    --border-glow: rgba(212, 175, 55, 0.3);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.1);
+
+    // Размеры и отступы
+    --container-max-width: 1200px;
+    --header-height: 70px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 16px;
+
+    // Анимация
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+// Сброс стилей
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: system-ui, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(45, 90, 39, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(194, 65, 12, 0.05) 0% transparent 50%);
+    background-attachment: fixed;
+}
+
+// Типографика
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--text-accent);
+    padding-left: 1rem;
+    margin: 2rem 0 1rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 0.75rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+
+    &:hover {
+        color: var(--element-wood-light);
+    }
+}
+
+// Контейнер
+.container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+    }
+}
+
+// Карточки
+.card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg), var(--shadow-glow);
+        border-color: var(--text-accent);
+    }
+}
+
+// Кнопки
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+
+    &:hover {
+        border-color: var(--text-accent);
+        background: var(--bg-card-hover);
+        transform: translateY(-2px);
+    }
+}
+
+// Сетка для карточек (адаптивная)
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+// Плавающие элементы для атмосферы
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+// Мерцание (для огня, светлячков
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% {opacity: 0.7; }
+}
+
+// Мягкое появление
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+// Полоска прогресса для стихий
+.element-bar {
+    height: 4px;
+    border-radius: 2px;
+    transition: width var(--transition-normal);
+
+    &.wood { background: var(--element-wood); }
+    &.fire { background: var(--element-fire); }
+    &.earth { background: var(--element-earth); }
+    &.metal { background: var(--element-metal); }
+    &.water {background: var(--element-water); }
+}
+
+// Бейджи стихий
+.element-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+
+    &.wood {
+        background: rgba(45, 90, 39, 0.2);
+        color: var(--element-wood-light);
+        border: 1px solid var(--element-wood);
+    }
+
+    &.fire {
+        background: rgba(194, 65, 12, 0.2);
+        color: var(--element-fire-light);
+        border: 1px solid var(--element-fire);
+    }
+
+    &.earth {
+        background: rgba(180, 83, 9, 0.2);
+        color: var(--element-earth-light);
+        border: 1px solid var(--element-earth);
+    }
+
+    &.metal {
+        background: rgba(120, 113, 108, 0.2);
+        color: var(--element-metal-light);
+        border: 1px solid var(--element-metal);
+    }
+
+    &.water {
+        background: rgba(30, 64, 175, 0.2);
+        color: var(--element-water-light);
+        border: 1px solid var(--element-water);
+    }
+}
+
+// Скроллбар
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 4px;
+
+    &:hover {
+        background: var(--text-accent);
+    }
+}
+
+// Выделение текста
+::selection {
+    background: var(--text-accent);
+    color: var(--bg-primary);
+}

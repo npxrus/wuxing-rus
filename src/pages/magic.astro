@@ -1,0 +1,250 @@
+---
+// Страница «Магия и обучение»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import MagicCasteCard from '@components/MagicCasteCard.astro';
+import TrainingStageCard from '@components/TrainingStageCard.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
+---
+
+<BaseLayout title="Магия и обучение">
+  <div class="page-header">
+    <h1>✨ Магия и обучение</h1>
+    <p class="page-description">
+      Четыре пути постижения магии, этапы обучения от пробуждения дара до мудрости, и древние ритуалы, связывающие людей со стихиями
+    </p>
+  </div>
+
+  <!-- Магические касты -->
+  <section class="section">
+    <h2>🎭 Четыре касты</h2>
+    <p>
+      В Царстве Пяти Начал магия разделена между четырьмя кастами, каждая из которых хранит свои секреты и традиции.
+      Волхвы постигают мудрость духов, богатыри черпают силу в бою, ведуньи — в природе, а кузнецы — в огне и металле.
+    </p>
+    <div class="castes-grid">
+      {MAGIC_CASTES.map(caste => (
+        <MagicCasteCard
+          name={caste.name}
+          description={caste.description}
+          learningMethod={caste.learningMethod}
+          specializations={caste.specializations}
+          tools={caste.tools}
+          icon={caste.icon}
+          color={caste.color}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Этапы обучения (таймлайн) -->
+  <section class="section timeline-section">
+    <h2>📚 Путь мага</h2>
+    <p>
+      Обучение магии длится всю жизнь. От пробуждения дара в детстве до мудрости в зрелые годы — каждый этап имеет свои ритуалы и испытания.
+    </p>
+    <div class="timeline-container">
+      {TRAINING_STAGES.map((stage, index) => (
+        <TrainingStageCard
+          name={stage.name}
+          ageRange={stage.ageRange}
+          description={stage.description}
+          rituals={stage.rituals}
+          outcomes={stage.outcomes}
+          icon={stage.icon}
+          index={index}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Ритуалы и обряды -->
+  <section class="section">
+    <h2>🕯️ Ритуалы и обряды</h2>
+    <p>
+      Ритуалы — важнейшая часть магической практики. Они проводятся в определённое время года, с использованием соответствующих стихий и предметов.
+    </p>
+    <div class="rituals-grid">
+      {RITUALS.map(ritual => (
+        <div class="ritual-card">
+          <div class="ritual-header">
+            <span class="ritual-icon">{ritual.icon}</span>
+            <h3>{ritual.name}</h3>
+          </div>
+          <p class="ritual-description">{ritual.description}</p>
+          <div class="ritual-details">
+            <div class="ritual-detail">
+              <span class="detail-label">🎯 Цель:</span>
+              <span>{ritual.purpose}</span>
+            </div>
+            <div class="ritual-detail">
+              <span class="detail-label">⏰ Время:</span>
+              <span>{ritual.timing}</span>
+            </div>
+            <div class="ritual-detail">
+              <span class="detail-label">🌿 Стихии:</span>
+              <div class="ritual-elements">
+                {ritual.elements.map(elem => {
+                  // Безопасное приведение типа
+                  const validElements = ['wood', 'fire', 'earth', 'metal', 'water'] as const;
+                  const elementType = validElements.includes(elem as any) ? elem as 'wood' | 'fire' | 'earth' | 'metal' | 'water' : 'wood';
+                  return <ElementBadge element={elementType} size="small" />;
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Магия — это не сила, а понимание. Пойми стихию — и она станет твоим союзником»</p>
+    <p class="quote-author">— Свиток Великого Единства</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .castes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Таймлайн */
+  .timeline-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .timeline-container {
+    margin: 2rem 0;
+    position: relative;
+  }
+  
+  /* Ритуалы */
+  .rituals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .ritual-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .ritual-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--text-accent);
+  }
+  
+  .ritual-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .ritual-icon {
+    font-size: 2rem;
+  }
+  
+  .ritual-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .ritual-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .ritual-details {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .ritual-detail {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+  }
+  
+  .detail-label {
+    font-weight: 600;
+    color: var(--text-accent);
+  }
+  
+  .ritual-elements {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+  
+  /* Цитата */
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .castes-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .rituals-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>
