@@ -3,6 +3,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Card from '@components/Card.astro';
 import ElementBadge from '@components/ElementBadge.astro';
 import { SITE_CONFIG } from '@data/siteConfig';
+import { withBase } from '@/utils/paths';
 ---
 
 <BaseLayout title="Добро пожаловать">
@@ -50,9 +51,9 @@ import { SITE_CONFIG } from '@data/siteConfig';
   <div class="cta-section">
     <h2>Погрузитесь в мир Царства Пяти Начал</h2>
     <div class="cta-buttons">
-      <a href="/world" class="button">🏛️ Устройство мира</a>
-      <a href="/principalities" class="button">🏰 Пять княжеств</a>
-      <a href="/creatures" class="button">🐉 Существа и духи</a>
+      <a href={withBase('/world')} class="button">🏛️ Устройство мира</a>
+      <a href={withBase('/principalities')} class="button">🏰 Пять княжеств</a>
+      <a href={withBase('/creatures')} class="button">🐉 Существа и духи</a>
     </div>
   </div>
 </BaseLayout>

@@ -1,0 +1,65 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Страница не найдена" noIndex={true}>
+  <div class="error-container">
+    <div class="error-content">
+      <div class="error-icon floating">🌳</div>
+      <h1 class="error-code">404</h1>
+      <h2 class="error-title">Страница не найдена</h2>
+      <p class="error-description">
+        Кажется, вы забрели в Искажённые Земли...<br/>
+        Такой страницы не существует.
+      </p>
+      <a href="/" class="error-button">Вернуться к Мировому Дубу</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .error-container {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .error-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .error-code {
+    font-size: 6rem;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .error-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .error-description {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+  
+  .error-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  
+  .error-button:hover {
+    transform: translateY(-3px);
+    background: var(--element-wood-light);
+    color: white;
+  }
+</style>

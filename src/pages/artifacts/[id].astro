@@ -3,6 +3,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import ElementBadge from '@components/ElementBadge.astro';
 import { ARTIFACTS, RARITY_COLORS, RARITY_NAMES } from '@data/artifacts';
+import { withBase } from '@/utils/paths';
 
 export async function getStaticPaths() {
   return ARTIFACTS.map(artifact => ({
@@ -76,7 +77,7 @@ const rarityName = RARITY_NAMES[rarity];
 
   <!-- Навигация назад -->
   <div class="back-link">
-    <a href="/artifacts">← Вернуться к списку артефактов</a>
+    <a href={withBase('/artifacts')}>← Вернуться к списку артефактов</a>
   </div>
 </BaseLayout>
 

@@ -1,6 +1,7 @@
 ---
 // Карточка существа
 import ElementBadge from './ElementBadge.astro';
+import { withBase } from '@/utils/paths';
 
 export interface Props {
   id: string;
@@ -62,7 +63,7 @@ const categoryClass = category === 'higher' ? 'category-higher' : 'category-comm
     </div>
   </div>
   
-  <a href={`/creatures/${id}`} class="card-link">
+  <a href={withBase(`/creatures/${id}`)} class="card-link">
     Узнать больше о существе →
   </a>
 </div>

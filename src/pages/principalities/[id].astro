@@ -5,6 +5,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import ElementBadge from '@components/ElementBadge.astro';
 import { PRINCIPALITIES } from '@data/principalities';
+import { withBase } from '@/utils/paths';
 
 // Получаем параметр id из URL
 export async function getStaticPaths() {
@@ -120,7 +121,7 @@ const {
 
   <!-- Навигация назад -->
   <div class="back-link">
-    <a href="/principalities">← Вернуться к списку княжеств</a>
+    <a href={withBase('/principalities')}>← Вернуться к списку княжеств</a>
   </div>
 </BaseLayout>
 

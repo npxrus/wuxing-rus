@@ -1,6 +1,7 @@
 ---
 // Карточка княжества
 import ElementBadge from './ElementBadge.astro';
+import { withBase } from '@/utils/paths';
 
 export interface Props {
   id: string;
@@ -58,7 +59,7 @@ const { id, name, element, landscape, architecture, keyLocations, description, i
     </div>
   </div>
   
-  <a href={`/principalities/${id}`} class="card-link">
+  <a href={withBase(`/principalities/${id}`)} class="card-link">
     Узнать больше о княжестве →
   </a>
 </div>

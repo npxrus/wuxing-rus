@@ -1,6 +1,7 @@
 ---
 // Карточка артефакта
 import ElementBadge from './ElementBadge.astro';
+import { withBase } from '@/utils/paths';
 import { RARITY_COLORS, RARITY_NAMES } from '@data/artifacts';
 
 export interface Props {
@@ -47,7 +48,7 @@ const rarityName = RARITY_NAMES[rarity];
     <span class="location-text">{location}</span>
   </div>
   
-  <a href={`/artifacts/${id}`} class="card-link">
+  <a href={withBase(`/artifacts/${id}`)} class="card-link">
     Узнать больше об артефакте →
   </a>
 </div>

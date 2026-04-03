@@ -1,0 +1,8 @@
+# robots.txt для Царства Пяти Начал
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Карта сайта
+Sitemap: https://npxrus.github.io/wuxing-rus/sitemap.xml

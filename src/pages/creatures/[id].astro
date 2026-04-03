@@ -3,6 +3,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import ElementBadge from '@components/ElementBadge.astro';
 import { ALL_CREATURES } from '@data/creatures';
+import { withBase } from '@/utils/paths';
 
 export async function getStaticPaths() {
   return ALL_CREATURES.map(creature => ({
@@ -105,7 +106,7 @@ const categoryLabel = category === 'higher' ? 'Высшее существо' : 
 
   <!-- Навигация назад -->
   <div class="back-link">
-    <a href="/creatures">← Вернуться к списку существ</a>
+    <a href={withBase('/creatures')}>← Вернуться к списку существ</a>
   </div>
 </BaseLayout>
 

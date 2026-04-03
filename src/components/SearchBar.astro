@@ -28,6 +28,13 @@
 </div>
 
 <script>
+
+  function withBase(path) {
+    const basePath = '/wuxing-rus/';
+    if (path.startsWith(basePath)) return path;
+    return `{$basePath.replace(/\/$/, '')}${path}`;
+  }
+
   // База данных для поиска (временная, позже будет расширена)
   const searchData = [
     { title: 'Мировое Древо', url: '/world', category: 'Мир', content: 'Мировой Дуб высотой 500 метров, соединяющий Правь, Явь и Навь' },
@@ -82,21 +89,21 @@
   }
 
   function displayResults(results) {
-    if (results.length === 0) {
-      resultsList.innerHTML = '<div class="search-no-results">Ничего не найдено 😔</div>';
-      resultsCount.textContent = '0';
-      searchResults.style.display = 'block';
-      return;
-    }
+  if (results.length === 0) {
+    resultsList.innerHTML = '<div class="search-no-results">Ничего не найдено 😔</div>';
+    resultsCount.textContent = '0';
+    searchResults.style.display = 'block';
+    return;
+  }
 
-    resultsCount.textContent = results.length;
-    resultsList.innerHTML = results.map(result => `
-      <a href="${result.url}" class="search-result-item">
-        <div class="search-result-category">${result.category}</div>
-        <div class="search-result-title">${escapeHtml(result.title)}</div>
-        <div class="search-result-snippet">${escapeHtml(result.content.substring(0, 100))}...</div>
-      </a>
-    `).join('');
+  resultsCount.textContent = results.length;
+  resultsList.innerHTML = results.map(result => `
+    <a href="${withBase(result.url)}" class="search-result-item">
+      <div class="search-result-category">${result.category}</div>
+      <div class="search-result-title">${escapeHtml(result.title)}</div>
+      <div class="search-result-snippet">${escapeHtml(result.content.substring(0, 100))}...</div>
+    </a>
+  `).join('');
 
     searchResults.style.display = 'block';
   }
