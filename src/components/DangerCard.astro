@@ -1,0 +1,138 @@
+---
+// Карточка опасности
+export interface Props {
+  name: string;
+  location: string;
+  description: string;
+  symptoms: string[];
+  survival: string;
+  dangerLevel: 'low' | 'medium' | 'high' | 'very-high';
+  icon: string;
+}
+
+const { name, location, description, symptoms, survival, dangerLevel, icon } = Astro.props;
+
+const dangerColors = {
+  low: { bg: 'rgba(34, 197, 94, 0.1)', border: '#22c55e', text: '#22c55e' },
+  medium: { bg: 'rgba(234, 179, 8, 0.1)', border: '#eab308', text: '#eab308' },
+  high: { bg: 'rgba(249, 115, 22, 0.1)', border: '#f97316', text: '#f97316' },
+  'very-high': { bg: 'rgba(239, 68, 68, 0.1)', border: '#ef4444', text: '#ef4444' },
+};
+
+const colors = dangerColors[dangerLevel];
+const levelNames = { low: 'Низкая', medium: 'Средняя', high: 'Высокая', 'very-high': 'Очень высокая' };
+---
+
+<div class="danger-card" style={`border-left-color: ${colors.border}`}>
+  <div class="danger-header">
+    <div class="danger-icon">{icon}</div>
+    <div class="danger-title">
+      <h3>{name}</h3>
+      <div class="danger-meta">
+        <span class="location-badge">📍 {location}</span>
+        <span class="danger-level" style={`background: ${colors.bg}; color: ${colors.text}`}>
+          ⚠️ {levelNames[dangerLevel]}
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  <p class="danger-description">{description}</p>
+  
+  <div class="danger-symptoms">
+    <strong>🤒 Симптомы:</strong>
+    <ul>
+      {symptoms.map(s => <li>{s}</li>)}
+    </ul>
+  </div>
+  
+  <div class="danger-survival">
+    <strong>🛡️ Как выжить:</strong>
+    <p>{survival}</p>
+  </div>
+</div>
+
+<style>
+  .danger-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+    border-left-width: 4px;
+    border-left-style: solid;
+    height: 100%;
+  }
+  
+  .danger-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .danger-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .danger-icon {
+    font-size: 2rem;
+  }
+  
+  .danger-title {
+    flex: 1;
+  }
+  
+  .danger-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .danger-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .location-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    color: var(--text-muted);
+  }
+  
+  .danger-level {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+  }
+  
+  .danger-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  
+  .danger-symptoms, .danger-survival {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .danger-symptoms ul {
+    margin: 0.25rem 0 0 1.25rem;
+    color: var(--text-muted);
+  }
+  
+  .danger-symptoms li {
+    margin-bottom: 0.15rem;
+  }
+  
+  .danger-survival p {
+    margin: 0.25rem 0 0 0;
+    color: var(--text-muted);
+  }
+</style>

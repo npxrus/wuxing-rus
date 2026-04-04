@@ -1,0 +1,359 @@
+---
+// Страница «Опасности и проклятия»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import DangerCard from '@components/DangerCard.astro';
+import CurseCard from '@components/CurseCard.astro';
+import { 
+  NATURAL_DANGERS, 
+  CURSES, 
+  DISEASES, 
+  DISTORTIONS, 
+  SURVIVAL_RULES 
+} from '@data/dangers';
+---
+
+<BaseLayout title="Опасности и проклятия">
+  <div class="page-header">
+    <h1>⚠️ Опасности и проклятия</h1>
+    <p class="page-description">
+      Мир Царства Пяти Начал полон опасностей — от гниющих лесов до проклятий и магических болезней
+    </p>
+  </div>
+
+  <!-- Естественные опасности -->
+  <section class="section">
+    <h2>🌲 Естественные опасности</h2>
+    <p>
+      Порождения перекоса стихий — места, где природа искажена и враждебна человеку.
+    </p>
+    <div class="dangers-grid">
+      {NATURAL_DANGERS.map(danger => (
+        <DangerCard
+          name={danger.name}
+          location={danger.location}
+          description={danger.description}
+          symptoms={danger.symptoms}
+          survival={danger.survival}
+          dangerLevel={danger.dangerLevel}
+          icon={danger.icon}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Проклятия -->
+  <section class="section">
+    <h2>🔮 Проклятия</h2>
+    <p>
+      Личные и местные проклятия, насланные тёмными магами или возникшие из нарушенных клятв.
+    </p>
+    <div class="curses-grid">
+      {CURSES.map(curse => (
+        <CurseCard
+          name={curse.name}
+          type={curse.type}
+          effect={curse.effect}
+          removal={curse.removal}
+          duration={curse.duration}
+          icon={curse.icon}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Болезни -->
+  <section class="section">
+    <h2>🤒 Магические болезни</h2>
+    <p>
+      Болезни, рождённые перекосом стихий. Обычное лечение против них бессильно.
+    </p>
+    <div class="diseases-grid">
+      {DISEASES.map(disease => (
+        <div class="disease-card">
+          <div class="disease-header">
+            <span class="disease-icon">{disease.icon}</span>
+            <h3>{disease.name}</h3>
+          </div>
+          <div class="disease-symptoms">
+            <strong>Симптомы:</strong>
+            <ul>
+              {disease.symptoms.map(s => <li>{s}</li>)}
+            </ul>
+          </div>
+          <div class="disease-treatment">
+            <strong>💊 Лечение:</strong> {disease.treatment}
+          </div>
+          <div class="disease-mortality">
+            <strong>💀 Смертность:</strong> {disease.mortality}
+          </div>
+          <div class="disease-origin">
+            <strong>🏞️ Происхождение:</strong> {disease.origin}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Искажённые Земли -->
+  <section class="section distortions-section">
+    <h2>🌀 Искажённые Земли</h2>
+    <p>
+      Место заточения Теневого Дракона, где законы реальности нарушены. Самое опасное место в Царстве.
+    </p>
+    <div class="distortions-grid">
+      {DISTORTIONS.map(distortion => (
+        <div class="distortion-card">
+          <div class="distortion-header">
+            <span class="distortion-icon">{distortion.icon}</span>
+            <h3>{distortion.name}</h3>
+          </div>
+          <div class="distortion-manifestation">
+            <strong>👁️ Проявление:</strong> {distortion.manifestation}
+          </div>
+          <div class="distortion-risk">
+            <strong>⚠️ Риск:</strong> {distortion.risk}
+          </div>
+          <div class="distortion-survival">
+            <strong>🛡️ Выживание:</strong> {distortion.survival}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Правила выживания -->
+  <section class="section rules-section">
+    <h2>📜 Правила выживания путника</h2>
+    <p>Заповеди, которые должен знать каждый, кто отправляется в путь по Царству Пяти Начал.</p>
+    <div class="rules-grid">
+      {SURVIVAL_RULES.map((rule, index) => (
+        <div class="rule-card">
+          <div class="rule-number">{index + 1}</div>
+          <div class="rule-text">{rule}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Опасность подстерегает неосторожного. Но знающий правила выживания вернётся домой»</p>
+    <p class="quote-author">— Памятка путника Царства Пяти Начал</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .dangers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .curses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .diseases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .disease-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .disease-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--text-accent);
+  }
+  
+  .disease-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .disease-icon {
+    font-size: 2rem;
+  }
+  
+  .disease-header h3 {
+    margin: 0;
+  }
+  
+  .disease-symptoms, .disease-treatment, .disease-mortality, .disease-origin {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .disease-symptoms ul {
+    margin: 0.25rem 0 0 1.25rem;
+    color: var(--text-muted);
+  }
+  
+  .distortions-section {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .distortions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .distortion-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    border-left: 3px solid #8b5cf6;
+    transition: transform var(--transition-fast);
+  }
+  
+  .distortion-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .distortion-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .distortion-icon {
+    font-size: 1.8rem;
+  }
+  
+  .distortion-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  
+  .distortion-manifestation, .distortion-risk, .distortion-survival {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .rules-section {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .rule-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem 1rem;
+    transition: transform var(--transition-fast);
+  }
+  
+  .rule-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .rule-number {
+    width: 30px;
+    height: 30px;
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  
+  .rule-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .dangers-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .curses-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .diseases-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .distortions-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .rules-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>

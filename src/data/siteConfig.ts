@@ -25,5 +25,6 @@ export const NAVIGATION: { title: string; href: string; icon: string }[] = [
   { title: 'Артефакты', href: withBase('/artifacts'), icon: '⚔️' },
   { title: 'Календарь', href: withBase('/calendar'), icon: '📅' },
   { title: 'История', href: withBase('/history'), icon: '📜' },
+  { title: 'Опасности', href: withBase('/dangers'), icon: '⚠️' },
   { title: 'Галерея', href: withBase('/gallery'), icon: '🖼️' },
 ];
