@@ -1,0 +1,105 @@
+---
+// Карточка сословия
+export interface Props {
+  estate: {
+    name: string;
+    privileges: string[];
+    duties: string[];
+    icon: string;
+    color: string;
+  };
+}
+
+const { estate } = Astro.props;
+---
+
+<div class="estate-card" style={`border-left-color: ${estate.color}`}>
+  <div class="estate-header">
+    <div class="estate-icon" style={`background: ${estate.color}20`}>
+      {estate.icon}
+    </div>
+    <h3 class="estate-name">{estate.name}</h3>
+  </div>
+  
+  <div class="estate-privileges">
+    <div class="section-title">✅ Привилегии</div>
+    <ul>
+      {estate.privileges.map(p => <li>{p}</li>)}
+    </ul>
+  </div>
+  
+  <div class="estate-duties">
+    <div class="section-title">📜 Обязанности</div>
+    <ul>
+      {estate.duties.map(d => <li>{d}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .estate-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+    border-left-width: 4px;
+    border-left-style: solid;
+    height: 100%;
+  }
+  
+  .estate-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .estate-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .estate-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  
+  .estate-name {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .section-title {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .estate-privileges, .estate-duties {
+    margin-bottom: 1rem;
+  }
+  
+  .estate-privileges ul, .estate-duties ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  
+  .estate-privileges li, .estate-duties li {
+    margin-bottom: 0.25rem;
+  }
+  
+  .estate-duties {
+    margin-bottom: 0;
+  }
+</style>

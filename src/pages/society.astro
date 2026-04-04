@@ -1,0 +1,365 @@
+---
+// Страница «Социальная структура»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import EstateCard from '@components/EstateCard.astro';
+import TabooCard from '@components/TabooCard.astro';
+import { 
+  ESTATES, 
+  MARRIAGE_TYPES, 
+  MARRIAGE_RULES, 
+  SOCIAL_TABOOS, 
+  SOCIAL_CUSTOMS, 
+  DAILY_LIFE 
+} from '@data/society';
+---
+
+<BaseLayout title="Социальная структура">
+  <div class="page-header">
+    <h1>👥 Социальная структура</h1>
+    <p class="page-description">
+      Сословия Царства Пяти Начал, их привилегии и обязанности, брак, табу и повседневная жизнь
+    </p>
+  </div>
+
+  <!-- Иерархия сословий -->
+  <section class="section">
+    <h2>🏛️ Иерархия сословий</h2>
+    <p>
+      Общество Царства разделено на 11 сословий — от волхвов до изгоев. Каждое имеет свои права и обязанности.
+    </p>
+    <div class="estates-grid">
+      {ESTATES.map(estate => (
+        <EstateCard estate={estate} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Брак и семья -->
+  <section class="section">
+    <h2>💑 Брак и семья</h2>
+    <div class="marriage-grid">
+      {MARRIAGE_TYPES.map(type => (
+        <div class="marriage-card">
+          <div class="marriage-icon">{type.icon}</div>
+          <div class="marriage-content">
+            <h3>{type.name}</h3>
+            <p>{type.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="marriage-rules">
+      <div class="rule-item">
+        <span class="rule-icon">📅</span>
+        <span><strong>Минимальный возраст:</strong> {MARRIAGE_RULES.minAge}</span>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">⚖️</span>
+        <span><strong>Развод:</strong> {MARRIAGE_RULES.divorce}</span>
+      </div>
+      <div class="rule-item">
+        <span class="rule-icon">🌿</span>
+        <span><strong>Ведуньи:</strong> {MARRIAGE_RULES.vedunyMarriage}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Социальные табу -->
+  <section class="section taboos-section">
+    <h2>⚠️ Социальные табу и наказания</h2>
+    <p>
+      Запреты, нарушение которых карается по законам Царства.
+    </p>
+    <div class="taboos-grid">
+      {SOCIAL_TABOOS.map((taboo, index) => (
+        <TabooCard taboo={taboo} index={index} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Обычаи и традиции -->
+  <section class="section">
+    <h2>🎎 Обычаи и традиции</h2>
+    <p>
+      Неписаные правила, регулирующие повседневную жизнь.
+    </p>
+    <div class="customs-grid">
+      {SOCIAL_CUSTOMS.map(custom => (
+        <div class="custom-card">
+          <div class="custom-name">{custom.name}</div>
+          <div class="custom-description">{custom.description}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Повседневная жизнь -->
+  <section class="section daily-life-section">
+    <h2>🏠 Повседневная жизнь</h2>
+    
+    <div class="daily-card">
+      <h3>🍲 Питание</h3>
+      <p>{DAILY_LIFE.food}</p>
+    </div>
+    
+    <div class="daily-card">
+      <h3>🏚️ Жилище</h3>
+      <p>{DAILY_LIFE.housing}</p>
+    </div>
+    
+    <div class="daily-card">
+      <h3>👕 Одежда</h3>
+      <p>{DAILY_LIFE.clothing}</p>
+    </div>
+    
+    <h3 class="subtitle">Типичный день по сословиям</h3>
+    <div class="typical-day-grid">
+      <div class="day-card">
+        <div class="day-icon">🌾</div>
+        <div class="day-content">
+          <strong>Земледелец:</strong> {DAILY_LIFE.typicalDay.farmers}
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-icon">🏺</div>
+        <div class="day-content">
+          <strong>Ремесленник:</strong> {DAILY_LIFE.typicalDay.artisans}
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-icon">💰</div>
+        <div class="day-content">
+          <strong>Купец:</strong> {DAILY_LIFE.typicalDay.merchants}
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-icon">⚔️</div>
+        <div class="day-content">
+          <strong>Воин:</strong> {DAILY_LIFE.typicalDay.warriors}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Не место красит человека, а человек — место. Но каждому сословию — своя честь»</p>
+    <p class="quote-author">— Свиток Великого Единства</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .estates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .marriage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .marriage-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .marriage-icon {
+    font-size: 2rem;
+  }
+  
+  .marriage-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .marriage-content p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .marriage-rules {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .rule-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .rule-icon {
+    font-size: 1.1rem;
+  }
+  
+  .taboos-section {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .taboos-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  .customs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .custom-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .custom-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .custom-name {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .custom-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .daily-life-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .daily-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .daily-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+  }
+  
+  .daily-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .subtitle {
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.1rem;
+  }
+  
+  .typical-day-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .day-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem;
+  }
+  
+  .day-icon {
+    font-size: 1.5rem;
+  }
+  
+  .day-content {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .estates-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .marriage-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .customs-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .typical-day-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+// Карточка социального табу
+export interface Props {
+  taboo: {
+    name: string;
+    description: string;
+    punishment: string;
+    icon: string;
+  };
+  index: number;
+}
+
+const { taboo, index } = Astro.props;
+---
+
+<div class="taboo-card">
+  <div class="taboo-number">{index + 1}</div>
+  <div class="taboo-content">
+    <div class="taboo-header">
+      <span class="taboo-icon">{taboo.icon}</span>
+      <h4>{taboo.name}</h4>
+    </div>
+    <p class="taboo-description">{taboo.description}</p>
+    <div class="taboo-punishment">
+      <strong>⚖️ Наказание:</strong> {taboo.punishment}
+    </div>
+  </div>
+</div>
+
+<style>
+  .taboo-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .taboo-card:hover {
+    transform: translateX(5px);
+    border-color: var(--text-accent);
+  }
+  
+  .taboo-number {
+    width: 32px;
+    height: 32px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  
+  .taboo-content {
+    flex: 1;
+  }
+  
+  .taboo-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .taboo-icon {
+    font-size: 1.2rem;
+  }
+  
+  .taboo-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #ef4444;
+  }
+  
+  .taboo-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .taboo-punishment {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+</style>
