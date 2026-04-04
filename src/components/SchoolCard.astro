@@ -1,0 +1,167 @@
+---
+// Карточка школы магии
+import ElementBadge from './ElementBadge.astro';
+import type { MagicSchool } from '@data/magicSchools';
+
+export interface Props {
+  school: MagicSchool;
+}
+
+const { school } = Astro.props;
+---
+
+<div class="school-card">
+  <div class="school-header" style={`border-left-color: ${school.color}`}>
+    <div class="school-icon" style={`background: ${school.color}20; color: ${school.color}`}>
+      <span>{school.icon}</span>
+    </div>
+    <div class="school-title">
+      <h3>{school.name}</h3>
+      <ElementBadge element={school.element} size="small" />
+    </div>
+  </div>
+  
+  <p class="school-description">{school.description}</p>
+  
+  <div class="school-levels">
+    <div class="levels-title">📚 Уровни мастерства</div>
+    {school.levels.map(level => (
+      <div class="level-item">
+        <div class="level-header">
+          <span class="level-name">{level.level}</span>
+          <span class="level-subname">{level.name}</span>
+        </div>
+        <div class="level-skills">
+          <strong>Навыки:</strong>
+          <ul>
+            {level.skills.map(skill => <li>{skill}</li>)}
+          </ul>
+        </div>
+        <div class="level-spell">
+          <em>Пример: {level.exampleSpell}</em>
+        </div>
+      </div>
+    ))}
+  </div>
+  
+  <div class="school-weaknesses">
+    <strong>⚠️ Слабые стороны:</strong>
+    <ul>
+      {school.weaknesses.map(weakness => <li>{weakness}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .school-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    height: 100%;
+    border: 1px solid var(--border-color);
+  }
+  
+  .school-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .school-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-left: 4px solid;
+  }
+  
+  .school-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+  
+  .school-title {
+    flex: 1;
+  }
+  
+  .school-title h3 {
+    margin: 0 0 0.25rem 0;
+  }
+  
+  .school-description {
+    padding: 0 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  
+  .school-levels {
+    padding: 0 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .levels-title {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .level-item {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .level-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .level-name {
+    font-weight: 600;
+    color: var(--text-accent);
+  }
+  
+  .level-subname {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  .level-skills {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .level-skills ul {
+    margin: 0.25rem 0 0 1rem;
+    color: var(--text-muted);
+  }
+  
+  .level-spell {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  
+  .school-weaknesses {
+    padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+  }
+  
+  .school-weaknesses ul {
+    margin: 0.25rem 0 0 1rem;
+    color: var(--text-muted);
+  }
+</style>

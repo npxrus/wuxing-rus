@@ -3,24 +3,63 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import MagicCasteCard from '@components/MagicCasteCard.astro';
 import TrainingStageCard from '@components/TrainingStageCard.astro';
+import SchoolCard from '@components/SchoolCard.astro';
 import ElementBadge from '@components/ElementBadge.astro';
 import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
+import { MAGIC_SCHOOLS, ELEMENT_MIXES, FORBIDDEN_MAGIC, MAGIC_RULES } from '@data/magicSchools';
 ---
 
 <BaseLayout title="Магия и обучение">
   <div class="page-header">
     <h1>✨ Магия и обучение</h1>
     <p class="page-description">
-      Четыре пути постижения магии, этапы обучения от пробуждения дара до мудрости, и древние ритуалы, связывающие людей со стихиями
+      Пять потоков магии, четыре касты, этапы обучения от пробуждения дара до мудрости, и древние ритуалы, связывающие людей со стихиями
     </p>
   </div>
+
+  <!-- Пять потоков магии (школы) -->
+  <section class="section">
+    <h2>🌀 Пять потоков магии</h2>
+    <p>
+      Каждая стихия формирует свой поток магии со своими законами, школами и уровнями мастерства.
+      Маг может постичь только один поток, но величайшие мудрецы способны смешивать Начала.
+    </p>
+    <div class="schools-grid">
+      {MAGIC_SCHOOLS.map(school => (
+        <SchoolCard school={school} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Соотношение магов -->
+  <section class="section">
+    <h2>📊 Соотношение магов по Началам</h2>
+    <div class="ratio-container">
+      <div class="ratio-bar">
+        <div class="ratio-segment earth" style="width: 35%">
+          <span>Земля 35%</span>
+        </div>
+        <div class="ratio-segment water" style="width: 25%">
+          <span>Вода 25%</span>
+        </div>
+        <div class="ratio-segment wood" style="width: 20%">
+          <span>Дерево 20%</span>
+        </div>
+        <div class="ratio-segment fire" style="width: 15%">
+          <span>Огонь 15%</span>
+        </div>
+        <div class="ratio-segment metal" style="width: 5%">
+          <span>Металл 5%</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Магические касты -->
   <section class="section">
     <h2>🎭 Четыре касты</h2>
     <p>
       В Царстве Пяти Начал магия разделена между четырьмя кастами, каждая из которых хранит свои секреты и традиции.
-      Волхвы постигают мудрость духов, богатыри черпают силу в бою, ведуньи — в природе, а кузнецы — в огне и металле.
     </p>
     <div class="castes-grid">
       {MAGIC_CASTES.map(caste => (
@@ -37,11 +76,11 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
     </div>
   </section>
 
-  <!-- Этапы обучения (таймлайн) -->
+  <!-- Этапы обучения -->
   <section class="section timeline-section">
     <h2>📚 Путь мага</h2>
     <p>
-      Обучение магии длится всю жизнь. От пробуждения дара в детстве до мудрости в зрелые годы — каждый этап имеет свои ритуалы и испытания.
+      Обучение магии длится всю жизнь. От пробуждения дара в детстве до мудрости в зрелые годы.
     </p>
     <div class="timeline-container">
       {TRAINING_STAGES.map((stage, index) => (
@@ -58,12 +97,58 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
     </div>
   </section>
 
+  <!-- Смешение Начал -->
+  <section class="section">
+    <h2>🔄 Смешение Начал</h2>
+    <p>
+      Когда два или более Начал объединяются, рождается новая магия. Но за это приходится платить.
+    </p>
+    <div class="mixes-grid">
+      {ELEMENT_MIXES.map(mix => (
+        <div class="mix-card">
+          <div class="mix-combination">{mix.combination}</div>
+          <div class="mix-result">✨ {mix.result}</div>
+          <div class="mix-risk">⚠️ Риск: {mix.risk}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цена магии -->
+  <section class="section">
+    <h2>💎 Цена магии: Равновесие и Перекос</h2>
+    <div class="price-grid">
+      {MAGIC_RULES.priceTypes.map(price => (
+        <div class="price-card">
+          <div class="price-name">{price.name}</div>
+          <div class="price-desc">{price.description}</div>
+          <div class="price-example">{price.example}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Запрещённая магия -->
+  <section class="section forbidden-section">
+    <h2>⚠️ Запрещённая магия: Тёмный Путь</h2>
+    <p>
+      Магия, нарушающая законы Равновесия. Её использование карается изгнанием или смертью.
+    </p>
+    <div class="forbidden-grid">
+      {FORBIDDEN_MAGIC.map(magic => (
+        <div class="forbidden-card">
+          <div class="forbidden-name">{magic.name}</div>
+          <div class="forbidden-desc">{magic.description}</div>
+          <div class="forbidden-price">💀 Цена: {magic.price}</div>
+          <div class="forbidden-danger">⚠️ Опасность: {magic.danger}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
   <!-- Ритуалы и обряды -->
   <section class="section">
     <h2>🕯️ Ритуалы и обряды</h2>
-    <p>
-      Ритуалы — важнейшая часть магической практики. Они проводятся в определённое время года, с использованием соответствующих стихий и предметов.
-    </p>
     <div class="rituals-grid">
       {RITUALS.map(ritual => (
         <div class="ritual-card">
@@ -85,7 +170,6 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
               <span class="detail-label">🌿 Стихии:</span>
               <div class="ritual-elements">
                 {ritual.elements.map(elem => {
-                  // Безопасное приведение типа
                   const validElements = ['wood', 'fire', 'earth', 'metal', 'water'] as const;
                   const elementType = validElements.includes(elem as any) ? elem as 'wood' | 'fire' | 'earth' | 'metal' | 'water' : 'wood';
                   return <ElementBadge element={elementType} size="small" />;
@@ -100,7 +184,7 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
 
   <!-- Цитата -->
   <div class="quote-block">
-    <p class="quote-text">«Магия — это не сила, а понимание. Пойми стихию — и она станет твоим союзником»</p>
+    <p class="quote-text">«Магия — это не сила, а понимание. Пойми стихию — и она станет твоим союзником. Но забудь о равновесии — и она уничтожит тебя»</p>
     <p class="quote-author">— Свиток Великого Единства</p>
   </div>
 </BaseLayout>
@@ -122,6 +206,46 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
     margin-bottom: 4rem;
   }
   
+  /* Школы */
+  .schools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Соотношение магов */
+  .ratio-container {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .ratio-bar {
+    display: flex;
+    height: 50px;
+    border-radius: 25px;
+    overflow: hidden;
+  }
+  
+  .ratio-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  }
+  
+  .ratio-segment.earth { background: var(--element-earth); }
+  .ratio-segment.water { background: var(--element-water); }
+  .ratio-segment.wood { background: var(--element-wood); }
+  .ratio-segment.fire { background: var(--element-fire); }
+  .ratio-segment.metal { background: var(--element-metal); }
+  
+  /* Касты */
   .castes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -138,7 +262,121 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
   
   .timeline-container {
     margin: 2rem 0;
-    position: relative;
+  }
+  
+  /* Смешение Начал */
+  .mixes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .mix-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .mix-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--text-accent);
+  }
+  
+  .mix-combination {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .mix-result {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .mix-risk {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  /* Цена магии */
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .price-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+  }
+  
+  .price-name {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .price-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  .price-example {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+  }
+  
+  /* Запрещённая магия */
+  .forbidden-section {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .forbidden-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .forbidden-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border-left: 3px solid #ef4444;
+  }
+  
+  .forbidden-name {
+    font-weight: 600;
+    color: #ef4444;
+    margin-bottom: 0.5rem;
+  }
+  
+  .forbidden-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .forbidden-price {
+    font-size: 0.75rem;
+    color: #f97316;
+  }
+  
+  .forbidden-danger {
+    font-size: 0.75rem;
+    color: #ef4444;
+    margin-top: 0.25rem;
   }
   
   /* Ритуалы */
@@ -235,6 +473,10 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
   }
   
   @media (max-width: 768px) {
+    .schools-grid {
+      grid-template-columns: 1fr;
+    }
+    
     .castes-grid {
       grid-template-columns: 1fr;
     }
@@ -243,8 +485,21 @@ import { MAGIC_CASTES, TRAINING_STAGES, RITUALS } from '@data/magic';
       grid-template-columns: 1fr;
     }
     
+    .price-grid {
+      grid-template-columns: 1fr;
+    }
+    
     .quote-text {
       font-size: 1rem;
+    }
+    
+    .ratio-bar {
+      flex-direction: column;
+      height: auto;
+    }
+    
+    .ratio-segment {
+      padding: 0.5rem;
     }
   }
 </style>
