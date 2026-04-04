@@ -4,10 +4,13 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import SeasonCard from '@components/SeasonCard.astro';
 import HolidayCard from '@components/HolidayCard.astro';
 import ElementBadge from '@components/ElementBadge.astro';
-import { SEASONS, HOLIDAYS, DAYS_WITHOUT_BEGINNING, getCurrentSeason, getHolidaysBySeason } from '@data/calendar';
+import { SEASONS, HOLIDAYS, DAYS_WITHOUT_BEGINNING, getCurrentSeason, getHolidaysBySeason, getAllHolidays } from '@data/calendar';
 
 const currentSeason = getCurrentSeason();
 const currentSeasonHolidays = getHolidaysBySeason(currentSeason.name);
+const allHolidays = getAllHolidays();
+
+// Функция для определения ближайшего праздника (в браузере)
 ---
 
 <BaseLayout title="Календарь и праздники">
@@ -18,7 +21,7 @@ const currentSeasonHolidays = getHolidaysBySeason(currentSeason.name);
     </p>
   </div>
 
-  <!-- Текущий сезон (выделенный) -->
+  <!-- Текущий сезон -->
   <section class="section current-season-section">
     <h2>🌟 Текущий сезон</h2>
     <p class="season-note">
@@ -39,29 +42,13 @@ const currentSeasonHolidays = getHolidaysBySeason(currentSeason.name);
   </section>
 
   <!-- Ближайшие праздники -->
-  {currentSeasonHolidays.length > 0 && (
-    <section class="section">
-      <h2>🎊 Ближайшие праздники</h2>
-      <p>
-        В текущем сезоне отмечаются следующие праздники. Не пропустите возможность 
-        присоединиться к древним традициям!
-      </p>
-      <div class="holidays-grid">
-        {currentSeasonHolidays.map(holiday => (
-          <HolidayCard
-            name={holiday.name}
-            season={holiday.season}
-            element={holiday.element}
-            description={holiday.description}
-            rituals={holiday.rituals}
-            traditions={holiday.traditions}
-            date={holiday.date}
-            icon={holiday.icon}
-          />
-        ))}
-      </div>
-    </section>
-  )}
+  <section class="section" id="upcoming-holidays">
+    <h2>🎊 Ближайшие праздники</h2>
+    <div class="upcoming-holidays" id="upcomingList">
+      <!-- JavaScript заполнит этот список -->
+      <p>Загрузка...</p>
+    </div>
+  </section>
 
   <!-- Все сезоны -->
   <section class="section">
@@ -100,6 +87,14 @@ const currentSeasonHolidays = getHolidaysBySeason(currentSeason.name);
           <ul>
             {DAYS_WITHOUT_BEGINNING.activities.map(activity => (
               <li>{activity}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="days-traditions">
+          <strong>Традиции:</strong>
+          <ul>
+            {DAYS_WITHOUT_BEGINNING.traditions.map(tradition => (
+              <li>{tradition}</li>
             ))}
           </ul>
         </div>
@@ -409,4 +404,110 @@ const currentSeasonHolidays = getHolidaysBySeason(currentSeason.name);
       font-size: 0.75rem;
     }
   }
+
+  .upcoming-holidays {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  .upcoming-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .upcoming-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .upcoming-icon {
+    font-size: 1.5rem;
+  }
+  
+  .upcoming-name {
+    font-weight: 600;
+  }
+  
+  .upcoming-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .upcoming-days {
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .days-traditions {
+    margin-top: 0.75rem;
+  }
+  
+  .days-traditions ul {
+    margin: 0.25rem 0 0 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
 </style>
+
+<script>
+  // Определение ближайшего праздника
+  const holidays = [
+    { name: 'День Пробуждения', season: 'Зелёный сезон', date: '1-й день', icon: '🌱' },
+    { name: 'Праздник Шепчущих Листьев', season: 'Зелёный сезон', date: '36-й день', icon: '🍃' },
+    { name: 'Ночь Посева', season: 'Зелёный сезон', date: '54-й день', icon: '⭐' },
+    { name: 'Праздник Огненного Танца', season: 'Алый сезон', date: '1-й день', icon: '🔥' },
+    { name: 'Состязание Ста Клинков', season: 'Алый сезон', date: '24-й день', icon: '⚔️' },
+    { name: 'День Первого Пламени', season: 'Алый сезон', date: '48-й день', icon: '🕯️' },
+    { name: 'Пир Урожая', season: 'Золотой сезон', date: '1-й день', icon: '🌾' },
+    { name: 'Праздник Первого Колоса', season: 'Золотой сезон', date: '18-й день', icon: '🌽' },
+    { name: 'День Камня', season: 'Золотой сезон', date: '48-й день', icon: '🪨' },
+    { name: 'День Благодарения Земли', season: 'Золотой сезон', date: '60-й день', icon: '🙏' },
+    { name: 'День Кузнеца', season: 'Белый сезон', date: '1-й день', icon: '⚒️' },
+    { name: 'Праздник Первого Удара', season: 'Белый сезон', date: '12-й день', icon: '🔨' },
+    { name: 'Ночь Кованого Месяца', season: 'Белый сезон', date: '36-й день', icon: '🌙' },
+    { name: 'День Рудознатца', season: 'Белый сезон', date: '54-й день', icon: '⛏️' },
+    { name: 'Ночь Зеркальной Луны', season: 'Чёрный сезон', date: '1-й день', icon: '🌙' },
+    { name: 'Праздник Туманного Рассвета', season: 'Чёрный сезон', date: '18-й день', icon: '🌫️' },
+    { name: 'День Воды', season: 'Чёрный сезон', date: '36-й день', icon: '💧' },
+    { name: 'Ночь Поминок', season: 'Чёрный сезон', date: '60-й день', icon: '🕯️' },
+  ];
+  
+  const seasonsOrder = ['Зелёный сезон', 'Алый сезон', 'Золотой сезон', 'Белый сезон', 'Чёрный сезон'];
+  const currentSeasonIndex = seasonsOrder.indexOf('{currentSeason.name}');
+  
+  // Функция для отображения ближайших праздников
+  function displayUpcomingHolidays() {
+    const container = document.getElementById('upcomingList');
+    if (!container) return;
+    
+    // Для демонстрации показываем первые 3 праздника
+    const upcoming = holidays.slice(0, 5);
+    
+    container.innerHTML = upcoming.map(holiday => `
+      <div class="upcoming-item">
+        <div class="upcoming-info">
+          <span class="upcoming-icon">${holiday.icon}</span>
+          <span class="upcoming-name">${holiday.name}</span>
+          <span class="upcoming-date">${holiday.season}, ${holiday.date}</span>
+        </div>
+        <span class="upcoming-days">Скоро!</span>
+      </div>
+    `).join('');
+  }
+  
+  displayUpcomingHolidays();
+</script>
