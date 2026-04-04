@@ -1,0 +1,362 @@
+---
+// Страница «Медиа» (книги, комиксы, игры)
+import BaseLayout from '@layouts/BaseLayout.astro';
+import MediaCard from '@components/MediaCard.astro';
+import { ALL_MEDIA, MEDIA_TYPES, MEDIA_STATUSES, BOOKS, COMICS, GAMES, RPG_MATERIALS } from '@data/media';
+---
+
+<BaseLayout title="Медиа">
+  <div class="page-header">
+    <h1>📚 Медиа по миру Царства Пяти Начал</h1>
+    <p class="page-description">
+      Книги, комиксы, игры и RPG-материалы, созданные по мотивам мира. Многие проекты в разработке — следите за новостями!
+    </p>
+  </div>
+
+  <!-- Фильтры -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <span class="filter-label">Тип:</span>
+      <div class="filter-buttons">
+        {MEDIA_TYPES.map(type => (
+          <button class="filter-btn active" data-type={type.id}>
+            <span class="filter-icon">{type.icon}</span>
+            {type.name}
+          </button>
+        ))}
+      </div>
+    </div>
+    
+    <div class="filter-group">
+      <span class="filter-label">Статус:</span>
+      <div class="filter-buttons">
+        {MEDIA_STATUSES.map(status => (
+          <button class="filter-btn active" data-status={status.id}>
+            <span class="filter-icon">{status.icon}</span>
+            {status.name}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Статистика -->
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-value">{ALL_MEDIA.length}</span>
+      <span class="stat-label">всего проектов</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{BOOKS.length}</span>
+      <span class="stat-label">книг</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{COMICS.length}</span>
+      <span class="stat-label">комиксов</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{GAMES.length}</span>
+      <span class="stat-label">игр</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{RPG_MATERIALS.length}</span>
+      <span class="stat-label">RPG</span>
+    </div>
+  </div>
+
+  <!-- Все проекты -->
+  <section class="section">
+    <h2>📖 Все проекты</h2>
+    <div class="media-grid" id="mediaGrid">
+      {ALL_MEDIA.map(item => (
+        <MediaCard item={item} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Информация о сотрудничестве -->
+  <section class="section collaboration-section">
+    <h2>🤝 Сотрудничество</h2>
+    <p>
+      Мы открыты для сотрудничества с писателями, художниками, разработчиками игр и издателями.
+      Если вы хотите создать продукт по миру Царства Пяти Начал — свяжитесь с нами!
+    </p>
+    <div class="collaboration-card">
+      <div class="collaboration-icon">📧</div>
+      <div class="collaboration-content">
+        <h3>Предложения о сотрудничестве</h3>
+        <p>По вопросам лицензирования и создания медиа-продуктов обращайтесь:</p>
+        <div class="collaboration-contact">
+          <span class="contact-icon">✉️</span>
+          <span>media@wuxing-rus.ru</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Каждая книга, комикс и игра — это новая дверь в наш мир. Мы только в начале пути»</p>
+    <p class="quote-author">— Творец Царства Пяти Начал</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .filters-section {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .filter-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .filter-btn {
+    padding: 0.4rem 0.8rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .filter-btn:hover {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+  }
+  
+  .filter-btn.active {
+    background: var(--text-accent);
+    border-color: var(--text-accent);
+    color: var(--bg-primary);
+  }
+  
+  .filter-icon {
+    font-size: 0.9rem;
+  }
+  
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    flex-wrap: wrap;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-accent);
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-left: 0.3rem;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .collaboration-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .collaboration-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .collaboration-icon {
+    font-size: 3rem;
+  }
+  
+  .collaboration-content {
+    flex: 1;
+  }
+  
+  .collaboration-content h3 {
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .collaboration-content p {
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .collaboration-contact {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-accent);
+  }
+  
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .media-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .filters-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .filter-group {
+      justify-content: space-between;
+    }
+    
+    .filter-buttons {
+      justify-content: center;
+    }
+    
+    .stats-bar {
+      gap: 1rem;
+    }
+    
+    .collaboration-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Фильтрация медиа
+  let currentType = 'all';
+  let currentStatus = 'all';
+  
+  function filterMedia() {
+    const grid = document.getElementById('mediaGrid');
+    if (!grid) return;
+    
+    const cards = grid.querySelectorAll('.media-card');
+    cards.forEach(card => {
+      const typeSpan = card.querySelector('.media-type');
+      const statusSpan = card.querySelector('.media-status');
+      
+      const type = typeSpan?.textContent?.replace(/[^a-z]/g, '') || '';
+      const statusText = statusSpan?.textContent || '';
+      
+      let status = '';
+      if (statusText.includes('Опубликовано')) status = 'published';
+      else if (statusText.includes('Скоро')) status = 'coming-soon';
+      else if (statusText.includes('В разработке')) status = 'in-development';
+      else if (statusText.includes('В планах')) status = 'planned';
+      
+      const typeMatch = currentType === 'all' || 
+        (currentType === 'book' && type.includes('Книга')) ||
+        (currentType === 'comic' && type.includes('Комикс')) ||
+        (currentType === 'game' && (type.includes('Видеоигра') || type.includes('Настольная') || type.includes('Карточная'))) ||
+        (currentType === 'rpg' && type.includes('RPG'));
+      
+      const statusMatch = currentStatus === 'all' || currentStatus === status;
+      
+      card.style.display = (typeMatch && statusMatch) ? '' : 'none';
+    });
+  }
+  
+  // Обработчики для кнопок типа
+  document.querySelectorAll('[data-type]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentType = btn.dataset.type;
+      document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll(`[data-type="${currentType}"]`).forEach(b => b.classList.add('active'));
+      filterMedia();
+    });
+  });
+  
+  // Обработчики для кнопок статуса
+  document.querySelectorAll('[data-status]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentStatus = btn.dataset.status;
+      document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll(`[data-status="${currentStatus}"]`).forEach(b => b.classList.add('active'));
+      filterMedia();
+    });
+  });
+</script>

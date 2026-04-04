@@ -31,6 +31,6 @@ export const ALL_NAVIGATION = [
   { title: 'Руны', href: withBase('/runes'), icon: '🔣' },
   { title: 'Опасности', href: withBase('/dangers'), icon: '⚠️' },
   { title: 'Персонажи', href: withBase('/heroes'), icon: '👥' },
-  { title: 'Квесты', href: withBase('/quests'), icon: '🎲' },
+  { title: 'Медиа', href: withBase('/media'), icon: '📚' },
   { title: 'Галерея', href: withBase('/gallery'), icon: '🖼️' },
 ];
