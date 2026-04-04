@@ -1,0 +1,470 @@
+---
+// Страница «Экономика и ресурсы»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ResourceCard from '@components/ResourceCard.astro';
+import TradeRouteCard from '@components/TradeRouteCard.astro';
+import ElementBadge from '@components/ElementBadge.astro';
+import { 
+  RESOURCES, 
+  TRADE_ROUTES, 
+  FORBIDDEN_GOODS, 
+  CURRENCY, 
+  TAXES, 
+  CRAFTS, 
+  ECONOMIC_CRIMES 
+} from '@data/economy';
+---
+
+<BaseLayout title="Экономика и ресурсы">
+  <div class="page-header">
+    <h1>💰 Экономика и ресурсы</h1>
+    <p class="page-description">
+      Ресурсы княжеств, торговые пути, денежная система и налоги Царства Пяти Начал
+    </p>
+  </div>
+
+  <!-- Ресурсы по княжествам -->
+  <section class="section">
+    <h2>📦 Ресурсы княжеств</h2>
+    <p>
+      Каждое княжество обладает уникальными ресурсами, которые добываются только на его землях.
+    </p>
+    
+    <!-- Зелёные Рощи -->
+    <h3 class="section-subtitle wood">🌿 Зелёные Рощи (Дерево)</h3>
+    <div class="resources-grid">
+      {RESOURCES.filter(r => r.principality === 'Зелёные Рощи').map(resource => (
+        <ResourceCard resource={resource} />
+      ))}
+    </div>
+    
+    <!-- Пылающие Степи -->
+    <h3 class="section-subtitle fire">🔥 Пылающие Степи (Огонь)</h3>
+    <div class="resources-grid">
+      {RESOURCES.filter(r => r.principality === 'Пылающие Степи').map(resource => (
+        <ResourceCard resource={resource} />
+      ))}
+    </div>
+    
+    <!-- Великие Холмы -->
+    <h3 class="section-subtitle earth">⛰️ Великие Холмы (Земля)</h3>
+    <div class="resources-grid">
+      {RESOURCES.filter(r => r.principality === 'Великие Холмы').map(resource => (
+        <ResourceCard resource={resource} />
+      ))}
+    </div>
+    
+    <!-- Железные Горы -->
+    <h3 class="section-subtitle metal">⚔️ Железные Горы (Металл)</h3>
+    <div class="resources-grid">
+      {RESOURCES.filter(r => r.principality === 'Железные Горы').map(resource => (
+        <ResourceCard resource={resource} />
+      ))}
+    </div>
+    
+    <!-- Туманные Озёра -->
+    <h3 class="section-subtitle water">💧 Туманные Озёра (Вода)</h3>
+    <div class="resources-grid">
+      {RESOURCES.filter(r => r.principality === 'Туманные Озёра').map(resource => (
+        <ResourceCard resource={resource} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Производство и ремёсла -->
+  <section class="section">
+    <h2>🏺 Производство и ремёсла</h2>
+    <p>
+      Каждое княжество славится своими мастерами и уникальными ремёслами.
+    </p>
+    <div class="crafts-grid">
+      {CRAFTS.map(craft => (
+        <div class="craft-card">
+          <div class="craft-icon">{craft.icon}</div>
+          <div class="craft-content">
+            <div class="craft-principality">
+              <ElementBadge element={craft.element} size="small" />
+              {craft.principality}
+            </div>
+            <div class="craft-name">{craft.craft}</div>
+            <div class="craft-masters">🎨 {craft.famousMasters}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Торговые пути -->
+  <section class="section">
+    <h2>🛤️ Торговые пути</h2>
+    <p>
+      Великий Круг и другие маршруты, соединяющие княжества и обеспечивающие торговлю.
+    </p>
+    <div class="trade-routes-grid">
+      {TRADE_ROUTES.map(route => (
+        <TradeRouteCard route={route} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Запрещённые товары -->
+  <section class="section forbidden-section">
+    <h2>🚫 Запрещённые товары</h2>
+    <p>
+      Товары, которые нельзя продавать или перевозить между княжествами.
+    </p>
+    <div class="forbidden-goods-list">
+      {FORBIDDEN_GOODS.map(good => (
+        <div class="forbidden-good">
+          <span class="forbidden-icon">🚫</span>
+          <span class="forbidden-name">{good.name}</span>
+          <span class="forbidden-reason">— {good.reason}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Денежная система -->
+  <section class="section">
+    <h2>💎 Денежная система</h2>
+    <p>
+      Основная валюта Царства — речной жемчуг. Также используются серебряные пластины.
+    </p>
+    <div class="currency-table-container">
+      <table class="currency-table">
+        <thead>
+          <tr>
+            <th>Единица</th>
+            <th>Размер / Вес</th>
+            <th>Стоимость (в хлебе)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {CURRENCY.units.map(unit => (
+            <tr>
+              <td class="currency-name">
+                <span class="currency-icon">{unit.icon}</span>
+                {unit.name}
+               </td>
+              <td>{unit.size}</td>
+              <td>{unit.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Налоги и повинности -->
+  <section class="section taxes-section">
+    <h2>📋 Налоги и повинности</h2>
+    <p>
+      Каждое сословие платит налоги в зависимости от своего статуса и дохода.
+    </p>
+    <div class="taxes-table-container">
+      <table class="taxes-table">
+        <thead>
+          <tr>
+            <th>Сословие</th>
+            <th>Налог</th>
+            <th>Форма</th>
+          </tr>
+        </thead>
+        <tbody>
+          {TAXES.map(tax => (
+            <tr>
+              <td class="tax-estate">
+                <span class="tax-icon">{tax.icon}</span>
+                {tax.estate}
+              </td>
+              <td>{tax.rate}</td>
+              <td>{tax.form}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Экономические преступления -->
+  <section class="section">
+    <h2>⚖️ Экономические преступления</h2>
+    <p>
+      Наказания за нарушения в сфере торговли и финансов.
+    </p>
+    <div class="crimes-grid">
+      {ECONOMIC_CRIMES.map(crime => (
+        <div class="crime-card">
+          <div class="crime-icon">{crime.icon}</div>
+          <div class="crime-content">
+            <div class="crime-name">{crime.crime}</div>
+            <div class="crime-punishment">⚖️ {crime.punishment}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Жемчуг — это кровь торговли. Но не всякую кровь можно продать»</p>
+    <p class="quote-author">— Купец Всемил</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .section-subtitle {
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .section-subtitle.wood { color: var(--element-wood-light); }
+  .section-subtitle.fire { color: var(--element-fire-light); }
+  .section-subtitle.earth { color: var(--element-earth-light); }
+  .section-subtitle.metal { color: var(--element-metal-light); }
+  .section-subtitle.water { color: var(--element-water-light); }
+  
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .crafts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .craft-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .craft-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .craft-icon {
+    font-size: 2rem;
+  }
+  
+  .craft-content {
+    flex: 1;
+  }
+  
+  .craft-principality {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .craft-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .craft-masters {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  .trade-routes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .forbidden-section {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .forbidden-goods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  
+  .forbidden-good {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+  }
+  
+  .forbidden-icon {
+    font-size: 1rem;
+  }
+  
+  .forbidden-name {
+    font-weight: 600;
+    color: #ef4444;
+  }
+  
+  .forbidden-reason {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .currency-table-container, .taxes-table-container {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .currency-table, .taxes-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  
+  .currency-table th, .taxes-table th,
+  .currency-table td, .taxes-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .currency-table th, .taxes-table th {
+    background: var(--bg-secondary);
+    color: var(--text-accent);
+  }
+  
+  .currency-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .tax-estate {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .tax-icon {
+    font-size: 1.1rem;
+  }
+  
+  .taxes-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .crimes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .crime-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .crime-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .crime-icon {
+    font-size: 1.5rem;
+  }
+  
+  .crime-content {
+    flex: 1;
+  }
+  
+  .crime-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .crime-punishment {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .resources-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .crafts-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .trade-routes-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .crimes-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>
