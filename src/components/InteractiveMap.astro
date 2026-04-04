@@ -1,0 +1,405 @@
+---
+// Интерактивная карта Царства Пяти Начал
+import { MAP_REGIONS, MAP_LOCATIONS, MAP_VIEWBOX } from '@data/mapData';
+import ElementBadge from './ElementBadge.astro';
+---
+
+<div class="map-container">
+  <div class="map-header">
+    <h3>🗺️ Карта Царства Пяти Начал</h3>
+    <p class="map-instruction">Наведите на регион для информации, кликните для перехода</p>
+  </div>
+  
+  <div class="map-wrapper">
+    <svg viewBox={MAP_VIEWBOX} class="interactive-map" id="worldMap">
+      <!-- Фон -->
+      <rect width="1000" height="600" fill="var(--bg-secondary)" rx="16" />
+      
+      <!-- Декоративные элементы (реки, горы) -->
+      <!-- Река Смородина -->
+      <path d="M150,380 Q250,350 300,400 Q350,450 250,500" stroke="#1e40af" stroke-width="3" fill="none" stroke-dasharray="8,4" opacity="0.5" />
+      
+      <!-- Горные хребты -->
+      <path d="M750,200 L770,180 L790,200 L810,180 L830,200" stroke="#78716c" stroke-width="2" fill="none" opacity="0.3" />
+      <path d="M760,220 L780,200 L800,220 L820,200 L840,220" stroke="#78716c" stroke-width="2" fill="none" opacity="0.3" />
+      
+      <!-- Регионы (княжества) -->
+      {MAP_REGIONS.map(region => (
+        <g class="map-region" data-region={region.id}>
+          <path
+            d={region.path}
+            fill={`var(--element-${region.element})`}
+            fill-opacity="0.3"
+            stroke={`var(--element-${region.element})`}
+            stroke-width="2"
+            class="region-path"
+          />
+          <text
+            x={region.coordinates.x}
+            y={region.coordinates.y}
+            text-anchor="middle"
+            fill={`var(--element-${region.element}-light)`}
+            font-size="14"
+            font-weight="bold"
+            class="region-label"
+          >
+            {region.name}
+          </text>
+        </g>
+      ))}
+      
+      <!-- Точки интереса -->
+      {MAP_LOCATIONS.map(location => {
+        let markerColor = '#d4af37';
+        let markerSize = 8;
+        if (location.type === 'capital') markerColor = '#d4af37';
+        else if (location.type === 'sacred') markerColor = '#8b5cf6';
+        else if (location.type === 'danger') markerColor = '#ef4444';
+        else markerColor = '#6b7280';
+        
+        return (
+          <g class="map-location" data-location={location.id} data-name={location.name} data-desc={location.description}>
+            <circle
+              cx={location.coordinates.x}
+              cy={location.coordinates.y}
+              r={markerSize}
+              fill={markerColor}
+              stroke="white"
+              stroke-width="2"
+              class="location-marker"
+            />
+            <text
+              x={location.coordinates.x + 10}
+              y={location.coordinates.y + 4}
+              fill="var(--text-secondary)"
+              font-size="10"
+              class="location-label"
+            >
+              {location.name.length > 15 ? location.name.slice(0, 12) + '...' : location.name}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+    
+    <!-- Всплывающая подсказка -->
+    <div id="mapTooltip" class="map-tooltip" style="display: none;">
+      <div class="tooltip-header">
+        <span id="tooltipIcon"></span>
+        <span id="tooltipTitle"></span>
+      </div>
+      <div id="tooltipDesc" class="tooltip-desc"></div>
+      <div id="tooltipLink" class="tooltip-link"></div>
+    </div>
+  </div>
+  
+  <!-- Легенда -->
+  <div class="map-legend">
+    <div class="legend-title">Условные обозначения</div>
+    <div class="legend-items">
+      {MAP_REGIONS.map(region => (
+        <div class="legend-item">
+          <span class="legend-color" style={`background: var(--element-${region.element})`}></span>
+          <span>{region.name}</span>
+        </div>
+      ))}
+      <div class="legend-divider"></div>
+      <div class="legend-item"><span class="legend-marker capital"></span> Столица</div>
+      <div class="legend-item"><span class="legend-marker sacred"></span> Священное место</div>
+      <div class="legend-item"><span class="legend-marker danger"></span> Опасное место</div>
+      <div class="legend-item"><span class="legend-marker city"></span> Город</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .map-container {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .map-header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .map-header h3 {
+    margin: 0 0 0.25rem 0;
+  }
+  
+  .map-instruction {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  
+  .map-wrapper {
+    position: relative;
+    overflow-x: auto;
+  }
+  
+  .interactive-map {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+  
+  .region-path {
+    transition: fill-opacity var(--transition-fast);
+    cursor: pointer;
+  }
+  
+  .region-path:hover {
+    fill-opacity: 0.6;
+  }
+  
+  .region-label {
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+  
+  .location-marker {
+    cursor: pointer;
+    transition: r var(--transition-fast), filter var(--transition-fast);
+  }
+  
+  .location-marker:hover {
+    r: 10;
+    filter: brightness(1.2);
+  }
+  
+  .location-label {
+    pointer-events: none;
+    fill: var(--text-muted);
+  }
+  
+  /* Всплывающая подсказка */
+  .map-tooltip {
+    position: fixed;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem;
+    max-width: 250px;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+    pointer-events: none;
+  }
+  
+  .tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-accent);
+  }
+  
+  .tooltip-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .tooltip-link {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  /* Легенда */
+  .map-legend {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .legend-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-accent);
+  }
+  
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+  }
+  
+  .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+  
+  .legend-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .legend-marker.capital {
+    background: #d4af37;
+    box-shadow: 0 0 0 1px white;
+  }
+  
+  .legend-marker.sacred {
+    background: #8b5cf6;
+  }
+  
+  .legend-marker.danger {
+    background: #ef4444;
+  }
+  
+  .legend-marker.city {
+    background: #6b7280;
+  }
+  
+  .legend-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-color);
+  }
+  
+  @media (max-width: 768px) {
+    .region-label {
+      font-size: 8px;
+    }
+    
+    .location-label {
+      font-size: 7px;
+    }
+    
+    .legend-items {
+      gap: 0.5rem;
+    }
+    
+    .legend-divider {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+import { withBase } from "@/utils/paths";
+
+  // Интерактивность карты
+  const tooltip = document.getElementById('mapTooltip');
+  const regions = document.querySelectorAll('.map-region');
+  const locations = document.querySelectorAll('.map-location');
+  
+  // Данные о регионах для подсказок
+  const regionData = {
+    wood: {
+      name: 'Зелёные Рощи',
+      icon: '🌿',
+      description: 'Княжество Дерева. Густые леса, дома-гнёзда в кронах, целебные травы.',
+      link: '/principalities/green-groves'
+    },
+    fire: {
+      name: 'Пылающие Степи',
+      icon: '🔥',
+      description: 'Княжество Огня. Бескрайние степи, вулканы, кочевники и кузнецы.',
+      link: '/principalities/flaming-steppes'
+    },
+    earth: {
+      name: 'Великие Холмы',
+      icon: '⛰️',
+      description: 'Княжество Земли. Круглые холмы, пшеничные поля, подземные города.',
+      link: '/principalities/great-hills'
+    },
+    metal: {
+      name: 'Железные Горы',
+      icon: '⚔️',
+      description: 'Княжество Металла. Острые горы, висячие мосты, Небесная Кузня.',
+      link: '/principalities/iron-mountains'
+    },
+    water: {
+      name: 'Туманные Озёра',
+      icon: '💧',
+      description: 'Княжество Воды. Озёра, каналы, плавучие деревни, Дворец Тумана.',
+      link: '/principalities/misty-lakes'
+    }
+  };
+  
+  // Данные о локациях
+  const locationData = {
+    'world-tree': { name: 'Мировой Дуб', icon: '🌳', desc: 'Центр мироздания, соединяющий Правь, Явь и Навь', link: '/world' },
+    'source': { name: 'Источник Начал', icon: '💎', desc: 'У корней Мирового Дуба, источник магической силы', link: '/world' },
+    'sacred-grove': { name: 'Священная Роща', icon: '🌲', desc: 'Роща древних дубов с рунами', link: '/principalities/green-groves' },
+    'rune-valley': { name: 'Долина Рун', icon: '🔣', desc: 'Каменные стелы с символами стихий', link: '/runes' },
+    'distorted-lands': { name: 'Искажённые Земли', icon: '🌀', desc: 'Место заточения Теневого Дракона', link: '/dangers' },
+    'smorodina': { name: 'Река Смородина', icon: '🌊', desc: 'Граница между Явью и Навью', link: '/world' },
+  };
+  
+  function showTooltip(event, data) {
+    const tooltipIcon = document.getElementById('tooltipIcon');
+    const tooltipTitle = document.getElementById('tooltipTitle');
+    const tooltipDesc = document.getElementById('tooltipDesc');
+    const tooltipLink = document.getElementById('tooltipLink');
+    
+    if (tooltipIcon) tooltipIcon.textContent = data.icon;
+    if (tooltipTitle) tooltipTitle.textContent = data.name;
+    if (tooltipDesc) tooltipDesc.textContent = data.desc;
+    if (tooltipLink) tooltipLink.innerHTML = data.link ? `📌 Подробнее о ${data.name}` : '';
+    
+    tooltip.style.display = 'block';
+    tooltip.style.left = (event.clientX + 15) + 'px';
+    tooltip.style.top = (event.clientY + 15) + 'px';
+  }
+  
+  function hideTooltip() {
+    tooltip.style.display = 'none';
+  }
+  
+  // Обработчики для регионов
+  regions.forEach(region => {
+    const regionId = region.dataset.region;
+    const data = regionData[regionId];
+    
+    if (data) {
+      region.addEventListener('mouseenter', (e) => showTooltip(e, data));
+      region.addEventListener('mousemove', (e) => {
+        tooltip.style.left = (e.clientX + 15) + 'px';
+        tooltip.style.top = (e.clientY + 15) + 'px';
+      });
+      region.addEventListener('mouseleave', hideTooltip);
+      region.addEventListener('click', () => {
+        if (data.link) window.location.href = withBase(data.link);
+      });
+    }
+  });
+  
+  // Обработчики для локаций
+  locations.forEach(location => {
+    const locationId = location.dataset.location;
+    const data = locationData[locationId];
+    
+    if (data) {
+      location.addEventListener('mouseenter', (e) => showTooltip(e, data));
+      location.addEventListener('mousemove', (e) => {
+        tooltip.style.left = (e.clientX + 15) + 'px';
+        tooltip.style.top = (e.clientY + 15) + 'px';
+      });
+      location.addEventListener('mouseleave', hideTooltip);
+      location.addEventListener('click', () => {
+        if (data.link) window.location.href = data.link;
+      });
+    }
+  });
+</script>

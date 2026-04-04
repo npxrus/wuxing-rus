@@ -1,0 +1,235 @@
+---
+// Страница «Интерактивная карта»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import InteractiveMap from '@components/InteractiveMap.astro';
+import { MAP_REGIONS, MAP_LOCATIONS } from '@data/mapData';
+import { withBase } from '@/utils/paths';
+---
+
+<BaseLayout title="Интерактивная карта">
+  <div class="page-header">
+    <h1>🗺️ Карта Царства Пяти Начал</h1>
+    <p class="page-description">
+      Исследуйте пять княжеств, священные места и опасные земли. Наводите на регионы для информации, кликайте для перехода.
+    </p>
+  </div>
+
+  <!-- Интерактивная карта -->
+  <InteractiveMap />
+
+  <!-- Список княжеств -->
+  <section class="section">
+    <h2>🏰 Княжества</h2>
+    <div class="regions-grid">
+      {MAP_REGIONS.map(region => (
+        <a href={withBase(`/principalities/${region.id === 'wood' ? 'green-groves' : region.id === 'fire' ? 'flaming-steppes' : region.id === 'earth' ? 'great-hills' : region.id === 'metal' ? 'iron-mountains' : 'misty-lakes'}`)} class="region-card">
+          <div class="region-icon">{region.icon}</div>
+          <div class="region-info">
+            <h3>{region.name}</h3>
+            <p>{region.description}</p>
+            <div class="region-capital">🏛️ Столица: {region.capital}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Ключевые места -->
+  <section class="section">
+    <h2>📍 Ключевые места</h2>
+    <div class="locations-grid">
+      {MAP_LOCATIONS.map(location => {
+        const typeIcon = {
+          capital: '🏛️',
+          city: '🏠',
+          sacred: '✨',
+          danger: '⚠️'
+        }[location.type];
+        
+        return (
+          <div class="location-card">
+            <div class="location-icon">{typeIcon} {location.icon}</div>
+            <div class="location-info">
+              <div class="location-name">{location.name}</div>
+              <div class="location-type">{location.type === 'capital' ? 'Столица' : location.type === 'city' ? 'Город' : location.type === 'sacred' ? 'Священное место' : 'Опасное место'}</div>
+              <div class="location-desc">{location.description}</div>
+              <div class="location-region">📍 {location.region === 'wood' ? 'Зелёные Рощи' : location.region === 'fire' ? 'Пылающие Степи' : location.region === 'earth' ? 'Великие Холмы' : location.region === 'metal' ? 'Железные Горы' : 'Туманные Озёра'}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Карта — это не просто бумага. Это история земли, застывшая в линиях»</p>
+    <p class="quote-author">— Странник Чёрного Дракона</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .regions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .region-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast), box-shadow var(--transition-normal);
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+  }
+  
+  .region-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--text-accent);
+  }
+  
+  .region-icon {
+    font-size: 2.5rem;
+  }
+  
+  .region-info {
+    flex: 1;
+  }
+  
+  .region-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+  
+  .region-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .region-capital {
+    font-size: 0.7rem;
+    color: var(--text-accent);
+    margin-top: 0.25rem;
+  }
+  
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .location-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .location-card:hover {
+    transform: translateX(5px);
+    border-color: var(--text-accent);
+  }
+  
+  .location-icon {
+    font-size: 2rem;
+  }
+  
+  .location-info {
+    flex: 1;
+  }
+  
+  .location-name {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .location-type {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+  
+  .location-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .location-region {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .regions-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .locations-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .region-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .location-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>

@@ -18,6 +18,7 @@ export const SITE_URL = `https://${SITE_CONFIG.githubUsername}.github.io/${SITE_
 export const ALL_NAVIGATION = [
   { title: 'Главная', href: withBase('/'), icon: '🏠' },
   { title: 'Мир', href: withBase('/world'), icon: '🌍' },
+  { title: 'Карта', href: withBase('/map'), icon: '🗺️'},
   { title: 'Княжества', href: withBase('/principalities'), icon: '🏰' },
   { title: 'Существа', href: withBase('/creatures'), icon: '🐉' },
   { title: 'Магия', href: withBase('/magic'), icon: '✨' },
