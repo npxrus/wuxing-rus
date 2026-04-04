@@ -1,0 +1,144 @@
+---
+// Компонент выпадающего меню
+export interface Props {
+  title: string;
+  icon: string;
+  items: { title: string; href: string; icon: string }[];
+}
+
+const { title, icon, items } = Astro.props;
+---
+
+<div class="dropdown">
+  <button class="dropdown-btn">
+    <span class="dropdown-icon">{icon}</span>
+    <span>{title}</span>
+    <span class="dropdown-arrow">▼</span>
+  </button>
+  <div class="dropdown-content">
+    {items.map(item => (
+      <a href={item.href}>
+        <span class="item-icon">{item.icon}</span>
+        <span>{item.title}</span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    transition: all var(--transition-fast);
+  }
+  
+  .dropdown-btn:hover {
+    color: var(--text-accent);
+    background: var(--bg-card);
+  }
+  
+  .dropdown-icon {
+    font-size: 1.1rem;
+  }
+  
+  .dropdown-arrow {
+    font-size: 0.7rem;
+    transition: transform var(--transition-fast);
+  }
+  
+  .dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--bg-card);
+    min-width: 180px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  
+  .dropdown:hover .dropdown-content,
+  .dropdown:focus-within .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-content a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .dropdown-content a:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-content a:hover {
+    background: var(--bg-secondary);
+    color: var(--text-accent);
+  }
+  
+  .item-icon {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .dropdown {
+      width: 100%;
+    }
+    
+    .dropdown-btn {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .dropdown-content {
+      position: static;
+      display: none;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    
+    .dropdown.active .dropdown-content {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // Для мобильных устройств: клик вместо наведения
+  if (window.innerWidth <= 768) {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const btn = dropdown.querySelector('.dropdown-btn');
+      btn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropdown.classList.toggle('active');
+      });
+    });
+  }
+</script>

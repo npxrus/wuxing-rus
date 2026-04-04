@@ -1,11 +1,10 @@
 ---
 // BaseLayout — обёртка для всех страниц сайта
-import { SITE_CONFIG, NAVIGATION, SITE_URL } from '@data/siteConfig';
+import { SITE_CONFIG, ALL_NAVIGATION } from '@data/siteConfig';
 import SearchBar from '@components/SearchBar.astro';
 import SeasonalBanner from '@components/SeasonalBanner.astro';
 import RandomFact from '@components/RandomFact.astro';
 import ElementBadge from '@components/ElementBadge.astro';
-import { withBase } from '@/utils/paths';
 
 export interface Props {
   title?: string;
@@ -26,21 +25,18 @@ const pageImage = image || '/images/og-image.jpg';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
-    {/* Базовые мета-теги */}
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <meta name="author" content={SITE_CONFIG.author} />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0a0a0a" />
     
-    {/* Роботы */}
     {noIndex ? (
       <meta name="robots" content="noindex, nofollow" />
     ) : (
       <meta name="robots" content="index, follow" />
     )}
     
-    {/* Open Graph / Facebook */}
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={pageTitle} />
@@ -48,24 +44,17 @@ const pageImage = image || '/images/og-image.jpg';
     <meta property="og:image" content={pageImage} />
     <meta property="og:site_name" content={SITE_CONFIG.title} />
     
-    {/* Twitter */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={pageImage} />
     
-    {/* Favicon */}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    
-    {/* Каноническая ссылка */}
     <link rel="canonical" href={Astro.url} />
     
-    {/* Предзагрузка шрифтов (если будут) */}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
     <style is:global>
+      /* Глобальные CSS-переменные */
       :root {
         --bg-primary: #0a0a0a;
         --bg-secondary: #141414;
@@ -167,7 +156,33 @@ const pageImage = image || '/images/og-image.jpg';
         h3 { font-size: 1.25rem; }
       }
       
-      /* Анимации */
+      .card {
+        background: var(--bg-card);
+        border-radius: var(--border-radius-lg);
+        padding: 1.5rem;
+        transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        border: 1px solid var(--border-color);
+      }
+      
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg), var(--shadow-glow);
+        border-color: var(--text-accent);
+      }
+      
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+      
+      @media (max-width: 640px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -186,7 +201,6 @@ const pageImage = image || '/images/og-image.jpg';
         animation: float 6s ease-in-out infinite;
       }
       
-      /* Скроллбар */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -210,7 +224,6 @@ const pageImage = image || '/images/og-image.jpg';
         color: var(--bg-primary);
       }
       
-      /* Утилиты */
       .text-accent { color: var(--text-accent); }
       .text-muted { color: var(--text-muted); }
       .mt-0 { margin-top: 0; }
@@ -222,7 +235,7 @@ const pageImage = image || '/images/og-image.jpg';
     <header class="site-header">
       <div class="container header-container">
         <div class="logo">
-          <a href={withBase('/')}'>
+          <a href="/">
             <span class="logo-icon">🌳</span>
             <span class="logo-text">{SITE_CONFIG.title}</span>
             <span class="logo-subtitle">{SITE_CONFIG.shortTitle}</span>
@@ -231,17 +244,21 @@ const pageImage = image || '/images/og-image.jpg';
         
         <SearchBar />
         
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Меню">
           <span></span>
           <span></span>
           <span></span>
         </button>
         
-        <nav class="main-nav" id="mainNav">
-          <ul>
-            {NAVIGATION.map((item) => (
+        <nav class="mobile-nav" id="mobileNav">
+          <div class="mobile-nav-header">
+            <span class="mobile-nav-title">Меню</span>
+            <button class="mobile-nav-close" id="mobileNavClose">✕</button>
+          </div>
+          <ul class="mobile-nav-list">
+            {ALL_NAVIGATION.map((item) => (
               <li>
-                <a href={item.href}>
+                <a href={item.href} class="mobile-nav-link">
                   <span class="nav-icon">{item.icon}</span>
                   <span>{item.title}</span>
                 </a>
@@ -249,6 +266,8 @@ const pageImage = image || '/images/og-image.jpg';
             ))}
           </ul>
         </nav>
+        
+        <div class="overlay" id="overlay"></div>
       </div>
     </header>
 
@@ -269,7 +288,7 @@ const pageImage = image || '/images/og-image.jpg';
           <div class="footer-section">
             <h4>Навигация</h4>
             <ul>
-              {NAVIGATION.map((item) => (
+              {ALL_NAVIGATION.map((item) => (
                 <li><a href={item.href}>{item.icon} {item.title}</a></li>
               ))}
             </ul>
@@ -297,23 +316,31 @@ const pageImage = image || '/images/og-image.jpg';
     </footer>
 
     <script>
-      // Мобильное меню
-      const menuBtn = document.getElementById('mobileMenuBtn');
-      const mainNav = document.getElementById('mainNav');
+      // Гамбургер-меню
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const overlay = document.getElementById('overlay');
+      const closeBtn = document.getElementById('mobileNavClose');
       
-      if (menuBtn && mainNav) {
-        menuBtn.addEventListener('click', () => {
-          menuBtn.classList.toggle('active');
-          mainNav.classList.toggle('open');
-        });
+      function openMenu() {
+        mobileNav?.classList.add('open');
+        overlay?.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
       
+      function closeMenu() {
+        mobileNav?.classList.remove('open');
+        overlay?.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      
+      hamburgerBtn?.addEventListener('click', openMenu);
+      closeBtn?.addEventListener('click', closeMenu);
+      overlay?.addEventListener('click', closeMenu);
+      
       // Закрытие меню при клике на ссылку
-      document.querySelectorAll('.main-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-          menuBtn?.classList.remove('active');
-          mainNav?.classList.remove('open');
-        });
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', closeMenu);
       });
       
       // Анимация появления
@@ -326,7 +353,7 @@ const pageImage = image || '/images/og-image.jpg';
         });
       }, { threshold: 0.1 });
       
-      document.querySelectorAll('.card, .principality-card, .creature-card, .artifact-card, .season-card, .holiday-card, .ritual-card').forEach(el => {
+      document.querySelectorAll('.card, .principality-card, .creature-card, .artifact-card, .season-card, .holiday-card, .ritual-card, .resource-card, .trade-route-card, .estate-card, .rune-card').forEach(el => {
         observer.observe(el);
       });
     </script>
@@ -334,6 +361,7 @@ const pageImage = image || '/images/og-image.jpg';
 </html>
 
 <style is:global>
+  /* Шапка */
   .site-header {
     position: sticky;
     top: 0;
@@ -350,6 +378,10 @@ const pageImage = image || '/images/og-image.jpg';
     align-items: center;
     height: 100%;
     gap: 1rem;
+  }
+  
+  .logo {
+    flex-shrink: 0;
   }
   
   .logo a {
@@ -375,93 +407,133 @@ const pageImage = image || '/images/og-image.jpg';
     font-weight: 400;
   }
   
-  .main-nav ul {
+  /* Поиск */
+  .search-container {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  /* Гамбургер-кнопка */
+  .hamburger-btn {
     display: flex;
-    gap: 1.5rem;
-    list-style: none;
-  }
-  
-  .main-nav a {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    color: var(--text-secondary);
-    transition: color var(--transition-fast);
-  }
-  
-  .main-nav a:hover {
-    color: var(--text-accent);
-  }
-  
-  .nav-icon {
-    font-size: 1.1rem;
-  }
-  
-  .mobile-menu-btn {
-    display: none;
     flex-direction: column;
     gap: 5px;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0.5rem;
+    flex-shrink: 0;
+    z-index: 1001;
   }
   
-  .mobile-menu-btn span {
+  .hamburger-btn span {
     width: 25px;
     height: 2px;
     background: var(--text-primary);
     transition: all var(--transition-fast);
   }
   
-  .mobile-menu-btn.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
+  /* Мобильная навигация */
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
+    background: var(--bg-primary);
+    z-index: 1002;
+    transition: right var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
   }
   
-  .mobile-menu-btn.active span:nth-child(2) {
+  .mobile-nav.open {
+    right: 0;
+  }
+  
+  .mobile-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+  }
+  
+  .mobile-nav-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-accent);
+  }
+  
+  .mobile-nav-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
+  }
+  
+  .mobile-nav-close:hover {
+    color: var(--text-accent);
+  }
+  
+  .mobile-nav-list {
+    list-style: none;
+    padding: 1rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  .mobile-nav-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    font-size: 1rem;
+  }
+  
+  .mobile-nav-link:hover {
+    background: var(--bg-card);
+    color: var(--text-accent);
+  }
+  
+  .mobile-nav-link .nav-icon {
+    font-size: 1.2rem;
+  }
+  
+  /* Оверлей */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1001;
     opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
   }
   
-  .mobile-menu-btn.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
+  .overlay.open {
+    opacity: 1;
+    visibility: visible;
   }
   
-  @media (max-width: 768px) {
-    .mobile-menu-btn {
-      display: flex;
-    }
-    
-    .main-nav {
-      position: fixed;
-      top: var(--header-height);
-      left: -100%;
-      width: 100%;
-      height: calc(100vh - var(--header-height));
-      background: var(--bg-primary);
-      transition: left var(--transition-normal);
-      overflow-y: auto;
-    }
-    
-    .main-nav.open {
-      left: 0;
-    }
-    
-    .main-nav ul {
-      flex-direction: column;
-      padding: 2rem;
-      gap: 1rem;
-    }
-    
-    .main-nav a {
-      font-size: 1.2rem;
-      padding: 0.5rem 0;
-    }
-    
-    .logo-subtitle {
-      display: none;
-    }
-  }
-  
+  /* Подвал */
   .site-footer {
     background: var(--bg-footer);
     border-top: 1px solid var(--border-color);
@@ -506,5 +578,43 @@ const pageImage = image || '/images/og-image.jpg';
   .main-content {
     min-height: calc(100vh - var(--header-height) - 400px);
     padding: 2rem 0;
+  }
+  
+  /* Адаптив */
+  @media (max-width: 768px) {
+    .logo-text {
+      font-size: 1rem;
+    }
+    
+    .logo-subtitle {
+      display: none;
+    }
+    
+    .logo-icon {
+      font-size: 1.5rem;
+    }
+    
+    .search-container {
+      max-width: 200px;
+    }
+    
+    .search-input {
+      font-size: 0.8rem;
+      padding: 0.4rem 1.8rem 0.4rem 2rem;
+    }
+    
+    .search-input::placeholder {
+      font-size: 0.7rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo-text {
+      display: none;
+    }
+    
+    .search-container {
+      max-width: 140px;
+    }
   }
 </style>

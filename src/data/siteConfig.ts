@@ -1,5 +1,5 @@
-// Конфигурация сайта - меняется в одном месте
-import { withBase } from "@/utils/paths";
+// Конфигурация сайта
+import { withBase } from '@utils/paths';
 
 export const SITE_CONFIG = {
   title: 'Царство Пяти Начал',
@@ -12,11 +12,10 @@ export const SITE_CONFIG = {
   githubUsername: 'npxrus',
 } as const;
 
-// Базовый URL для продакшена
 export const SITE_URL = `https://${SITE_CONFIG.githubUsername}.github.io/${SITE_CONFIG.githubRepo}/`;
 
-// Навигация по сайту
-export const NAVIGATION: { title: string; href: string; icon: string }[] = [
+// ВСЯ навигация в одном списке (для гамбургер-меню)
+export const ALL_NAVIGATION = [
   { title: 'Главная', href: withBase('/'), icon: '🏠' },
   { title: 'Мир', href: withBase('/world'), icon: '🌍' },
   { title: 'Княжества', href: withBase('/principalities'), icon: '🏰' },
@@ -31,5 +30,6 @@ export const NAVIGATION: { title: string; href: string; icon: string }[] = [
   { title: 'Руны', href: withBase('/runes'), icon: '🔣' },
   { title: 'Опасности', href: withBase('/dangers'), icon: '⚠️' },
   { title: 'Персонажи', href: withBase('/heroes'), icon: '👥' },
+  { title: 'Квесты', href: withBase('/quests'), icon: '🎲' },
   { title: 'Галерея', href: withBase('/gallery'), icon: '🖼️' },
 ];
