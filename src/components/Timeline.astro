@@ -1,0 +1,202 @@
+---
+// Компонент для отображения временной шкалы истории
+import type { Era, Event } from '@data/history';
+
+export interface Props {
+  eras: Era[];
+}
+
+const { eras } = Astro.props;
+---
+
+<div class="timeline-container">
+  {eras.map((era, eraIndex) => (
+    <div class="timeline-era">
+      <div class="era-header" style={`border-left-color: ${era.color}`}>
+        <div class="era-icon">{era.icon}</div>
+        <div class="era-info">
+          <h3 class="era-name">{era.name}</h3>
+          <div class="era-years" style={`color: ${era.color}`}>{era.years}</div>
+          <p class="era-description">{era.description}</p>
+        </div>
+      </div>
+      
+      <div class="era-events">
+        {era.keyEvents.map((event, eventIndex) => (
+          <div class={`timeline-event ${event.importance === 'major' ? 'event-major' : 'event-minor'}`}>
+            <div class="event-marker" style={`background: ${era.color}`}>
+              <span class="event-dot"></span>
+              {eventIndex < era.keyEvents.length - 1 && (
+                <div class="event-line" style={`background: ${era.color}40`}></div>
+              )}
+            </div>
+            <div class="event-content">
+              <div class="event-year" style={`color: ${era.color}`}>{event.year}</div>
+              <div class="event-title">{event.title}</div>
+              <div class="event-description">{event.description}</div>
+              {event.location && (
+                <div class="event-location">
+                  <span class="location-icon">📍</span>
+                  <span>{event.location}</span>
+                </div>
+              )}
+              {event.characters && event.characters.length > 0 && (
+                <div class="event-characters">
+                  <span class="characters-icon">👥</span>
+                  <span>{event.characters.join(', ')}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .timeline-container {
+    position: relative;
+    padding: 1rem 0;
+  }
+  
+  .timeline-era {
+    margin-bottom: 3rem;
+  }
+  
+  .era-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    border-left: 4px solid;
+  }
+  
+  .era-icon {
+    font-size: 2.5rem;
+  }
+  
+  .era-info {
+    flex: 1;
+  }
+  
+  .era-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.4rem;
+  }
+  
+  .era-years {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .era-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  .era-events {
+    position: relative;
+    padding-left: 3rem;
+  }
+  
+  .timeline-event {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .event-marker {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 2rem;
+    flex-shrink: 0;
+  }
+  
+  .event-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: inherit;
+    border: 2px solid var(--bg-card);
+    box-shadow: 0 0 0 2px currentColor;
+  }
+  
+  .event-line {
+    width: 2px;
+    flex: 1;
+    margin-top: 0.5rem;
+  }
+  
+  .timeline-event:last-child .event-line {
+    display: none;
+  }
+  
+  .event-content {
+    flex: 1;
+    padding-bottom: 0.5rem;
+  }
+  
+  .event-year {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .event-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .event-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  
+  .event-location, .event-characters {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .event-major .event-title {
+    color: var(--text-accent);
+  }
+  
+  .event-major .event-dot {
+    width: 14px;
+    height: 14px;
+  }
+  
+  @media (max-width: 768px) {
+    .era-events {
+      padding-left: 1.5rem;
+    }
+    
+    .era-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .event-year {
+      font-size: 0.7rem;
+    }
+    
+    .event-title {
+      font-size: 0.9rem;
+    }
+  }
+</style>

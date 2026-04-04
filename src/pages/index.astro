@@ -56,6 +56,36 @@ import { withBase } from '@/utils/paths';
       <a href={withBase('/creatures')} class="button">🐉 Существа и духи</a>
     </div>
   </div>
+
+  <!-- Краткая история -->
+  <section class="section history-preview">
+    <h2>📜 Вехи истории</h2>
+    <div class="history-preview-grid">
+      <div class="history-card">
+        <div class="history-year">0 Лето</div>
+        <div class="history-title">Пробуждение Мирового Дуба</div>
+        <div class="history-desc">Из Великого Единства рождается Противоборство Начал</div>
+      </div>
+      <div class="history-card">
+        <div class="history-year">222 Лето</div>
+        <div class="history-title">Появление людей</div>
+        <div class="history-desc">Первые люди слеплены из пяти элементов</div>
+      </div>
+      <div class="history-card">
+        <div class="history-year">777 Лето</div>
+        <div class="history-title">Заточение Теневого Дракона</div>
+        <div class="history-desc">Драконы заключают хаос в Искажённых Землях</div>
+      </div>
+      <div class="history-card">
+        <div class="history-year">7 843 Лето</div>
+        <div class="history-title">Поиск Пятой Жемчужины</div>
+        <div class="history-desc">Волхвы объявляют о поиске</div>
+      </div>
+    </div>
+    <div class="history-link">
+      <a href="/history" class="button">📜 Подробнее об истории →</a>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -145,5 +175,49 @@ import { withBase } from '@/utils/paths';
     .quote {
       font-size: 1rem;
     }
+  }
+
+  .history-preview {
+    margin: 3rem 0;
+  }
+  
+  .history-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .history-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border-left: 3px solid var(--text-accent);
+    transition: transform var(--transition-fast);
+  }
+  
+  .history-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .history-year {
+    font-size: 0.7rem;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .history-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .history-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .history-link {
+    text-align: center;
+    margin-top: 1rem;
   }
 </style>
