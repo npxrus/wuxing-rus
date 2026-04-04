@@ -55,7 +55,7 @@ export const HIGHER_CREATURES: Creature[] = [
     habitat: 'Лунный чертог в Прави, окружённый звёздной пыльцой.',
     abilities: ['Управление луной', 'Видение судеб', 'Дар снов'],
     behavior: 'Загадочна и молчалива, говорит только с избранными.',
-    interaction: 'Может явиться в ночь полнолуния тем, кто чисти сердцем.',
+    interaction: 'Может явиться в ночь полнолуния тем, кто чист сердцем.',
     imagePlaceholder: '/images/creature-lunar-maiden.jpg',
     icon: '🌙',
   },
