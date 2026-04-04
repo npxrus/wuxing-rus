@@ -1,0 +1,90 @@
+---
+// Карточка устройства княжества
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  principality: {
+    name: string;
+    element: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+    rulerTitle: string;
+    succession: string;
+    capital: string;
+    icon: string;
+  };
+}
+
+const { principality } = Astro.props;
+---
+
+<div class="principality-rule-card">
+  <div class="principality-rule-header">
+    <div class="principality-rule-icon">{principality.icon}</div>
+    <div class="principality-rule-title">
+      <h3>{principality.name}</h3>
+      <ElementBadge element={principality.element} size="small" />
+    </div>
+  </div>
+  
+  <div class="principality-rule-detail">
+    <span class="detail-label">👑 Титул правителя:</span>
+    <span>{principality.rulerTitle}</span>
+  </div>
+  
+  <div class="principality-rule-detail">
+    <span class="detail-label">📜 Способ наследования:</span>
+    <span>{principality.succession}</span>
+  </div>
+  
+  <div class="principality-rule-detail">
+    <span class="detail-label">🏛️ Столица:</span>
+    <span>{principality.capital}</span>
+  </div>
+</div>
+
+<style>
+  .principality-rule-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .principality-rule-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--text-accent);
+  }
+  
+  .principality-rule-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .principality-rule-icon {
+    font-size: 2rem;
+  }
+  
+  .principality-rule-title {
+    flex: 1;
+  }
+  
+  .principality-rule-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .principality-rule-detail {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .detail-label {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-right: 0.5rem;
+  }
+</style>

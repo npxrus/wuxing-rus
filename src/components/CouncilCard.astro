@@ -1,0 +1,94 @@
+---
+// Карточка совета
+export interface Props {
+  council: {
+    name: string;
+    description: string;
+    members: string[];
+    powers: string[];
+    meetingPlace: string;
+    icon: string;
+  };
+}
+
+const { council } = Astro.props;
+---
+
+<div class="council-card">
+  <div class="council-header">
+    <div class="council-icon">{council.icon}</div>
+    <h3>{council.name}</h3>
+  </div>
+  
+  <p class="council-description">{council.description}</p>
+  
+  <div class="council-members">
+    <strong>👥 Состав:</strong>
+    <ul>
+      {council.members.map(member => <li>{member}</li>)}
+    </ul>
+  </div>
+  
+  <div class="council-powers">
+    <strong>⚡ Полномочия:</strong>
+    <ul>
+      {council.powers.map(power => <li>{power}</li>)}
+    </ul>
+  </div>
+  
+  <div class="council-place">
+    <strong>📍 Место сбора:</strong> {council.meetingPlace}
+  </div>
+</div>
+
+<style>
+  .council-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  }
+  
+  .council-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .council-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+  }
+  
+  .council-icon {
+    font-size: 2.5rem;
+  }
+  
+  .council-header h3 {
+    margin: 0;
+  }
+  
+  .council-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .council-members, .council-powers, .council-place {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .council-members ul, .council-powers ul {
+    margin: 0.25rem 0 0 1.25rem;
+    color: var(--text-muted);
+  }
+  
+  .council-members li, .council-powers li {
+    margin-bottom: 0.15rem;
+  }
+</style>

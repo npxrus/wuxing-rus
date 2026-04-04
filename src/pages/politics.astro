@@ -1,0 +1,466 @@
+---
+// Страница «Политическое устройство»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import CouncilCard from '@components/CouncilCard.astro';
+import LawCard from '@components/LawCard.astro';
+import PrincipalityRuleCard from '@components/PrincipalityRuleCard.astro';
+import { 
+  GREAT_COUNCIL, 
+  PRINCIPALITY_RULES, 
+  IMMUTABLE_LAWS, 
+  THREE_PILLARS,
+  POLITICAL_FACTIONS,
+  VOTING_SYSTEM,
+  POLITICAL_CRISES
+} from '@data/politics';
+---
+
+<BaseLayout title="Политическое устройство">
+  <div class="page-header">
+    <h1>🏛️ Политическое устройство</h1>
+    <p class="page-description">
+      Великий Совет Пяти Князей, законы между княжествами и политические фракции Царства Пяти Начал
+    </p>
+  </div>
+
+  <!-- Великий Совет -->
+  <section class="section">
+    <h2>🏛️ Великий Совет Пяти Князей</h2>
+    <p>
+      Высший орган власти Царства, собирающийся раз в год у корней Мирового Дуба.
+    </p>
+    <CouncilCard council={GREAT_COUNCIL} />
+  </section>
+
+  <!-- Система голосования -->
+  <section class="section">
+    <h2>🗳️ Система голосования</h2>
+    <div class="voting-card">
+      <div class="voting-stats">
+        <div class="voting-stat">
+          <span class="stat-number">{VOTING_SYSTEM.totalMembers}</span>
+          <span class="stat-label">членов Совета</span>
+        </div>
+        <div class="voting-stat">
+          <span class="stat-number">{VOTING_SYSTEM.quorum}</span>
+          <span class="stat-label">кворум</span>
+        </div>
+        <div class="voting-stat">
+          <span class="stat-number">{VOTING_SYSTEM.majority}</span>
+          <span class="stat-label">большинство</span>
+        </div>
+      </div>
+      <p class="voting-description">{VOTING_SYSTEM.description}</p>
+    </div>
+  </section>
+
+  <!-- Устройство княжеств -->
+  <section class="section">
+    <h2>👑 Устройство княжеств</h2>
+    <p>
+      Каждое княжество имеет свою систему наследования и титул правителя.
+    </p>
+    <div class="principalities-rules-grid">
+      {PRINCIPALITY_RULES.map(rule => (
+        <PrincipalityRuleCard principality={rule} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Совет Трёх Опор -->
+  <section class="section">
+    <h2>🏛️ Совет Трёх Опор</h2>
+    <p>
+      Совещательный орган при каждом князе, помогающий управлять княжеством.
+    </p>
+    <div class="pillars-grid">
+      {THREE_PILLARS.pillars.map(pillar => (
+        <div class="pillar-card">
+          <div class="pillar-icon">{pillar.icon}</div>
+          <div class="pillar-content">
+            <h3>{pillar.name}</h3>
+            <div class="pillar-role">Роль: {pillar.role}</div>
+            <div class="pillar-responsibilities">{pillar.responsibilities}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Нерушимые законы -->
+  <section class="section laws-section">
+    <h2>📜 Пять нерушимых законов</h2>
+    <p>
+      Законы, обязательные для всех княжеств. Нарушение карается Советом.
+    </p>
+    <div class="laws-grid">
+      {IMMUTABLE_LAWS.map((law, index) => (
+        <LawCard law={law} index={index} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Политические фракции -->
+  <section class="section">
+    <h2>⚔️ Политические фракции</h2>
+    <p>
+      Силы, борющиеся за власть и влияние в Царстве.
+    </p>
+    <div class="factions-grid">
+      {POLITICAL_FACTIONS.map(faction => (
+        <div class="faction-card" style={`border-left-color: ${faction.color}`}>
+          <div class="faction-header">
+            <div class="faction-icon">{faction.icon}</div>
+            <div class="faction-title">
+              <h3>{faction.name}</h3>
+              <span class="faction-danger" style={`background: ${faction.color}20; color: ${faction.color}`}>
+                ⚠️ Опасность: {faction.danger === 'low' ? 'Низкая' : faction.danger === 'medium' ? 'Средняя' : faction.danger === 'high' ? 'Высокая' : 'Очень высокая'}
+              </span>
+            </div>
+          </div>
+          <div class="faction-goal">
+            <strong>🎯 Цель:</strong> {faction.goal}
+          </div>
+          <div class="faction-allies">
+            <strong>🤝 Союзники:</strong>
+            <div class="faction-tags">
+              {faction.allies.map(ally => <span class="ally-tag">{ally}</span>)}
+            </div>
+          </div>
+          <div class="faction-enemies">
+            <strong>⚔️ Враги:</strong>
+            <div class="faction-tags">
+              {faction.enemies.map(enemy => <span class="enemy-tag">{enemy}</span>)}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Политические кризисы -->
+  <section class="section crises-section">
+    <h2>📖 Известные политические кризисы</h2>
+    <div class="crises-timeline">
+      {POLITICAL_CRISES.map(crisis => (
+        <div class="crisis-card">
+          <div class="crisis-year">{crisis.year}</div>
+          <div class="crisis-content">
+            <h4>{crisis.name}</h4>
+            <p>{crisis.description}</p>
+            <div class="crisis-resolution">
+              <strong>📌 Решение:</strong> {crisis.resolution}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Равновесие держится не только на магии, но и на мудрости правителей»</p>
+    <p class="quote-author">— Великий Совет Пяти Князей</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  /* Голосование */
+  .voting-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+  }
+  
+  .voting-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .voting-stat {
+    text-align: center;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-accent);
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-left: 0.3rem;
+  }
+  
+  .voting-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  /* Княжества */
+  .principalities-rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Три опоры */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .pillar-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .pillar-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .pillar-icon {
+    font-size: 2rem;
+  }
+  
+  .pillar-content {
+    flex: 1;
+  }
+  
+  .pillar-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .pillar-role {
+    font-size: 0.8rem;
+    color: var(--text-accent);
+  }
+  
+  .pillar-responsibilities {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  
+  /* Законы */
+  .laws-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .laws-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Фракции */
+  .factions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .faction-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border-left-width: 4px;
+    border-left-style: solid;
+  }
+  
+  .faction-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .faction-icon {
+    font-size: 1.8rem;
+  }
+  
+  .faction-title {
+    flex: 1;
+  }
+  
+  .faction-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .faction-danger {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+  }
+  
+  .faction-goal, .faction-allies, .faction-enemies {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .faction-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+  }
+  
+  .ally-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border-radius: 12px;
+  }
+  
+  .enemy-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border-radius: 12px;
+  }
+  
+  /* Кризисы */
+  .crises-section {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .crises-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .crisis-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+  }
+  
+  .crisis-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .crisis-year {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-accent);
+    min-width: 100px;
+  }
+  
+  .crisis-content {
+    flex: 1;
+  }
+  
+  .crisis-content h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .crisis-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  
+  .crisis-resolution {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  
+  /* Цитата */
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .principalities-rules-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .pillars-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .factions-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .crisis-card {
+      flex-direction: column;
+    }
+    
+    .crisis-year {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.25rem;
+    }
+    
+    .voting-stats {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>

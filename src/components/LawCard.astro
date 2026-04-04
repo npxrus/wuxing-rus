@@ -1,0 +1,91 @@
+---
+// Карточка закона
+export interface Props {
+  law: {
+    id: string;
+    name: string;
+    description: string;
+    punishment: string;
+    icon: string;
+  };
+  index: number;
+}
+
+const { law, index } = Astro.props;
+---
+
+<div class="law-card">
+  <div class="law-number">{index + 1}</div>
+  <div class="law-content">
+    <div class="law-header">
+      <span class="law-icon">{law.icon}</span>
+      <h4>{law.name}</h4>
+    </div>
+    <p class="law-description">{law.description}</p>
+    <div class="law-punishment">
+      <strong>⚖️ Наказание:</strong> {law.punishment}
+    </div>
+  </div>
+</div>
+
+<style>
+  .law-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .law-card:hover {
+    transform: translateX(5px);
+    border-color: var(--text-accent);
+  }
+  
+  .law-number {
+    width: 36px;
+    height: 36px;
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  
+  .law-content {
+    flex: 1;
+  }
+  
+  .law-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .law-icon {
+    font-size: 1.2rem;
+  }
+  
+  .law-header h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .law-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .law-punishment {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+</style>
