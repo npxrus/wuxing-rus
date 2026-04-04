@@ -5,6 +5,7 @@ import SearchBar from '@components/SearchBar.astro';
 import SeasonalBanner from '@components/SeasonalBanner.astro';
 import RandomFact from '@components/RandomFact.astro';
 import ElementBadge from '@components/ElementBadge.astro';
+import { withBase } from '@/utils/paths';
 
 export interface Props {
   title?: string;
@@ -92,14 +93,16 @@ const pageImage = image || '/images/og-image.jpg';
         --transition-slow: 0.5s ease;
       }
       
+      /* Сброс стилей */
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
       
+      /* Только запрет горизонтального скролла на уровне html/body */
       html {
-        scroll-behavior: smooth;
+        overflow-x: hidden;
       }
       
       body {
@@ -112,8 +115,17 @@ const pageImage = image || '/images/og-image.jpg';
           radial-gradient(circle at 10% 20%, rgba(45, 90, 39, 0.05) 0%, transparent 50%),
           radial-gradient(circle at 90% 80%, rgba(194, 65, 12, 0.05) 0%, transparent 50%);
         background-attachment: fixed;
+        overflow-x: hidden;
       }
       
+      /* Блокировка скролла при открытом меню */
+      body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+      
+      /* Типографика */
       h1, h2, h3, h4, h5, h6 {
         font-weight: 600;
         line-height: 1.3;
@@ -141,6 +153,7 @@ const pageImage = image || '/images/og-image.jpg';
         color: var(--element-wood-light);
       }
       
+      /* Контейнер */
       .container {
         max-width: var(--container-max-width);
         margin: 0 auto;
@@ -156,6 +169,7 @@ const pageImage = image || '/images/og-image.jpg';
         h3 { font-size: 1.25rem; }
       }
       
+      /* Карточки */
       .card {
         background: var(--bg-card);
         border-radius: var(--border-radius-lg);
@@ -170,6 +184,7 @@ const pageImage = image || '/images/og-image.jpg';
         border-color: var(--text-accent);
       }
       
+      /* Сетка */
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -183,6 +198,23 @@ const pageImage = image || '/images/og-image.jpg';
         }
       }
       
+      /* Обёртки для таблиц — добавляем прокрутку */
+      .table-container, .currency-table-container, .taxes-table-container,
+      .calendar-table-container, .artifacts-table-container,
+      .comparison-table-container {
+        overflow-x: auto;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Таблицы */
+      table {
+        width: 100%;
+        min-width: 500px;
+        border-collapse: collapse;
+      }
+      
+      /* Анимации */
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -201,6 +233,7 @@ const pageImage = image || '/images/og-image.jpg';
         animation: float 6s ease-in-out infinite;
       }
       
+      /* Скроллбар */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -219,11 +252,13 @@ const pageImage = image || '/images/og-image.jpg';
         background: var(--text-accent);
       }
       
+      /* Выделение текста */
       ::selection {
         background: var(--text-accent);
         color: var(--bg-primary);
       }
       
+      /* Утилиты */
       .text-accent { color: var(--text-accent); }
       .text-muted { color: var(--text-muted); }
       .mt-0 { margin-top: 0; }
@@ -235,7 +270,7 @@ const pageImage = image || '/images/og-image.jpg';
     <header class="site-header">
       <div class="container header-container">
         <div class="logo">
-          <a href="/">
+          <a href={withBase('/')}>
             <span class="logo-icon">🌳</span>
             <span class="logo-text">{SITE_CONFIG.title}</span>
             <span class="logo-subtitle">{SITE_CONFIG.shortTitle}</span>
@@ -325,22 +360,29 @@ const pageImage = image || '/images/og-image.jpg';
       function openMenu() {
         mobileNav?.classList.add('open');
         overlay?.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('menu-open');
       }
       
       function closeMenu() {
         mobileNav?.classList.remove('open');
         overlay?.classList.remove('open');
-        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
       }
       
-      hamburgerBtn?.addEventListener('click', openMenu);
-      closeBtn?.addEventListener('click', closeMenu);
-      overlay?.addEventListener('click', closeMenu);
+      if (hamburgerBtn) hamburgerBtn.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      if (overlay) overlay.addEventListener('click', closeMenu);
       
       // Закрытие меню при клике на ссылку
       document.querySelectorAll('.mobile-nav-link').forEach(link => {
         link.addEventListener('click', closeMenu);
+      });
+      
+      // Закрытие при нажатии Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileNav?.classList.contains('open')) {
+          closeMenu();
+        }
       });
       
       // Анимация появления
@@ -361,7 +403,7 @@ const pageImage = image || '/images/og-image.jpg';
 </html>
 
 <style is:global>
-  /* Шапка */
+  /* Стили для шапки */
   .site-header {
     position: sticky;
     top: 0;
@@ -424,7 +466,8 @@ const pageImage = image || '/images/og-image.jpg';
     cursor: pointer;
     padding: 0.5rem;
     flex-shrink: 0;
-    z-index: 1001;
+    z-index: 1003;
+    position: relative;
   }
   
   .hamburger-btn span {
@@ -526,11 +569,13 @@ const pageImage = image || '/images/og-image.jpg';
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-normal);
+    pointer-events: none;
   }
   
   .overlay.open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
   
   /* Подвал */
@@ -581,6 +626,20 @@ const pageImage = image || '/images/og-image.jpg';
   }
   
   /* Адаптив */
+  @media (max-width: 1024px) {
+    .logo-text {
+      font-size: 1rem;
+    }
+    
+    .logo-subtitle {
+      display: none;
+    }
+    
+    .search-container {
+      max-width: 300px;
+    }
+  }
+  
   @media (max-width: 768px) {
     .logo-text {
       font-size: 1rem;
