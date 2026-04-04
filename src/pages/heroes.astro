@@ -1,0 +1,420 @@
+---
+// Страница «Персонажи и герои»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroCard from '@components/HeroCard.astro';
+import { LEGENDARY_HEROES, MODERN_HEROES, ANTAGONISTS, ALL_HEROES, HERO_ERAS, HERO_ROLES } from '@data/heroes';
+---
+
+<BaseLayout title="Персонажи и герои">
+  <div class="page-header">
+    <h1>👥 Персонажи и герои</h1>
+    <p class="page-description">
+      Легендарные герои прошлого, современные искатели приключений и опасные антагонисты Царства Пяти Начал
+    </p>
+  </div>
+
+  <!-- Фильтры -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <span class="filter-label">Тип:</span>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-type="all">Все</button>
+        <button class="filter-btn" data-type="legendary">⭐ Легендарные</button>
+        <button class="filter-btn" data-type="modern">🔮 Современные</button>
+        <button class="filter-btn" data-type="antagonist">⚠️ Антагонисты</button>
+      </div>
+    </div>
+    
+    <div class="filter-group">
+      <span class="filter-label">Эпоха:</span>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-era="all">Все</button>
+        {HERO_ERAS.map(era => (
+          <button class="filter-btn" data-era={era}>{era}</button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Статистика -->
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-value">{ALL_HEROES.length}</span>
+      <span class="stat-label">всего персонажей</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{LEGENDARY_HEROES.length}</span>
+      <span class="stat-label">легендарных героев</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{MODERN_HEROES.length}</span>
+      <span class="stat-label">современных героев</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{ANTAGONISTS.length}</span>
+      <span class="stat-label">антагонистов</span>
+    </div>
+  </div>
+
+  <!-- Легендарные герои -->
+  <section class="section" id="legendary-section" data-type="legendary">
+    <h2>⭐ Легендарные герои прошлого</h2>
+    <p>
+      Те, чьи имена вписаны в свитки истории золотыми рунами. Их подвиги помнят и чтят.
+    </p>
+    <div class="heroes-grid">
+      {LEGENDARY_HEROES.map(hero => (
+        <HeroCard hero={hero} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Современные герои -->
+  <section class="section" id="modern-section" data-type="modern">
+    <h2>🔮 Современные герои</h2>
+    <p>
+      Те, кто живёт и действует сейчас. Именно им предстоит встретить грядущую угрозу.
+    </p>
+    <div class="heroes-grid">
+      {MODERN_HEROES.map(hero => (
+        <HeroCard hero={hero} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Антагонисты -->
+  <section class="section" id="antagonist-section" data-type="antagonist">
+    <h2>⚠️ Антагонисты</h2>
+    <p>
+      Тёмные силы, угрожающие Равновесию. Культисты, душегубы и тайные враги.
+    </p>
+    <div class="heroes-grid">
+      {ANTAGONISTS.map(hero => (
+        <HeroCard hero={hero} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Создание персонажа -->
+  <section class="section creation-section">
+    <h2>📝 Создайте своего героя</h2>
+    <p>
+      Хотите стать частью мира Царства Пяти Начал? Вот шаблон для создания собственного персонажа.
+    </p>
+    <div class="creation-steps">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Выберите Начало</h3>
+          <p>Дерево — целитель, следопыт, дипломат<br>
+          Огонь — воин, кузнец, лидер<br>
+          Земля — защитник, земледелец, хранитель<br>
+          Металл — воин-маг, судья, охотник на нечисть<br>
+          Вода — ведунья, разведчик, целитель отравлений</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Выберите сословие</h3>
+          <p>Волхв, князь, богатырь, кузнец, ведунья, купец, ремесленник, земледелец, смерд, холоп, изгой</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Определите уровень магии</h3>
+          <p>Нет дара — не может колдовать<br>
+          Пробуждённый — 1-2 заклинания в день<br>
+          Цвет — 3-5 заклинаний<br>
+          Древо — до 10 заклинаний<br>
+          Мудрость — легендарный маг</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Добавьте характер и цель</h3>
+          <p>Придумайте историю своего героя, его мотивацию и мечты. Что движет им? Кого он защищает?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Каждый может стать героем. Но не каждый готов заплатить цену»</p>
+    <p class="quote-author">— Вещий Кудеяр</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .filters-section {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .filter-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .filter-btn {
+    padding: 0.4rem 0.8rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .filter-btn:hover {
+    border-color: var(--text-accent);
+    color: var(--text-accent);
+  }
+  
+  .filter-btn.active {
+    background: var(--text-accent);
+    border-color: var(--text-accent);
+    color: var(--bg-primary);
+  }
+  
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-accent);
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-left: 0.3rem;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .heroes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Создание персонажа */
+  .creation-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .creation-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .step-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+  }
+  
+  .step-card:hover {
+    transform: translateX(5px);
+  }
+  
+  .step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  
+  .step-content {
+    flex: 1;
+  }
+  
+  .step-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .step-content p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  
+  /* Цитата */
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .heroes-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .filters-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .filter-group {
+      justify-content: space-between;
+    }
+    
+    .filter-buttons {
+      justify-content: center;
+    }
+    
+    .stats-bar {
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .step-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .step-number {
+      margin: 0 auto;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Фильтрация героев по типу и эпохе
+  let currentType = 'all';
+  let currentEra = 'all';
+  
+  function filterHeroes() {
+    const sections = document.querySelectorAll('.section[id$="-section"]');
+    
+    sections.forEach(section => {
+      const sectionType = section.id?.replace('-section', '');
+      const cards = section.querySelectorAll('.hero-card');
+      
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const heroType = card.classList.contains('hero-legendary') ? 'legendary' :
+                        card.classList.contains('hero-modern') ? 'modern' : 'antagonist';
+        
+        const heroEra = card.querySelector('.hero-era')?.textContent || '';
+        
+        const typeMatch = currentType === 'all' || currentType === heroType;
+        const eraMatch = currentEra === 'all' || (heroEra === currentEra);
+        
+        const isVisible = typeMatch && eraMatch;
+        card.style.display = isVisible ? '' : 'none';
+        if (isVisible) visibleCount++;
+      });
+      
+      // Скрываем секцию, если в ней нет видимых карточек
+      section.style.display = visibleCount > 0 ? '' : 'none';
+    });
+  }
+  
+  // Обработчики для кнопок типа
+  document.querySelectorAll('[data-type]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentType = btn.dataset.type;
+      document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll(`[data-type="${currentType}"]`).forEach(b => b.classList.add('active'));
+      filterHeroes();
+    });
+  });
+  
+  // Обработчики для кнопок эпохи
+  document.querySelectorAll('[data-era]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentEra = btn.dataset.era;
+      document.querySelectorAll('[data-era]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll(`[data-era="${currentEra}"]`).forEach(b => b.classList.add('active'));
+      filterHeroes();
+    });
+  });
+</script>

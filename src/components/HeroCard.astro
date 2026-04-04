@@ -1,0 +1,206 @@
+---
+// Карточка героя
+import ElementBadge from './ElementBadge.astro';
+
+export interface Props {
+  hero: {
+    id: string;
+    name: string;
+    type: 'legendary' | 'modern' | 'antagonist';
+    era?: string;
+    element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
+    role: string;
+    description: string;
+    appearance: string;
+    deeds: string[];
+    quote: string;
+    icon: string;
+    status?: 'alive' | 'deceased' | 'unknown';
+  };
+}
+
+const { hero } = Astro.props;
+
+const typeNames = {
+  legendary: 'Легендарный герой',
+  modern: 'Современный герой',
+  antagonist: 'Антагонист',
+};
+
+const typeColors = {
+  legendary: '#d4af37',
+  modern: '#3b82f6',
+  antagonist: '#ef4444',
+};
+
+const statusNames = {
+  alive: 'Жив',
+  deceased: 'Ушёл из Яви',
+  unknown: 'Судьба неизвестна',
+};
+
+const statusColors = {
+  alive: '#22c55e',
+  deceased: '#6b7280',
+  unknown: '#f59e0b',
+};
+---
+
+<div class={`hero-card hero-${hero.type}`}>
+  <div class="hero-header">
+    <div class="hero-icon" style={`background: ${typeColors[hero.type]}20; border-color: ${typeColors[hero.type]}`}>
+      <span>{hero.icon}</span>
+    </div>
+    <div class="hero-title">
+      <h3>{hero.name}</h3>
+      <div class="hero-meta">
+        <span class="hero-type" style={`background: ${typeColors[hero.type]}20; color: ${typeColors[hero.type]}`}>
+          {typeNames[hero.type]}
+        </span>
+        {hero.era && <span class="hero-era">{hero.era}</span>}
+        {hero.element && <ElementBadge element={hero.element} size="small" />}
+        {hero.status && (
+          <span class="hero-status" style={`background: ${statusColors[hero.status]}20; color: ${statusColors[hero.status]}`}>
+            {statusNames[hero.status]}
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+  
+  <div class="hero-role">{hero.role}</div>
+  
+  <p class="hero-description">{hero.description}</p>
+  
+  <div class="hero-deeds">
+    <strong>🏆 Деяния:</strong>
+    <ul>
+      {hero.deeds.slice(0, 3).map(deed => <li>{deed}</li>)}
+    </ul>
+  </div>
+  
+  <div class="hero-quote">
+    <span class="quote-mark">«</span>
+    {hero.quote}
+    <span class="quote-mark">»</span>
+  </div>
+</div>
+
+<style>
+  .hero-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border: 1px solid var(--border-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .hero-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .hero-legendary {
+    border-top: 3px solid #d4af37;
+  }
+  
+  .hero-modern {
+    border-top: 3px solid #3b82f6;
+  }
+  
+  .hero-antagonist {
+    border-top: 3px solid #ef4444;
+  }
+  
+  .hero-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .hero-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    border: 2px solid;
+  }
+  
+  .hero-title {
+    flex: 1;
+  }
+  
+  .hero-title h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  
+  .hero-type, .hero-era, .hero-status {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+  }
+  
+  .hero-era {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+  }
+  
+  .hero-role {
+    font-size: 0.8rem;
+    color: var(--text-accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero-description {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+  
+  .hero-deeds {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .hero-deeds ul {
+    margin: 0.25rem 0 0 1.25rem;
+    color: var(--text-muted);
+  }
+  
+  .hero-deeds li {
+    margin-bottom: 0.15rem;
+  }
+  
+  .hero-quote {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--text-accent);
+    text-align: center;
+  }
+  
+  .quote-mark {
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.5;
+  }
+</style>
