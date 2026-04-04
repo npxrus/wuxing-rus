@@ -1,0 +1,86 @@
+---
+// Карточка комбинации рун
+export interface Props {
+  combination: {
+    combination: string;
+    elements: string[];
+    effect: string;
+    risk: string;
+    icon: string;
+  };
+}
+
+const { combination } = Astro.props;
+---
+
+<div class="combination-card">
+  <div class="combination-icon">{combination.icon}</div>
+  <div class="combination-content">
+    <div class="combination-name">{combination.combination}</div>
+    <div class="combination-elements">
+      {combination.elements.map(el => (
+        <span class="element-tag">{el}</span>
+      ))}
+    </div>
+    <div class="combination-effect">✨ {combination.effect}</div>
+    <div class="combination-risk">⚠️ Риск: {combination.risk}</div>
+  </div>
+</div>
+
+<style>
+  .combination-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    transition: transform var(--transition-fast);
+    border: 1px solid var(--border-color);
+  }
+  
+  .combination-card:hover {
+    transform: translateX(5px);
+    border-color: var(--text-accent);
+  }
+  
+  .combination-icon {
+    font-size: 2rem;
+  }
+  
+  .combination-content {
+    flex: 1;
+  }
+  
+  .combination-name {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .combination-elements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .element-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    color: var(--text-muted);
+  }
+  
+  .combination-effect {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .combination-risk {
+    font-size: 0.7rem;
+    color: #f97316;
+  }
+</style>

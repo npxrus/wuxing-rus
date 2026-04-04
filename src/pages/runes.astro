@@ -1,0 +1,455 @@
+---
+// Страница «Руны и письменность»
+import BaseLayout from '@layouts/BaseLayout.astro';
+import RuneCard from '@components/RuneCard.astro';
+import RuneCombinationCard from '@components/RuneCombinationCard.astro';
+import { 
+  WOOD_RUNES, FIRE_RUNES, EARTH_RUNES, METAL_RUNES, WATER_RUNES, VOID_RUNES,
+  RUNE_COMBINATIONS, FORBIDDEN_RUNES, LANGUAGES, WRITING_SYSTEMS, RUNE_TRAINING_STAGES
+} from '@data/runes';
+---
+
+<BaseLayout title="Руны и письменность">
+  <div class="page-header">
+    <h1>🔣 Руны и письменность</h1>
+    <p class="page-description">
+      Древний язык Драконов, 25 рун, их значение и магическое применение, комбинации и запрещённые символы
+    </p>
+  </div>
+
+  <!-- Языки и наречия -->
+  <section class="section">
+    <h2>🗣️ Языки и наречия</h2>
+    <div class="languages-grid">
+      {LANGUAGES.map(lang => (
+        <div class="language-card">
+          <div class="language-icon">{lang.icon}</div>
+          <div class="language-content">
+            <div class="language-name">{lang.name}</div>
+            <div class="language-users">🗣️ {lang.usedBy}</div>
+            <div class="language-features">{lang.features}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Письменность -->
+  <section class="section">
+    <h2>✍️ Письменность</h2>
+    <div class="writing-grid">
+      {WRITING_SYSTEMS.map(system => (
+        <div class="writing-card">
+          <div class="writing-icon">{system.icon}</div>
+          <div class="writing-content">
+            <h3>{system.name}</h3>
+            <div class="writing-purpose">📜 {system.usedFor}</div>
+            <div class="writing-material">📦 Материал: {system.material}</div>
+            <p class="writing-description">{system.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Руны Дерева -->
+  <section class="section">
+    <h2 class="wood-title">🌿 Руны Дерева</h2>
+    <div class="runes-grid">
+      {WOOD_RUNES.map(rune => (
+        <RuneCard rune={rune} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Руны Огня -->
+  <section class="section">
+    <h2 class="fire-title">🔥 Руны Огня</h2>
+    <div class="runes-grid">
+      {FIRE_RUNES.map(rune => (
+        <RuneCard rune={rune} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Руны Земли -->
+  <section class="section">
+    <h2 class="earth-title">⛰️ Руны Земли</h2>
+    <div class="runes-grid">
+      {EARTH_RUNES.map(rune => (
+        <RuneCard rune={rune} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Руны Металла -->
+  <section class="section">
+    <h2 class="metal-title">⚔️ Руны Металла</h2>
+    <div class="runes-grid">
+      {METAL_RUNES.map(rune => (
+        <RuneCard rune={rune} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Руны Воды -->
+  <section class="section">
+    <h2 class="water-title">💧 Руны Воды</h2>
+    <div class="runes-grid">
+      {WATER_RUNES.map(rune => (
+        <RuneCard rune={rune} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Пустые руны -->
+  <section class="section void-section">
+    <h2>🌀 Пустые руны (для гаданий)</h2>
+    <div class="runes-grid">
+      {VOID_RUNES.map(rune => (
+        <RuneCard rune={rune} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Комбинации рун -->
+  <section class="section">
+    <h2>🔗 Комбинации рун</h2>
+    <p>
+      Соединение двух или более рун создаёт сложные магические эффекты. Но риск возрастает многократно.
+    </p>
+    <div class="combinations-grid">
+      {RUNE_COMBINATIONS.map(comb => (
+        <RuneCombinationCard combination={comb} />
+      ))}
+    </div>
+  </section>
+
+  <!-- Запрещённые руны -->
+  <section class="section forbidden-section">
+    <h2>⚠️ Запрещённые руны (Тёмный Путь)</h2>
+    <p>
+      Руны, использование которых карается изгнанием или смертью. Они питают Теневого Дракона.
+    </p>
+    <div class="forbidden-grid">
+      {FORBIDDEN_RUNES.map(rune => (
+        <div class="forbidden-rune-card">
+          <div class="forbidden-header">
+            <div class="forbidden-icon">{rune.icon}</div>
+            <div class="forbidden-name">{rune.name}</div>
+          </div>
+          <div class="forbidden-effect">{rune.effect}</div>
+          <div class="forbidden-price">💀 Цена: {rune.price}</div>
+          <div class="forbidden-detection">👁️ Как распознать: {rune.detection}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Обучение рунам -->
+  <section class="section training-section">
+    <h2>📚 Обучение рунам</h2>
+    <div class="training-timeline">
+      {RUNE_TRAINING_STAGES.map((stage, index) => (
+        <div class="training-stage">
+          <div class="stage-number">{index + 1}</div>
+          <div class="stage-content">
+            <div class="stage-name">{stage.stage}</div>
+            <div class="stage-age">📅 {stage.age}</div>
+            <div class="stage-desc">{stage.description}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Цитата -->
+  <div class="quote-block">
+    <p class="quote-text">«Руна — это не просто знак. Это голос стихии, застывший в линии»</p>
+    <p class="quote-author">— Белояр Травник, первый волхв</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-accent);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .section {
+    margin-bottom: 4rem;
+  }
+  
+  .wood-title { color: var(--element-wood-light); }
+  .fire-title { color: var(--element-fire-light); }
+  .earth-title { color: var(--element-earth-light); }
+  .metal-title { color: var(--element-metal-light); }
+  .water-title { color: var(--element-water-light); }
+  
+  .languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .language-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .language-icon {
+    font-size: 2rem;
+  }
+  
+  .language-content {
+    flex: 1;
+  }
+  
+  .language-name {
+    font-weight: 600;
+    color: var(--text-accent);
+    margin-bottom: 0.25rem;
+  }
+  
+  .language-users {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .language-features {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+  
+  .writing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .writing-card {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-fast);
+  }
+  
+  .writing-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .writing-icon {
+    font-size: 2rem;
+  }
+  
+  .writing-content {
+    flex: 1;
+  }
+  
+  .writing-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+  
+  .writing-purpose, .writing-material {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .writing-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+  }
+  
+  .runes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .combinations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .void-section {
+    background: linear-gradient(135deg, rgba(107, 114, 128, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .forbidden-section {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .forbidden-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .forbidden-rune-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    border-left: 3px solid #ef4444;
+  }
+  
+  .forbidden-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .forbidden-icon {
+    font-size: 1.5rem;
+  }
+  
+  .forbidden-name {
+    font-weight: 600;
+    color: #ef4444;
+  }
+  
+  .forbidden-effect {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .forbidden-price {
+    font-size: 0.75rem;
+    color: #f97316;
+  }
+  
+  .forbidden-detection {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  
+  .training-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, transparent 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+  }
+  
+  .training-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  .training-stage {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem;
+  }
+  
+  .stage-number {
+    width: 32px;
+    height: 32px;
+    background: var(--text-accent);
+    color: var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  
+  .stage-content {
+    flex: 1;
+  }
+  
+  .stage-name {
+    font-weight: 600;
+    color: var(--text-accent);
+  }
+  
+  .stage-age {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  
+  .stage-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+  
+  .quote-block {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border-left: 4px solid var(--text-accent);
+    padding: 2rem;
+    margin: 3rem 0;
+    border-radius: var(--border-radius-md);
+    text-align: center;
+  }
+  
+  .quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text-primary);
+  }
+  
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--text-accent);
+  }
+  
+  @media (max-width: 768px) {
+    .languages-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .writing-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .runes-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .combinations-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .forbidden-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-text {
+      font-size: 1rem;
+    }
+  }
+</style>
