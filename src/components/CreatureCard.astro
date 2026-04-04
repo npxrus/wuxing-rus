@@ -1,24 +1,35 @@
 ---
 // Карточка существа
 import ElementBadge from './ElementBadge.astro';
+import { DANGER_LEVELS } from '@data/dangerLevels';
+import type { Creature } from '@types/creature.types';
 import { withBase } from '@/utils/paths';
 
 export interface Props {
-  id: string;
-  name: string;
-  category: 'higher' | 'common';
-  element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
-  description: string;
-  appearance: string;
-  habitat: string;
-  abilities: string[];
-  icon: string;
+  creature: Creature;
 }
 
-const { id, name, category, element, description, appearance, habitat, abilities, icon } = Astro.props;
+const { creature } = Astro.props;
+const { 
+  id, 
+  name, 
+  category, 
+  categoryName, 
+  element, 
+  description, 
+  appearance, 
+  habitat, 
+  abilities, 
+  dangerLevel, 
+  icon,
+  traces,
+  sounds,
+  smell,
+  tamable 
+} = creature;
 
-const categoryLabel = category === 'higher' ? 'Высшее существо' : 'Обычное существо';
-const categoryClass = category === 'higher' ? 'category-higher' : 'category-common';
+const dangerInfo = DANGER_LEVELS[dangerLevel] || DANGER_LEVELS.low;
+const categoryClass = category === 'higher' ? 'category-higher' : '';
 ---
 
 <div class={`creature-card ${element ? `creature-${element}` : ''} ${categoryClass}`}>
@@ -27,8 +38,12 @@ const categoryClass = category === 'higher' ? 'category-higher' : 'category-comm
     <div class="creature-title">
       <h3>{name}</h3>
       <div class="creature-meta">
-        <span class="category-badge">{categoryLabel}</span>
+        <span class="category-badge">{categoryName}</span>
         {element && <ElementBadge element={element} size="small" />}
+        <span class="danger-badge" style={`background: ${dangerInfo.color}20; color: ${dangerInfo.color}; border-color: ${dangerInfo.color}`}>
+          {dangerInfo.icon} {dangerInfo.name}
+        </span>
+        {tamable && <span class="tamable-badge">🐕 Можно приручить</span>}
       </div>
     </div>
   </div>
@@ -61,6 +76,36 @@ const categoryClass = category === 'higher' ? 'category-higher' : 'category-comm
         </ul>
       </div>
     </div>
+    
+    {traces && (
+      <div class="detail-item">
+        <span class="detail-icon">👣</span>
+        <div>
+          <strong>Следы</strong>
+          <p>{traces}</p>
+        </div>
+      </div>
+    )}
+    
+    {sounds && (
+      <div class="detail-item">
+        <span class="detail-icon">🔊</span>
+        <div>
+          <strong>Звуки</strong>
+          <p>{sounds}</p>
+        </div>
+      </div>
+    )}
+    
+    {smell && (
+      <div class="detail-item">
+        <span class="detail-icon">👃</span>
+        <div>
+          <strong>Запах</strong>
+          <p>{smell}</p>
+        </div>
+      </div>
+    )}
   </div>
   
   <a href={withBase(`/creatures/${id}`)} class="card-link">
@@ -88,10 +133,6 @@ const categoryClass = category === 'higher' ? 'category-higher' : 'category-comm
   
   .category-higher {
     background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.05) 100%);
-  }
-  
-  .category-common {
-    background: var(--bg-card);
   }
   
   .creature-card:hover {
@@ -134,9 +175,19 @@ const categoryClass = category === 'higher' ? 'category-higher' : 'category-comm
     color: var(--text-muted);
   }
   
-  .category-higher .category-badge {
-    background: rgba(212, 175, 55, 0.2);
-    color: var(--text-accent);
+  .danger-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    border: 1px solid;
+  }
+  
+  .tamable-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
   }
   
   .creature-description {

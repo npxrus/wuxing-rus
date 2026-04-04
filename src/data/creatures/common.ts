@@ -1,85 +1,11 @@
-// Данные о существах и духах Царства Пяти Начал
+import type { Creature } from '@types/creature.types';
 
-export interface Creature {
-  id: string;
-  name: string;
-  category: 'higher' | 'common';
-  element?: 'wood' | 'fire' | 'earth' | 'metal' | 'water';
-  description: string;
-  appearance: string;
-  habitat: string;
-  abilities: string[];
-  behavior: string;
-  interaction: string;
-  size?: string;
-  imagePlaceholder: string;
-  icon: string;
-  quote?: string;
-}
-
-// Высшие существа
-export const HIGHER_CREATURES: Creature[] = [
-  {
-    id: 'great-unity',
-    name: 'Великое Единство',
-    category: 'higher',
-    description: 'Безличная первооснова всего сущего, аналог Дао и Рода. Из неё родилось Противоборство Начал — столкновение Инь и Ян.',
-    appearance: 'Не имеет формы или облика, воспринимается как чистая энергия, пронизывающая всё сущее.',
-    habitat: 'Везде и нигде одновременно, вне пространства и времени.',
-    abilities: ['Творение миров', 'Управление судьбой', 'Баланс Вселенной'],
-    behavior: 'Не вмешивается напрямую в дела миров, но задаёт законы бытия.',
-    interaction: 'Постигается через медитацию и просветление, недоступно обычным чувствам.',
-    imagePlaceholder: '/images/creature-great-unity.jpg',
-    icon: '☯',
-    quote: '«Из Великого Единства всё рождается, в Великое Единство всё возвращается»',
-  },
-  {
-    id: 'star-spirits',
-    name: 'Звёздные Духи',
-    category: 'higher',
-    description: 'Бессмертные сущности Прави, обитающие в небесных чертогах. Каждая звезда — это один дух, наблюдающий за миром.',
-    appearance: 'Сияющие фигуры, сотканные из света, с чертами, напоминающими людей и зверей одновременно.',
-    habitat: 'Правь — небесный мир звёздных духов и Лунной Девы.',
-    abilities: ['Дар пророчества', 'Влияние на судьбы', 'Свет во тьме'],
-    behavior: 'Мудры и созерцательны, редко вмешиваются в дела Яви.',
-    interaction: 'Могут являться во снах или в моменты великих событий.',
-    imagePlaceholder: '/images/creature-star-spirits.jpg',
-    icon: '⭐',
-  },
-  {
-    id: 'lunar-maiden',
-    name: 'Лунная Дева',
-    category: 'higher',
-    description: 'Бессмертная сущность Прави, повелительница ночи и тайн. Она развеяла звёзды по небу и наблюдает за сменой циклов.',
-    appearance: 'Женщина с серебряными волосами до пят, одетая в платье из лунного света. Её глаза сияют, как полная луна.',
-    habitat: 'Лунный чертог в Прави, окружённый звёздной пыльцой.',
-    abilities: ['Управление луной', 'Видение судеб', 'Дар снов'],
-    behavior: 'Загадочна и молчалива, говорит только с избранными.',
-    interaction: 'Может явиться в ночь полнолуния тем, кто чист сердцем.',
-    imagePlaceholder: '/images/creature-lunar-maiden.jpg',
-    icon: '🌙',
-  },
-  {
-    id: 'shadow-dragon',
-    name: 'Теневой Дракон',
-    category: 'higher',
-    description: 'Сила хаоса, заключённая в Искажённых Землях. Пытался поглотить стихии, но был остановлен пятью драконами.',
-    appearance: 'Тело покрыто угольно-чёрной чешуёй с фиолетовыми отблесками, местами трещины с сочащейся тёмной энергией.',
-    habitat: 'Искажённые Земли — место, где законы мира искажены.',
-    abilities: ['Искажение реальности', 'Поглощение стихий', 'Порождение теней'],
-    behavior: 'Стремится к хаосу и разрушению, но ослаблен заточением.',
-    interaction: 'Опасен для всех живых существ. Не вступать в контакт!',
-    imagePlaceholder: '/images/creature-shadow-dragon.jpg',
-    icon: '🐉',
-  },
-];
-
-// Обычные существа
 export const COMMON_CREATURES: Creature[] = [
   {
     id: 'leshy-huli-jing',
     name: 'Леший-Хули-Цзин',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'wood',
     description: 'Духи леса, хранители деревьев и зверей. Могут менять форму и часто обманывают путников, но никогда не причиняют вреда детям.',
     appearance: 'Рост 2-3 метра, тело из коры и мха, руки как ветви с тонкими корешками на концах. Голова с лисьими чертами.',
@@ -88,6 +14,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Озорные и любопытные, могут завести путника в глушь, но всегда выводят обратно.',
     interaction: 'Оставьте подношение (молоко или хлеб) — и леший поможет найти дорогу.',
     size: '2-3 метра',
+    dangerLevel: 'low',
+    traces: 'Сломанные ветки на высоте 2 м, запутанные тропы',
+    sounds: 'Шёпот листьев, треск веток',
+    smell: 'Свежая земля, лесные травы',
+    tamable: false,
     imagePlaceholder: '/images/creature-leshy.jpg',
     icon: '🌲',
   },
@@ -95,6 +26,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'domovoi-tszao-shen',
     name: 'Домовой-Цзао-Шэнь',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'earth',
     description: 'Хранители домов и очагов. Помогают по хозяйству, но если их обидеть — начинают прятать вещи.',
     appearance: 'Рост 60 см, бородатый старик с бородой из соломы. Одет в старый кафтан из мешковины и лапти.',
@@ -103,6 +35,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Добродушные, но обидчивые. Любят порядок и тишину.',
     interaction: 'Оставьте блюдце с молоком за печью — и домовой будет благосклонен.',
     size: '60 см',
+    dangerLevel: 'none',
+    traces: 'Мелкие следы, передвинутые вещи',
+    sounds: 'Тихий топот, шуршание',
+    smell: 'Печной дым, сушёные травы',
+    tamable: false,
     imagePlaceholder: '/images/creature-domovoi.jpg',
     icon: '🏠',
   },
@@ -110,6 +47,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'vodyanoy-lun-wang',
     name: 'Водяной-Лун-Ван',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'water',
     description: 'Цари рек и озёр, хранители водных путей. Могут утащить на дно неосторожного путника, но щедры к тем, кто чтит воду.',
     appearance: 'Рост 4-5 метров, сине-зелёная чешуйчатая кожа, длинные серебристые волосы, корона из кораллов.',
@@ -118,6 +56,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Мудры, но суровы. Не любят, когда загрязняют воду.',
     interaction: 'Перед плаванием бросьте монетку в воду — и водяной будет благосклонен.',
     size: '4-5 метров',
+    dangerLevel: 'high',
+    traces: 'Влажная земля у воды, чешуя на камнях',
+    sounds: 'Плеск воды без ветра, глухой голос из глубины',
+    smell: 'Речная свежесть, водоросли',
+    tamable: false,
     imagePlaceholder: '/images/creature-vodyanoy.jpg',
     icon: '💧',
   },
@@ -125,6 +68,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'kikimora-gui',
     name: 'Кикимора-Гуй',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'water',
     description: 'Духи болот, заманивающие путников блуждающими огнями. Опасны для тех, кто забрёл на болото ночью.',
     appearance: 'Рост 1,5 метра, бледная полупрозрачная кожа, волосы из тины и тростника, глаза без зрачков.',
@@ -133,6 +77,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Коварны и хитры, но боятся железа и огня.',
     interaction: 'Если увидели болотный огонь — не следуйте за ним. Поверните обратно.',
     size: '1,5 метра',
+    dangerLevel: 'medium',
+    traces: 'Мокрая трава, тина на берегу',
+    sounds: 'Хлюпанье, болотные пузыри',
+    smell: 'Гниль, стоячая вода',
+    tamable: false,
     imagePlaceholder: '/images/creature-kikimora.jpg',
     icon: '🌾',
   },
@@ -140,6 +89,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'serpent-mudrik',
     name: 'Змей-Мудрик',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'metal',
     description: 'Горные существа, обладающие даром предвидения. Могут предсказывать погоду и землетрясения.',
     appearance: 'Длина 5-7 метров, тело покрыто бронзовой чешуёй с металлическим блеском. На голове гребень из кристаллов.',
@@ -148,6 +98,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Мудры и спокойны, редко нападают первыми.',
     interaction: 'Если встретили — замрите и не делайте резких движений. Змей уйдёт сам.',
     size: '5-7 метров',
+    dangerLevel: 'medium',
+    traces: 'Металлический блеск на камнях, сброшенная чешуя',
+    sounds: 'Металлический звон, шипение',
+    smell: 'Озон, металл',
+    tamable: false,
     imagePlaceholder: '/images/creature-serpent.jpg',
     icon: '🐍',
   },
@@ -155,6 +110,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'firebird-zhar-ptitsa',
     name: 'Жар-Птица',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'fire',
     description: 'Мифические птицы с огненными перьями. Их перо приносит удачу, но поймать птицу невозможно — она сгорает дотла.',
     appearance: 'Размер с крупного орла, перья переливаются оттенками огня: алый, оранжевый, золотой. Клюв из закалённого металла.',
@@ -163,6 +119,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Свободолюбивы и горды. Не подпускают к себе людей.',
     interaction: 'Если увидите Жар-Птицу — загадайте желание. Оно сбудется, если птица пролетит мимо.',
     size: 'с орла',
+    dangerLevel: 'low',
+    traces: 'Обожжённая трава, алые перья',
+    sounds: 'Мелодичное пение, треск пламени',
+    smell: 'Гарь, жарёные травы',
+    tamable: false,
     imagePlaceholder: '/images/creature-firebird.jpg',
     icon: '🔥',
   },
@@ -170,6 +131,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'crane-mentor',
     name: 'Журавль-Наставник',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'wood',
     description: 'Мудрые птицы, помогающие волхвам и ведуньям. Считаются самыми мудрыми существами после драконов.',
     appearance: 'Высота 2 метра, белоснежные перья с серебристым отливом, клюв из полупрозрачного хрусталя.',
@@ -178,6 +140,11 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Терпеливы и добры, но требуют уважения.',
     interaction: 'Если Журавль заговорил с вами — слушайте внимательно. Его слова — закон.',
     size: '2 метра',
+    dangerLevel: 'none',
+    traces: 'Кристаллические следы, белые перья',
+    sounds: 'Трубный крик, тихая речь',
+    smell: 'Свежесть, утренняя роса',
+    tamable: false,
     imagePlaceholder: '/images/creature-crane.jpg',
     icon: '🕊️',
   },
@@ -185,6 +152,7 @@ export const COMMON_CREATURES: Creature[] = [
     id: 'source-spirit',
     name: 'Дух Источника Начал',
     category: 'common',
+    categoryName: 'Обычные существа',
     element: 'water',
     description: 'Дух, обитающий у корней Мирового Дуба. Хранит знания о всех стихиях.',
     appearance: 'Гуманоидная фигура высотой 3 метра, состоящая из текущей воды с вкраплениями света. Тело прозрачное.',
@@ -193,10 +161,12 @@ export const COMMON_CREATURES: Creature[] = [
     behavior: 'Спокоен и созерцателен. Отвечает только на вопросы, заданные с чистым сердцем.',
     interaction: 'Придите к Источнику в тишине и задайте свой вопрос. Ответ придёт в видении.',
     size: '3 метра',
+    dangerLevel: 'none',
+    traces: 'Влажные отпечатки, светящиеся капли',
+    sounds: 'Журчание воды, тихий шёпот',
+    smell: 'Свежая родниковая вода',
+    tamable: false,
     imagePlaceholder: '/images/creature-source-spirit.jpg',
     icon: '💎',
   },
 ];
-
-// Объединяем всех существ для удобного импорта
-export const ALL_CREATURES: Creature[] = [...HIGHER_CREATURES, ...COMMON_CREATURES];
